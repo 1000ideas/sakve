@@ -1,0 +1,7 @@
+<title><%= yield_title %></title>
+<meta name="description" content="<%= yield_description %>" />
+<meta name="keywords" content="<%= yield_keywords %>" />
+<%= stylesheet_link_tag 'facebook' %>
+<%= javascript_include_tag 'facebook' %>
+<%= yield :head %>
+<%= csrf_meta_tag %>

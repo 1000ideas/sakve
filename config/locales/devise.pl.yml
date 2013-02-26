@@ -1,0 +1,48 @@
+pl:
+  errors:
+    messages:
+      not_found: "nie odnaleziono"
+      already_confirmed: "zostało już potwierdzone"
+      not_locked: "nie było zablokowane"
+  devise:
+    failure:
+      unauthenticated: 'Musisz być zalogowany.'
+      unconfirmed: 'Musisz potwierdzić konto.'
+      locked: 'Twoje konto jest zablokowane.'
+      invalid: 'Niepoprawny login lub hasło.'
+      invalid_token: 'Niepoprawny token.'
+      timeout: 'Twoja sesja straciła ważność. Zaloguj się, aby kontynuować'
+      inactive: 'Twoje konto nie zostało jeszcze aktywowane.'
+    sessions:
+      signed_in: 'Zalogowano.'
+      signed_out: 'Wylogowano.'
+      new:
+        title: Logowanie
+        submit: Zaloguj
+    passwords:
+      send_instructions: 'You will receive an email with instructions about how to reset your password in a few minutes.'
+      updated: 'Your password was changed successfully. You are now signed in.'
+    confirmations:
+      send_instructions: 'You will receive an email with instructions about how to confirm your account in a few minutes.'
+      confirmed: 'Your account was successfully confirmed. You are now signed in.'
+    registrations:
+      signed_up: 'You have signed up successfully.'
+      updated: 'You updated your account successfully.'
+      destroyed: 'Bye! Your account was successfully cancelled. We hope to see you again soon.'
+      new:
+        title: 'Zarejestruj się'
+        register: 'Zarejestuj'
+    unlocks:
+      send_instructions: 'You will receive an email with instructions about how to unlock your account in a few minutes.'
+      unlocked: 'Your account was successfully unlocked. You are now signed in.'
+    mailer:
+      confirmation_instructions: 'Confirmation instructions'
+      reset_password_instructions: 'Reset password instructions'
+      unlock_instructions: 'Unlock Instructions'
+    shared:
+      links:
+        sign_in: "Zaloguj się"
+        sign_up: "Zarejestruj się"
+        password: "Przypomnij hasło"
+        confirmation: "Potwierdź konto"
+        unlock: "Odblokuj konto"

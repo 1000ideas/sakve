@@ -1,0 +1,104 @@
+pl:
+  admin:
+    title: "Panel admina"
+  unauthorized:
+    default: "Nie masz wystarczających praw dostępu do wybranej strony."
+  new: "Dodaj"
+  edit: "Edytuj"
+  promo_add: "Promuj na stronie głównej"
+  promo_del: "Usuń z promocji"
+  hide_page: "Ukryj stronę"
+  unhide_page: "Uwidocznij stronę"
+  hide_news: "Ukryj aktualność"
+  unhide_news: "Uwidocznij aktualność"
+  destroy: "Usuń"
+  destroy_selected: "Usuń zaznaczone"
+  confirm: "Czy na pewno?"
+  gallery_warning: "Uwaga: usunięcie tej galerii spowoduje usunięcie wszystkich jej podgalerii. Czy na pewno?"
+  layout:
+    logged_as: "Zalogowany jako:"
+    logout: Wyloguj
+  menu:
+    main_page: Strona główna
+    users: Użytkownicy
+    pages: Strony
+    news: Aktualności
+    galleries: Galerie
+    newsletter: Newsletter
+  users:
+    submenu:
+      index: Lista Użytkowników
+      new: Dodaj użytkownika
+    index:
+      title: Użytkownicy
+      email: Email
+      role: Role
+    new:
+      title: Dodawanie użytkownika
+    edit:
+      title: Edycja użytkownika
+    show:
+      title: Szczegóły użytkownika
+  submenu:
+    new: Dodaj
+  pages:
+    submenu:
+      index: Lista stron
+      new: Dodawanie strony
+    new:
+      title: Nowa strona
+  admins:
+    submenu:
+      edit_profile: Edytuj profil
+    show:
+      title: Strona główna
+      edit_profile: Edytuj profil
+      update: Zapisz zmiany
+  newsletter_mails:
+    submenu:
+      index: Lista maili
+      send_mail: Wyślij mail
+    send_mail:
+      title: Wyślij mail
+      addresses_list: "Lista użytkowników"
+      mail: "Treść listu"
+      attachment: "Załącznik"
+      send_mail: Wyślij
+    index:
+      title: Lista maili
+  news:
+    edit:
+      title: Edycja aktualności
+    new:
+      title: Dodawanie aktualności
+    submenu:
+      new: Dodaj aktualność
+      index: Lista aktualności
+    index:
+      column_title: Tytuł
+      title: Aktualności
+  galleries:
+    submenu:
+      new: Dodaj galerię
+      index: Lista galerii
+    index:
+      title: Galerie
+      parent: Galeria-rodzic
+      name: Nazwa galerii
+      content: "Treść"
+    new:
+      title: Dodawanie galerii
+    edit:
+      title: Edycja galerii
+    form: !map:ActiveSupport::HashWithIndifferentAccess
+      hierarchy: "Hierarchia"
+      data: "Szczegóły galerii"
+      upload_queue: "Kolejka plików"
+      files_sent: "wysłanych plików"
+      upload: "Wybierz zdjęcia"
+      cancel: "Anuluj wysyłanie"
+  gallery_photos: !map:ActiveSupport::HashWithIndifferentAccess
+    show_photos: !map:ActiveSupport::HashWithIndifferentAccess
+      photos_added: "Zdjęcia dodane do galerii:"
+      delete: "Usuń"
+      confirm: "Jesteś pewien?"

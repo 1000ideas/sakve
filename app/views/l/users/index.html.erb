@@ -1,0 +1,39 @@
+<% content_for :submenu do %>
+  <%= render 'submenu' %>
+<% end %>
+
+<% title t('users.index.title') %>
+<% breadcrumbs_admin link_to(t('users.index.title'), users_path) %>
+
+<p id="notice"><%= notice %></p>
+<%= render partial: 'l/partials/switcher', object: @users %>
+
+<table class="rows">
+  <thead>
+    <tr>
+      <th></th>
+      <th><%= User.human_attribute_name :email %></th>
+      <th><%= User.human_attribute_name :role %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr class="<%= cycle('odd', 'even') %>">
+        <td><%= selection_tag user %></td>
+        <td><%= user.email %></td>
+        <td><%= user.role %></td>
+        <td class="options">
+          <%= link_to t('show'), user, class: "show", title: t('show'), target: '_blank' %>
+          <%= link_to t('edit'), edit_user_path(user), class: "edit", title: t('edit') %>
+          <%= link_to t('destroy'), user, class: "destroy", title: t('destroy'),
+            data: {confirm: t('confirm'), method: :delete } %>
+        </td>
+      </tr>
+      <tr class="spacer"><td></td></tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to t('destroy_selected'), 
+  "javascript: LazyAdmin.destroy_selected('.selection','users')", 
+  data: {confirm: t('confirm') } %>

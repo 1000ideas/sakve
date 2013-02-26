@@ -1,0 +1,17 @@
+<% 
+  start = (switcher.current_page - 1)*switcher.per_page + 1
+  finish = switcher.current_page*switcher.per_page
+  finish = switcher.total_entries if finish > switcher.total_entries
+%>
+<div id="switcher">
+  Wyświetlanie 
+  <span>
+    <%= "%d-%d" % [ start, finish ] %>
+  </span> z 
+  <span><%= switcher.total_entries %></span>
+  <%= will_paginate switcher, 
+    :next_label => '&gt;', 
+    :previous_label => '&lt;',
+    :page_links => false %>
+
+  </div>

@@ -1,0 +1,399 @@
+pl:
+  main:
+  newsletter: 
+    name: "Newsletter"
+    info: "Wpisz swój adres e-mail, aby otrzymywać nasz biuletyn elektroniczny."
+    sign: "Zapisz się"
+    wait: "Proszę czekać..."
+    confirmed: "Email potwierdzony"
+    added: "Adres został dodany."
+    already_exists: 'Podany adres już istnieje.'
+    invalid: 'Błędny adres e-mail.'
+    confirmation:
+      subject: "Newsletter - Potwierdź swój adres email"
+    send_mail:
+      subject: "Newsletter"
+  edit: "Edytuj"
+  back: "Powrót"
+  show: "Pokaż"
+  destroy: "Usuń"
+  sure: "Jesteś pewny?"
+  sort:
+    asc: "Sortuj rosnąco"
+    desc: "Sortuj malejąco"
+  http_errors:
+    e404: "Błąd 404"
+  menu:
+    pages: "Strony"
+    login: "Zaloguj"
+    logout: "Wyloguj"
+  meta:
+    description: "Opis strony"
+    keywords: "Słowa kluczowe"
+    title: "Sakve" 
+  create:
+    success: "Pomyślnie utworzono."
+    fail: "Nie udało się zapisać."
+  update:
+    success: "Zapisano zmiany."
+    fail: "Nie udało się zapisać zmian."
+  delete:
+    success: "Pomyślnie usunięto."
+    fail: "Nie udało się usunąć."
+  hide:
+    success: "Strona została ukyta."
+    failure: "Nie udało się ukryć strony."
+  unhide:
+    success: "Strona została uwidoczniona."
+    failure: "Nie udało się uwidocznić strony."
+  attributes:
+    created_at: "Data utworzenia"
+    updated_at: "Data aktualizacji"
+    title: "Tytuł"
+    content: "Treść"
+    photo_content_type: Zdjęcie
+    email: "Email"
+    password: "Hasło"
+    password_confirmation: "Powtórz hasło"
+    current_password: "Aktualne hasło"
+    remember_me: "Zapamiętaj"
+  breadcrumbs:
+    intro: "Znajdujesz się:"
+    home: "Strona główna"
+    news: "Aktualności"
+    search: "Szukaj"
+  helpers:
+    submit:
+      create: "Utwórz"
+      update: "Zapisz zmiany"
+  pages:
+    index:
+      title: "Lista stron"
+      show: "Pokaż"
+      edit: "Edycja"
+      destroy: "Usuń"
+      new_page: "Dodaj stronę"
+      confirm: "Potwierdź"
+    new:
+      new_title: "Tytuł"
+      url: "Url"
+      meta_description: "Opis (meta)"
+      meta_keywords: "Słowa kluczowe (meta)"
+      content: "Treść"
+    edit:
+      title: "Edycja strony"
+      root: 'Strona nadrzędna'
+  news:
+    name: 'Aktualności'
+    new:
+      new_title: "Tytuł"
+      content: "Treść"
+      photo: "Zdjęcie"
+    edit:
+      edit_title: "Tytuł"
+      content: "Treść"
+      photo: "Zdjęcie"
+      photo_img: "Obecne zdjęcie"
+  galleries:
+    show:
+      title: "Galerie"
+      parent: "Galeria nadrzędna"
+      name: "Nazwa galerii"
+      content: "Treść"
+  footer:
+    left: "Stopka"
+  previous: "Poprzednia"
+  next: "Następna"
+  conditions:
+    new: "Nowy"
+    used: "Używany"
+  admin:
+    news:
+      notice_update: "Wpis został pomyślnie edytowany."
+      notice_create: "Wpis został pomyślnie dodany do bazy danych."
+      notice_destroy: "Wpis został skasowany."
+
+  date:
+    formats:
+      default: "%d-%m-%Y"
+      short: "%d %b"
+      long: "%B %d, %Y"
+    day_names:
+      - niedziela
+      - poniedziałek
+      - wtorek
+      - środa
+      - czwartek
+      - piątek
+      - sobota
+    abbr_day_names:
+      - nie
+      - pon
+      - wto
+      - śro
+      - czw
+      - pia
+      - sob
+
+    month_names:
+      - ~
+      - styczeń
+      - luty
+      - marzec
+      - kwiecień
+      - maj
+      - czerwiec
+      - lipiec
+      - sierpień
+      - wrzesień
+      - październik
+      - listopad
+      - grudzień
+    abbr_month_names:
+      - ~
+      - sty
+      - lut
+      - mar
+      - kwi
+      - maj
+      - cze
+      - lip
+      - sie
+      - wrz
+      - paź
+      - lis
+      - gru
+    order:
+      - :day
+      - :month
+      - :year
+
+  time:
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      short: "%d %b %H:%M"
+      long: "%B %d, %Y %H:%M"
+    am: "przed południem"
+    pm: "po południu"
+
+  support:
+    array:
+      words_connector: ", "
+      two_words_connector: " i "
+      last_word_connector: " oraz "
+
+    select:
+      prompt: "Proszę wybrać"
+
+  number:
+    format:
+      separator: ","
+      delimiter: " "
+      precision: 3
+      significant: false
+      strip_insignificant_zeros: false
+
+    currency:
+      format:
+        format: "%u %n"
+        unit: "PLN"
+        separator: ","
+        delimiter: " "
+        precision: 2
+        significant: false
+        strip_insignificant_zeros: true
+
+    percentage:
+      format:
+        delimiter: ""
+
+    precision:
+      format:
+        delimiter: ""
+
+    human:
+      format:
+        delimiter: ""
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      storage_units:
+        format: "%n %u"
+        units:
+          byte:
+            one:   "bajt"
+            other: "bajty"
+          kb: "KB"
+          mb: "MB"
+          gb: "GB"
+          tb: "TB"
+      decimal_units:
+        format: "%n %u"
+        units:
+          unit: ""
+          thousand: Tysiąc
+          million: Milion
+          billion: Miliard
+          trillion: Bilion
+          quadrillion: Biliard
+
+  datetime:
+    distance_in_words:
+      half_a_minute: "pół minuty"
+      less_than_x_seconds:
+        one:   "mniej niż sekundę"
+        few:   "mniej niż %{count} sekundy"
+        other: "mniej niż %{count} sekund"
+      x_seconds:
+        one:   "1 sekunda"
+        few:   "%{count} sekundy"
+        other: "%{count} sekund"
+      less_than_x_minutes:
+        one:   "mniej niż minutę"
+        few:   "mniej niż %{count} minuty"
+        other: "mniej niż %{count} minut"
+      x_minutes:
+        one:   "1 minuta"
+        few:   "%{count} minuty"
+        other: "%{count} minut"
+      about_x_hours:
+        one:   "około godziny"
+        few:   "około %{count} godziny"
+        other: "około %{count} godzin"
+      x_days:
+        one:   "1 dzień"
+        few:   "%{count} dni"
+        other: "%{count} dni"
+      about_x_months:
+        one:   "około miesiąca"
+        few:   "około %{count} miesiące"
+        other: "około %{count} miesięcy"
+      x_months:
+        one:   "1 miesiąc"
+        few:   "%{count} miesiące"
+        other: "%{count} miesięcy"
+      about_x_years:
+        one:   "około rok"
+        few:   "około %{count} lata"
+        other: "około %{count} lat"
+      over_x_years:
+        one:   "ponad rok"
+        few:   "ponad %{count} lata"
+        other: "ponad %{count} lat"
+      almost_x_years:
+        one:   "prawie rok"
+        few:   "prawie %{count} lata"
+        other: "prawie %{count} lat"
+    prompts:
+      year:   "Rok"
+      month:  "Miesiąc"
+      day:    "Dzień"
+      hour:   "Godzina"
+      minute: "Minuta"
+      second: "Sekundy"
+
+  errors:
+    format: "%{attribute} %{message}"
+    template:
+      header:
+        one:    "Nie udało się zapisać z powodu błędu"
+        other:  "Nie udało się zapisać z powodu %{count} błędów"
+      body: "Błędy dotyczą następujących pól:"
+
+    messages: &errors_messages
+      inclusion: "nie znajduje się na liście dopuszczalnych wartości"
+      exclusion: "jest zarezerwowane"
+      invalid: "jest nieprawidłowe"
+      confirmation: "nie zgadza się z potwierdzeniem"
+      accepted: "musi zostać zaakceptowane"
+      empty: "nie może być puste"
+      blank: "nie może być puste"
+      too_long: "jest za długie (maksymalnie %{count} znaków)"
+      too_short: "jest za krótkie (przynajmniej %{count} znaków)"
+      wrong_length: "ma nieprawidłową długość (powinna wynosić %{count} znaków)"
+      not_a_number: "nie jest liczbą"
+      not_an_integer: "musi być liczbą całkowitą"
+      greater_than: "musi być większe od %{count}"
+      greater_than_or_equal_to: "musi być większe lub równe %{count}"
+      equal_to: "musi być równe %{count}"
+      less_than: "musi być mniejsze od %{count}"
+      less_than_or_equal_to: "musi być mniejsze lub równe %{count}"
+      odd: "musi być nieparzyste"
+      even: "musi być parzyste"
+
+  activerecord:
+    attributes:
+      l/page:
+        parent: "Strona rodzic"
+        url: "Url strony"
+        title: "Tytuł"
+        meta_description: "Opis strony (meta)"
+        meta_keywords: "Słowa kluczowe strony (meta)"
+        content: "Treść"
+        parent_id: "Strona nadrzędna"
+      user:
+        email: "Adres email"
+        password: "Hasło"
+        password_confirmation: "Powtórz hasło"
+        set_role: "Wybierz uprawnienia"
+        role : Uprawnienia
+      l/news:
+        content: Treść
+        title: Tytuł
+        photo: "Zdjęcie"
+        photo_img: "Aktualne zdjęcie"
+        photo_content_type: Zdjęcie
+      l/gallery:
+        name: 'Nazwa'
+        content: 'Opis'
+        thumb: 'Miniatura'
+      attachment:
+        upload: Plik
+        upload_content_type: 'Typ pliku'
+    errors:
+      template:
+        header:
+          one:    "Nie udało się utworzyć z powodu błędu"
+          other:  "Nie udało się utworzyć z powodu %{count} błędów"
+        body: "Błędy dotyczą następujących pól:"
+      messages:
+        taken: "zostało już zajęte"
+        record_invalid: "Negatywne sprawdzenie poprawności: %{errors}"
+        <<: *errors_messages
+      full_messages:
+        format: "%{attribute} %{message}"
+      models:
+        user:
+          attributes:
+            email:
+              blank: " jest wymagany."
+              taken: " już istnieje."
+              invalid: jest niepoprawny.
+            password:
+              blank: " jest wymagane."
+              confirmation: "i powtórzenie hasła nie są zgodne."
+        l/page:
+          attributes:
+            title:
+              blank: ": brak tytułu strony"
+            url:
+              blank: 'jest wymagane'
+              taken: 'nie może powtarzać się wśród stron o tym samym rodzicu'
+            parent_id: 
+              loop: 'jest potomkiem strony'
+        news:
+          attributes:
+            content:
+              blank: jest wymagana
+            photo:
+              image: "musi być plikiem graficznym (dopuszczalne rozszerzenia: jpeg, png, gif, bmp)"
+        attachment:
+          attributes:
+            upload:
+              blank: "nie został wybrany"
+            upload_content_type:
+              invalid: "jest nieprawidołowy (dozwolone *.png i *.jpg)"
+  will_paginate:
+    previous_label: "&#8592; Poprzednia"
+    next_label: "Następna &#8594;"
+    page_gap: "&hellip;"

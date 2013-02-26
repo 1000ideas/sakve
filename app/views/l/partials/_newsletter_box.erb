@@ -1,0 +1,8 @@
+  <div class="newsletter">
+    <div id="newsletter_message"><%= flash[:confirm] %></div>
+    <%= form_for(LazyProgrammer::NewsletterMail.new, :url => newsletter_mails_path, :method => 'post', :remote => true, :html => {:onsubmit => "$('#newsletter_message').show().html('Proszę czekać...')"}) do |f| %>
+      <%= f.label "e-mail" %>
+      <%= f.text_field :mail, :id => 'input_text' %>
+      <%= f.submit "Submit", :id => 'input_submit' %>
+    <% end %>
+  </div>

@@ -1,0 +1,12 @@
+try {
+  var row = $("input:checkbox[value=<%= @user.id %>]").parent().parent();
+  var spacer = row.next('tr');
+  row.remove();
+  spacer.remove();
+} catch(err) {
+  alert('Error: check console for more details');
+  if (console != undefined) {
+    console.log(err);
+  }
+}
+

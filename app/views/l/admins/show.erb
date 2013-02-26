@@ -1,0 +1,18 @@
+<% content_for :submenu do %>
+  <%= render 'submenu' %>
+<% end %>
+
+<% title t('admins.show.edit_profile') %>
+<% breadcrumbs_admin link_to(t('admins.show.edit_profile'), admin_path) %>
+
+<p id="notice"><%= notice %></p>
+<p id="alert"><%= alert %></p>
+
+<div class="cols-container">
+  <div class="main-column">
+    <%= render 'form' %>
+  </div>
+  <div class="tooltip-column">
+    <%= render 'tooltip' %>
+  </div>
+</div>

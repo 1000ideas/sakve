@@ -1,0 +1,22 @@
+<%= form_for current_user, url: update_user_admin_path, method: :post do |f| %>
+  <%= render partial: 'l/partials/errors', object: current_user.errors %>
+  <div class="group">
+    <div class="field">
+      <%= f.label :email %>
+      <%= f.text_field :email %>
+    </div>
+
+    <div class="field">
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+    </div>
+
+    <div class="field">
+      <%= f.label :password_confirmation %>
+      <%= f.password_field :password_confirmation %>
+    </div>
+  </div>
+  <div class="field">
+    <%= f.submit t('admins.show.update') %>
+  </div>
+<% end %>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= yield_title %></title>
+    <meta name="description" content="<%= yield_description %>" />
+    <meta name="keywords" content="<%= yield_keywords %>" />
+    <%= stylesheet_link_tag 'jquery.mobile' %>
+    <%= javascript_include_tag 'jquery', 'jquery-ui', 'jquery_ujs', 'jquery.autocomplete.pack',
+                               'jquery.mobile' %>
+
+    <%= yield :head %>
+    <%= csrf_meta_tag %>
+  </head>
+  <body>
+    <%= yield %>
+  </body>
+</html>
