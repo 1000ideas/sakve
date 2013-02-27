@@ -1,0 +1,20 @@
+<% content_for :submenu do %>
+<%= render "submenu" %>
+<% end %>
+
+<% title t('items.show.title') %>
+<% breadcrumbs_admin link_to(t('items.index.title'), items_path),
+                      link_to(t('items.show.title'), item_path) %>
+
+<p id="notice"><%= notice %></p>
+
+<dl>
+<dt><%= Item.human_attribute_name :name %>:</dt>
+<dd><%= @item.name %></dd>
+<dt><%= Item.human_attribute_name :type %>:</dt>
+<dd><%= @item.type %></dd>
+<dt><%= Item.human_attribute_name :object %>:</dt>
+<dd><%= @item.object_file_name %></dd>
+<dt><%= Item.human_attribute_name :user_id %>:</dt>
+<dd><%= @item.user_id %></dd>
+</dl>

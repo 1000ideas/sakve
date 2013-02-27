@@ -1,0 +1,25 @@
+<div class="filter">
+  <div class="field">
+    <strong>Filtruj: </strong>
+
+    <%= label_tag :filter_name, Item.human_attribute_name(:name)  %>
+        <%= text_field_tag "filter[name]", filter(:name) %>
+    
+    <%= label_tag :filter_type, Item.human_attribute_name(:type)  %>
+        <%= text_field_tag "filter[type]", filter(:type) %>
+    
+    <%= label_tag :filter_object, Item.human_attribute_name(:object)  %>
+        <%= text_field_tag "filter[object_file_name]", filter(:object_file_name) %>
+    
+    <%= label_tag :filter_user_id, Item.human_attribute_name(:user_id)  %>
+        <%= text_field_tag "filter[user_id]", filter(:user_id) %>
+    
+
+    <%= submit_tag "Filtruj" %>
+  </div>
+
+  <div class="field">
+    <%= link_to "Wyczyść", items_path %>
+  </div>
+
+</div>

@@ -1,0 +1,67 @@
+<% content_for :submenu do %>
+<%= render "submenu" %>
+<% end %>
+
+<% title t('items.index.title') %>
+<% breadcrumbs_admin link_to(t('items.index.title'), items_path) %>
+
+<p id="notice"><%= notice %></p>
+
+<%= form_tag items_path, method: :get do %>
+
+<%= render "filter" %>
+<%= render partial: 'l/partials/switcher', object: @items %>
+
+<table class="rows">
+  <thead>
+    <tr>
+      <th>
+        <%= Item.human_attribute_name :thumb %>
+      </th>
+      <th>
+        <%= Item.human_attribute_name :name %>
+        <%= sort_tag :name, :asc %>
+        <%= sort_tag :name, :desc %>
+      </th>
+      <th>
+        <%= Item.human_attribute_name :type %>
+        <%= sort_tag :type, :asc %>
+        <%= sort_tag :type, :desc %>
+      </th>
+      <th>
+        <%= Item.human_attribute_name :object %>
+        <%= sort_tag :object_file_name, :asc %>
+        <%= sort_tag :object_file_name, :desc %>
+      </th>
+      <th>
+        <%= Item.human_attribute_name :user_id %>
+        <%= sort_tag :user_id, :asc %>
+        <%= sort_tag :user_id, :desc %>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @items.each do |item| %>
+    <tr  class="<%= cycle('odd', 'even') %>">
+        <td><%= image_tag item.thumb %></td>
+        <td><%= item.name %></td>
+        <td><%= item.type %></td>
+        <td><%= item.object_file_name %></td>
+        <td><%= item.user_id %></td>
+      <td class="options">
+        <%= link_to t('edit'), edit_item_path(item), class: "edit", title: t('edit') %>
+        <%= link_to t('show'), item, class: "show", title: t('show'), target: "_blank" %>
+        <%= link_to t('destroy'), item, class: "destroy", title: t('destroy'), data: { confirm: t('confirm'), method: :delete } %>
+      </td>
+    </tr>
+    <tr class="spacer"><td></td></tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% end %>
+
+<%= will_paginate @items %>
+
+
+

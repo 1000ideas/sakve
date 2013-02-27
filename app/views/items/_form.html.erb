@@ -1,0 +1,16 @@
+<%= form_for(@item) do |f| %>
+<%= render partial: 'l/partials/errors', object: @item.errors %>
+<div class="group">
+      <div class="field">
+      <%= f.label :name %>
+      <%= f.text_field :name  %>
+    </div>
+      <div class="field">
+      <%= f.label :object %>
+      <%= f.file_field :object  %>
+    </div>
+  </div>
+<div class="actions">
+  <%= f.submit %>
+</div>
+<% end %>

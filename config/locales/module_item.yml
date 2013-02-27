@@ -1,0 +1,42 @@
+pl:
+  items:
+    submenu:
+      new: Dodaj zasób
+      index: Lista zasobów
+    new:
+      title: Dodawanie zasobu
+    index:
+      title: Zasoby
+    edit:
+      title: Edycja zasobu
+  menu:
+    items: Zasoby
+  activerecord:
+    attributes:
+      item:
+        name: Nazwa
+        type: Typ
+        object: Plik
+        user_id: Uzytkownik
+        thumb: Miniatura
+en:
+  items:
+    submenu:
+      new: Add item
+      index: Item list
+    new:
+      title: Adding an item
+    index:
+      title: Items
+    edit:
+      title: Editing an item
+  menu:
+    items: Items
+  activerecord:
+    attributes:
+      item:
+        name: Name
+        type: Type
+        object: File
+        user_id: User
+        thumb: Thumbnail
