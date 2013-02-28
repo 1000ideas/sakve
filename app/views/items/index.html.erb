@@ -24,14 +24,12 @@
         <%= sort_tag :name, :desc %>
       </th>
       <th>
-        <%= Item.human_attribute_name :type %>
-        <%= sort_tag :type, :asc %>
-        <%= sort_tag :type, :desc %>
-      </th>
-      <th>
         <%= Item.human_attribute_name :object %>
         <%= sort_tag :object_file_name, :asc %>
         <%= sort_tag :object_file_name, :desc %>
+      </th>
+      <th>
+        <%= Item.human_attribute_name :tags %>
       </th>
       <th>
         <%= Item.human_attribute_name :user_id %>
@@ -45,8 +43,8 @@
     <tr  class="<%= cycle('odd', 'even') %>">
         <td><%= image_tag item.thumb %></td>
         <td><%= item.name %></td>
-        <td><%= item.type %></td>
         <td><%= item.object_file_name %></td>
+        <td><%= item.tags %></td>
         <td><%= item.user %></td>
       <td class="options">
         <%= link_to t('edit'), edit_item_path(item), class: "edit", title: t('edit') %>

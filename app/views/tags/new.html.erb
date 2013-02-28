@@ -1,0 +1,20 @@
+<% content_for :submenu do %>
+  <%= render "submenu" %>
+<% end %>
+
+<% title t('tags.new.title') %>
+<% breadcrumbs_admin link_to(t('tags.index.title'), tags_path),
+                      link_to(t('tags.new.title'), new_tag_path) %>
+
+<p id="notice"><%= notice %></p>
+
+<div class="cols-container">
+  <div class="main-column">
+    <%= render 'form' %>
+  </div>
+  <div class="tooltip-column">
+    <%= render 'tooltip' %>
+  </div>
+</div>   
+
+<%= link_to t('back'), tags_path %>

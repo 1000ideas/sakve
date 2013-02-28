@@ -1,0 +1,16 @@
+<div class="filter">
+  <div class="field">
+    <strong>Filtruj: </strong>
+
+    <%= label_tag :filter_name, Tag.human_attribute_name(:name)  %>
+        <%= text_field_tag "filter[name]", filter(:name) %>
+    
+
+    <%= submit_tag "Filtruj" %>
+  </div>
+
+  <div class="field">
+    <%= link_to "Wyczyść", tags_path %>
+  </div>
+
+</div>

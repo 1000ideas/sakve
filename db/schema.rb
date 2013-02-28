@@ -11,7 +11,25 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130226142308) do
+ActiveRecord::Schema.define(:version => 20130228142025) do
+
+  create_table "attachments", :force => true do |t|
+    t.string   "upload_file_name"
+    t.string   "upload_content_type"
+    t.integer  "upload_file_size"
+    t.datetime "upload_updated_at"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+  end
+
+  create_table "item_tags", :force => true do |t|
+    t.integer  "item_id",    :null => false
+    t.integer  "tag_id",     :null => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "item_tags", ["item_id", "tag_id"], :name => "index_item_tags_on_item_id_and_tag_id", :unique => true
 
   create_table "items", :force => true do |t|
     t.string   "name"
@@ -21,15 +39,6 @@ ActiveRecord::Schema.define(:version => 20130226142308) do
     t.integer  "object_file_size"
     t.datetime "object_updated_at"
     t.integer  "user_id"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
-  end
-
-  create_table "attachments", :force => true do |t|
-    t.string   "upload_file_name"
-    t.string   "upload_content_type"
-    t.integer  "upload_file_size"
-    t.datetime "upload_updated_at"
     t.datetime "created_at",          :null => false
     t.datetime "updated_at",          :null => false
   end
@@ -44,6 +53,13 @@ ActiveRecord::Schema.define(:version => 20130226142308) do
 
   add_index "roles", ["name", "resource_type", "resource_id"], :name => "index_roles_on_name_and_resource_type_and_resource_id"
   add_index "roles", ["name"], :name => "index_roles_on_name"
+
+  create_table "tags", :force => true do |t|
+    t.string   "name",                       :null => false
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
+    t.integer  "items_count", :default => 0, :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.string   "email",               :default => "", :null => false

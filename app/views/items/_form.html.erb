@@ -1,13 +1,21 @@
 <%= form_for(@item) do |f| %>
 <%= render partial: 'l/partials/errors', object: @item.errors %>
 <div class="group">
-      <div class="field">
+    <div class="field">
+      <%= f.label :thumb %>
+      <%= image_tag f.object.thumb %>
+    </div>
+    <div class="field">
       <%= f.label :name %>
       <%= f.text_field :name  %>
     </div>
-      <div class="field">
+    <div class="field">
       <%= f.label :object %>
       <%= f.file_field :object  %>
+    </div>
+    <div class="field">
+      <%= f.label :tags %>
+      <%= f.text_field :tags  %>
     </div>
   </div>
 <div class="actions">

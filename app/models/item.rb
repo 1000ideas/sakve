@@ -1,5 +1,7 @@
 class Item < ActiveRecord::Base
   belongs_to :user
+  has_many :item_tags
+  has_many :tags, through: :item_tags
 
   has_attached_file :object, 
     styles: Proc.new {|object| object.instance.item_styles } ,
@@ -7,9 +9,9 @@ class Item < ActiveRecord::Base
     path: ':partition/:class/:id/:style/:filename',
     url: '/:class/:id/download/:style/:filename'
 
-  before_save :fix_mime_type
+  before_save :fix_mime_type, :save_tags
 
-  attr_accessible :name, :object, :type, :user_id
+  attr_accessible :name, :object, :type, :user_id, :tags
 
   validates :object, attachment_presence: true
 
@@ -22,7 +24,7 @@ class Item < ActiveRecord::Base
       styles[:flash] = ['640x480>', :flv]
     elsif presentation?
       styles[:preview] = ['200', :pdf]
-    elsif image?
+    elsif image? or pdf_document?
       styles[:preview] = ['640x480>', :png]
     end
     styles
@@ -30,6 +32,16 @@ class Item < ActiveRecord::Base
 
   def thumb
     object.url(:thumb)
+  end
+
+  alias :tags_list :tags
+
+  def tags=(value)
+    @tags = value
+  end
+
+  def tags
+    @tags || tags_list.join(', ')
   end
 
   def fix_mime_type(force = false)
@@ -106,5 +118,16 @@ class Item < ActiveRecord::Base
     end
   end
 
+  protected
 
+  def save_tags
+    if @tags
+      item_tags.destroy_all
+      @tags.split(',').map(&:strip).each do |tag|
+        t = Tag.where(name: tag).first || Tag.create(name: tag)  
+        self.item_tags.create(tag_id: t.id)
+      end
+
+    end
+  end
 end

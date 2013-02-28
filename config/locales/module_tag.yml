@@ -1,0 +1,35 @@
+pl:
+  tags:
+    submenu:
+      new: Dodaj tag
+      index: Lista tagów
+    new:
+      title: Dodawanie tagu
+    index:
+      title: Tagi
+    edit:
+      title: Edytuj
+  menu:
+    tags: Tagi
+  activerecord:
+    attributes:
+      tag:
+        name: Nazwa
+        items_count: Otagowanych zasobów
+en:
+  tags:
+    submenu:
+      new: Dodaj Tag
+      index: Lista tags
+    new:
+      title: Dodawanie Tag
+    index:
+      title: tags
+    edit:
+      title: Edycja Tag
+  menu:
+    tags: Tags
+  activerecord:
+    attributes:
+      tag:
+        name: Name

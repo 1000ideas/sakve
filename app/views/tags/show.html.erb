@@ -1,0 +1,14 @@
+<% content_for :submenu do %>
+<%= render "submenu" %>
+<% end %>
+
+<% title t('tags.show.title') %>
+<% breadcrumbs_admin link_to(t('tags.index.title'), tags_path),
+                      link_to(t('tags.show.title'), tag_path) %>
+
+<p id="notice"><%= notice %></p>
+
+<dl>
+<dt><%= Tag.human_attribute_name :name %>:</dt>
+<dd><%= @tag.name %></dd>
+</dl>

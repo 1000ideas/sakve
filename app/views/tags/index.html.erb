@@ -1,0 +1,51 @@
+<% content_for :submenu do %>
+<%= render "submenu" %>
+<% end %>
+
+<% title t('tags.index.title') %>
+<% breadcrumbs_admin link_to(t('tags.index.title'), tags_path) %>
+
+<p id="notice"><%= notice %></p>
+
+<%= form_tag tags_path, method: :get do %>
+
+<%= render "filter" %>
+<%= render partial: 'l/partials/switcher', object: @tags %>
+
+<table class="rows">
+  <thead>
+    <tr>
+      <th>
+        <%= Tag.human_attribute_name :name %>
+        <%= sort_tag :name, :asc %>
+        <%= sort_tag :name, :desc %>
+      </th>
+      <th>
+        <%= Tag.human_attribute_name :items_count %>
+        <%= sort_tag :items_count, :asc %>
+        <%= sort_tag :items_count, :desc %>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tags.each do |tag| %>
+    <tr  class="<%= cycle('odd', 'even') %>">
+        <td><%= tag.name %></td>
+        <td><%= tag.items_count %></td>
+      <td class="options">
+        <%= link_to t('edit'), edit_tag_path(tag), class: "edit", title: t('edit') %>
+        <%= link_to t('show'), tag, class: "show", title: t('show'), target: "_blank" %>
+        <%= link_to t('destroy'), tag, class: "destroy", title: t('destroy'), data: { confirm: t('confirm'), method: :delete } %>
+      </td>
+    </tr>
+    <tr class="spacer"><td></td></tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% end %>
+
+<%= will_paginate @tags %>
+
+
+
