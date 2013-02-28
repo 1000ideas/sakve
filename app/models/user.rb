@@ -12,6 +12,11 @@ class User < ActiveRecord::Base
   validates :password, :presence => true, :confirmation => true, :length => {:minimum => 5}, :on => :create
   validates :password, :allow_blank => true, :confirmation => true, :length => {:minimum => 5}, :on => :update
 
+
+  def to_s 
+    email
+  end
+
   def role
     if has_role?(:admin)
       "admin"

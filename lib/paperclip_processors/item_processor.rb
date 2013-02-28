@@ -44,7 +44,7 @@ module Paperclip
 
       @attachment = attachment
 
-      @current_format = File.extname(@file.path)
+      @current_format = File.extname(@file.path).slice(1..-1).to_sym
       @basename = File.basename(@file.path, @current_format)
     end
 
@@ -67,6 +67,8 @@ module Paperclip
         process_video
       elsif item.document?
         process_document
+      elsif item.pdf_document?
+        process_pdf
       elsif item.image?
         process_image
       else
@@ -117,9 +119,11 @@ module Paperclip
     end
 
     def process_document
-      dst = Tempfile.new([@basename, ".#{@format.to_s}"])
+      dst = Tempfile.new([@basename, ".#{@format}"])
 
       if format == :png
+        Rails.logger.debug @file.path
+        Rails.logger.debug File.exists? @file.path
         pdf = Tempfile.new([@basename, '.pdf'])
         jodconvert(':src :dst', src: File.expand_path(@file.path), dst: File.expand_path(pdf.path))
 
@@ -129,6 +133,8 @@ module Paperclip
         command = []
         command << '-density' << '200'
         command << ':src'
+        command << '-background' << 'white'
+        command << '-flatten'
         command << '-resize' << "'#{scale}'"
         command << '-crop' << "'#{crop}'" if crop
         command << ':dst'
@@ -137,7 +143,6 @@ module Paperclip
                 src: "#{File.expand_path(pdf.path)}[0]",
                 dst: File.expand_path(dst.path) )
 
-        
       elsif format == :pdf
         jodconvert(':src :dst', src: File.expand_path(@file.path), dst: File.expand_path(dst.path))
       end
@@ -147,13 +152,69 @@ module Paperclip
 
 
     def process_image
-      dst = Tempfile.new([@basename, @format.to_s])
+      dst = Tempfile.new([@basename, ".#{@format}"])
 
+      current_geometry = Geometry.from_file(@file)
+      scale, crop = current_geometry.transformation_to(@geometry, @crop)
+
+      command = []
+      command << ':src'
+      command << '-resize' << "'#{scale}'"
+      command << '-crop' << "'#{crop}'" if crop
+      command << ':dst'
+
+      convert(command.join(' '), 
+              src: File.expand_path(@file.path),
+              dst: File.expand_path(dst.path) )
+      dst
+    end
+
+    def process_pdf
+      dst = Tempfile.new([@basename, ".#{@format}"])
+
+      current_geometry = Geometry.from_file(@file)
+      scale, crop = current_geometry.transformation_to(@geometry, @crop)
+
+      command = []
+      command << '-density' << '200'
+      command << ':src'
+      command << '-background' << 'white'
+      command << '-flatten'
+      command << '-resize' << "'#{scale}'"
+      command << '-crop' << "'#{crop}'" if crop
+      command << ':dst'
+
+      convert(command.join(' '), 
+              src: "#{File.expand_path(@file.path)}[0]",
+              dst: File.expand_path(dst.path) )
+      dst
     end
 
     def process_item
       dst = Tempfile.new([@basename, @format.to_s])
 
+      icon = @attachment.instance.icon_name
+      icon_path = Rails.root.join('lib', 'assets', 'file_icons', "#{icon}.png")
+    
+      hpos = icon == :archive ? -32 : -27
+      vpos = icon == :archive ? 24 : -36
+
+      command = []
+      command << ':src'
+      command << '-gravity' << 'Center'
+      command << '-fill' << 'white'
+      command << '-pointsize' << '14'
+      command << '-annotate' << sprintf("%+d%+d", hpos, vpos)
+      command << ':text'
+      #command << '-resize' << "'#{scale}'"
+      #command << '-crop' << "'#{crop}'" if crop
+      command << ':dst'
+
+      convert(command.join(' '), 
+              src: File.expand_path(icon_path),
+              text: @current_format, 
+              dst: File.expand_path(dst.path) )
+      dst
     end
   end
 end

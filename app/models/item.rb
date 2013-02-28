@@ -11,6 +11,8 @@ class Item < ActiveRecord::Base
 
   attr_accessible :name, :object, :type, :user_id
 
+  validates :object, attachment_presence: true
+
   def item_styles
     styles = {
       thumb: ['128x128#', :png],
@@ -54,6 +56,54 @@ class Item < ActiveRecord::Base
 
   def presentation?
     object_content_type.match /(powerpoint|presentation)$/
+  end
+
+  def spreadsheet?
+    object_content_type.match /(excel|spreadsheet)$/
+  end
+
+  def text_document?
+    document? and object_content_type.match /word|text/
+  end
+
+  def pdf_document?
+    object_content_type.match /pdf$/
+  end
+
+  def archive?
+    object_content_type.match /(bzip2$|[gl]zip$|zip$|lzma$|lzop$|xz$|commpress|archive|diskimage$)/
+  end
+
+  def webpage?
+   text_file? and object_content_type.match /(css|js|html|xml)/
+  end
+
+  def text_file?
+    object_content_type.match /^text/
+  end
+
+  def icon_name
+    if video?
+      :video
+    elsif audio?
+      :audio
+    elsif image?
+      :image
+    elsif archive?
+      :archive
+    elsif presentation?
+      :presentation
+    elsif spreadsheet?
+      :spreadsheet
+    elsif text_document?
+      :text_document
+    elsif webpage?
+      :webpage
+    elsif text_file?
+      :text
+    else
+      :none
+    end
   end
 
 
