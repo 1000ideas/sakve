@@ -1,6 +1,6 @@
 class Item < ActiveRecord::Base
   belongs_to :user
-  has_many :item_tags
+  has_many :item_tags, include: :tag
   has_many :tags, through: :item_tags
 
   has_attached_file :object, 
@@ -122,8 +122,13 @@ class Item < ActiveRecord::Base
 
   def save_tags
     if @tags
-      item_tags.destroy_all
-      @tags.split(',').map(&:strip).each do |tag|
+      tag_list = @tags.split(',').map(&:strip)
+      item_tags.each do |item_tag|
+        unless tag_list.include? item_tag.name
+          item_tag.destroy
+        end
+      end
+      tag_list.each do |tag|
         t = Tag.where(name: tag).first || Tag.create(name: tag)  
         self.item_tags.create(tag_id: t.id)
       end

@@ -3,8 +3,11 @@ pl:
     submenu:
       new: Dodaj zasób
       index: Lista zasobów
+      multinew: Masowe dodawanie zasobów
     new:
       title: Dodawanie zasobu
+    multinew:
+      title: Dodawanie zasobów
     index:
       title: Zasoby
     edit:
@@ -17,6 +20,7 @@ pl:
         name: Nazwa
         type: Typ
         object: Plik
+        tags: Tagi
         user_id: Uzytkownik
         thumb: Miniatura
 en:
@@ -24,8 +28,11 @@ en:
     submenu:
       new: Add item
       index: Item list
+      multinew: Add multiple items
     new:
       title: Adding an item
+    multinew:
+      title: Adding items
     index:
       title: Items
     edit:
@@ -38,5 +45,6 @@ en:
         name: Name
         type: Type
         object: File
+        tags: Tags
         user_id: User
         thumb: Thumbnail

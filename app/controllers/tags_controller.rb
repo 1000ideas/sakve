@@ -12,6 +12,12 @@ class TagsController < ApplicationController
       @tags = @tags.
         where("`name` LIKE ?", "%#{filter(:name)}%")
     end
+
+    unless params[:q].blank?
+      @tags = @tags.
+        where('`name` like ?', "#{params[:q]}%").
+        order('`items_count` DESC')
+    end
     
     @tags = @tags.order(sort_order) if sort_results?
     
@@ -19,7 +25,7 @@ class TagsController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render xml: @tags }
+      format.json  { render json: @tags.map(&:name) }
     end
   end
 

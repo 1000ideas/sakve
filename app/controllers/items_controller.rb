@@ -59,6 +59,13 @@ class ItemsController < ApplicationController
     end
   end
 
+  def multinew
+    authorize! :menage, :all
+    respond_to do |format|
+      format.html 
+    end
+  end
+
   # GET /items/1/edit
   def edit
     authorize! :menage, :all

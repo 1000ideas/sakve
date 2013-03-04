@@ -1,10 +1,12 @@
 <%= form_for(@item) do |f| %>
 <%= render partial: 'l/partials/errors', object: @item.errors %>
-<div class="group">
+  <div class="group">
+    <% if f.object.object? %>
     <div class="field">
       <%= f.label :thumb %>
       <%= image_tag f.object.thumb %>
     </div>
+    <% end %>
     <div class="field">
       <%= f.label :name %>
       <%= f.text_field :name  %>
@@ -15,7 +17,7 @@
     </div>
     <div class="field">
       <%= f.label :tags %>
-      <%= f.text_field :tags  %>
+      <%= f.text_field :tags, class: 'tags-autocomplete'  %>
     </div>
   </div>
 <div class="actions">

@@ -10,7 +10,12 @@ Sakve::Application.routes.draw do
       :registration => 'account'
     }
 
-  resources :items
+  resources :items do
+    collection do
+      get :multinew
+    end
+  end
+
   match 'items/:id/download/:style/:basename.:format', 
     to: 'items#download', 
     via: :get, 
