@@ -10,6 +10,10 @@ var Helper = {
 var LazyAdminExtension = {
   extension_setup: function() {
     $('.tags-autocomplete').autocomplete(this.tags_autocomplete_options);
+    $('.fileupload').each(function() {
+      LazyAdmin.fileupload_init(this);
+    });
+
   },
   tags_autocomplete_options: {
     source: function( request, response ) {
@@ -34,6 +38,14 @@ var LazyAdminExtension = {
       this.value = terms.join( ", " );
       return false;
     }
+  },
+  fileupload_init: function(element) {
+    var value = $(element).data('value');
+    $(element).wrap( $('<div>').addClass('button fileupload-button') );
+    $(element).after( $('<span>').text( value ) );
+    $(element).fileupload({
+      dataType: 'json '
+    });
   }
 };
 

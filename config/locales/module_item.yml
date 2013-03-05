@@ -3,13 +3,11 @@ pl:
     submenu:
       new: Dodaj zasób
       index: Lista zasobów
-      multinew: Masowe dodawanie zasobów
     new:
       title: Dodawanie zasobu
-    multinew:
-      title: Dodawanie zasobów
     index:
       title: Zasoby
+      fileupload: 'Dodaj pliki'
     edit:
       title: Edycja zasobu
   menu:

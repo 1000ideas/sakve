@@ -1,0 +1,31 @@
+.fileupload-button input[type=file] {
+  float: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  width: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+  font-size: inherit;
+}
+
+.fileupload-button {
+  height: 20px;
+  line-height: 20px;
+  width: 100px;
+  margin: 10px 0;
+  float: left; 
+  position: relative;
+  cursor: pointer;
+  border: 1px solid #333;
+  padding: 0 10px;
+  text-align: center;
+  overflow: hidden;
+}
+
+

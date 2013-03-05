@@ -44,7 +44,7 @@ module Paperclip
 
       @attachment = attachment
 
-      @current_format = File.extname(@file.path).slice(1..-1).to_sym
+      @current_format = File.extname(@file.path)
       @basename = File.basename(@file.path, @current_format)
     end
 

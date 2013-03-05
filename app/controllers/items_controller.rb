@@ -59,13 +59,6 @@ class ItemsController < ApplicationController
     end
   end
 
-  def multinew
-    authorize! :menage, :all
-    respond_to do |format|
-      format.html 
-    end
-  end
-
   # GET /items/1/edit
   def edit
     authorize! :menage, :all
@@ -83,10 +76,10 @@ class ItemsController < ApplicationController
     respond_to do |format|
       if @item.save
         format.html { redirect_to(items_path, notice: I18n.t('create.success') ) }
-        format.xml  { render xml: @item, status: :created, location: @item }
+        format.json  { render json: @item, status: :created, location: @item }
       else
         format.html { render action: "new" }
-        format.xml  { render xml: @item.errors, status: :unprocessable_entity }
+        format.json  { render json: @item.errors, status: :unprocessable_entity }
       end
     end
   end

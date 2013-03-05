@@ -7,6 +7,14 @@
 
 <p id="notice"><%= notice %></p>
 
+<%= form_tag do %>
+<div class="group">
+  <div class="field">
+    <%= file_field_tag :files, multiple: true, class: 'fileupload', name: 'item[object]', data: {value: t('.fileupload', default: 'Select files')} %>
+  </div>
+</div>
+<% end %>
+
 <%= form_tag items_path, method: :get do %>
 
 <%= render "filter" %>

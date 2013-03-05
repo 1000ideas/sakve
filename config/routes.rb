@@ -10,19 +10,14 @@ Sakve::Application.routes.draw do
       :registration => 'account'
     }
 
-  resources :items do
-    collection do
-      get :multinew
-    end
-  end
-
-  match 'items/:id/download/:style/:basename.:format', 
+  resources :items
+  match 'items/:id/download/:style.:format', 
     to: 'items#download', 
     via: :get, 
     as: :download_file
 
-    resources :tags
-resources :users, controller: 'l/users' 
+  resources :tags
+  resources :users, controller: 'l/users' 
   resource :admin, controller: 'l/admins', only: [:show] do
     post :update_user, as: :update_user, on: :member
   end

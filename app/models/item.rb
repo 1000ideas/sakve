@@ -7,9 +7,9 @@ class Item < ActiveRecord::Base
     styles: Proc.new {|object| object.instance.item_styles } ,
     processors: [:item_processor],
     path: ':partition/:class/:id/:style/:filename',
-    url: '/:class/:id/download/:style/:filename'
+    url: '/:class/:id/download/:style.:extension'
 
-  before_save :fix_mime_type, :save_tags
+  before_save :fix_mime_type, :save_tags, :default_name
 
   attr_accessible :name, :object, :type, :user_id, :tags
 
@@ -119,6 +119,10 @@ class Item < ActiveRecord::Base
   end
 
   protected
+
+  def default_name
+    self.name ||= File.basename(object_file_name, '.*').titleize if object?
+  end
 
   def save_tags
     if @tags

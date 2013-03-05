@@ -49,3 +49,4 @@ gem "will_paginate", "~> 3.0.0"
 gem "acts_as_tree", "~> 0.1.1"
 gem "mysql2"
 gem "tiny_mce_uploads"
+gem 'jquery-fileupload-rails'

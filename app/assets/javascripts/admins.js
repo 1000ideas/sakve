@@ -1,5 +1,6 @@
 //= require jquery
 //= require jquery-ui
+//= require jquery-fileupload/basic
 //= require jquery_ujs
 //= require lightbox
 //= require jquery.uploadify

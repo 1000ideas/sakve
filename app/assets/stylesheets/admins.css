@@ -2,6 +2,7 @@
  *= require jquery-ui-custom
  *= require lightbox
  *= require uploadify
+ *= require fileupload
  *= require admin/layout
  *= require admin/style
  *= require admin/layout/tabs
