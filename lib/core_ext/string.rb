@@ -7,12 +7,8 @@ class String
 
     self.scan(/'[^']+'|"[^"]+"|(?:[^[:blank:][:punct:]]|:)+/).map do |token|
       type, _, word = token.tr(%('"), '').partition(type_separator)
-      Rails.logger.debug "'#{type}' - '#{word}'"
-      if word.blank?
-        word, type = type, nil
-      else
-        type = type.to_sym
-      end
+      word, type = word.blank? ? [type, nil] : [word, type.to_sym]
+
       word if (type == search_type || type.nil?) && word.length > min_length
     end.compact.uniq
   end
