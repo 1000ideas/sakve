@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  transfer_id: 1
+  object: MyString
+
+two:
+  transfer_id: 1
+  object: MyString

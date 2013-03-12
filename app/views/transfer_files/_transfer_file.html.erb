@@ -1,0 +1,4 @@
+<div class="field transfer-file-<%= transfer_file.id %>">
+  <span class="name"><%= transfer_file.name %></span>
+  <%= link_to t('destroy'), file_path(transfer_file, format: :js), method: :delete, confirm: t('confirm'), remote: true %>
+</div>

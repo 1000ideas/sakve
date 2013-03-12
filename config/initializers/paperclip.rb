@@ -2,6 +2,10 @@ Paperclip.configure do |config|
   config.interpolates :partition do |attachment, style|
     "#{Rails.root}/uploads"
   end
+
+  config.interpolates :token do |attachment, style|
+    attachment.instance.token
+  end
 end
 
 ## Run open office

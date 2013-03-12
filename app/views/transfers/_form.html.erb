@@ -1,0 +1,48 @@
+<%= form_for(@transfer, html: {multipart: true}) do |f| %>
+  <%= render partial: 'l/partials/errors', object: @transfer.errors %>
+  <div class="group">
+    <div class="field">
+      <%= f.label :name %>
+      <%= f.text_field :name  %>
+    </div>
+    <div class="field">
+      <%= f.label :recipients %>
+      <%= f.text_field :recipients  %>
+    </div>
+    <% if f.object.new_record? %>
+    <div class="field">
+      <%= f.hidden_field :group_token %>
+      <%= file_upload_tag :object, class: 'transfer-fileupload' %>
+    </div>
+    <% end %>
+  </div>
+  <% if f.object.new_record? %>
+  <div class="group" id="uploaded-files">
+    <%= render f.object.files %>
+  </div>
+  <% end %>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+<% if @transfer.new_record? %>
+<script id="upload_progress_template" type="text/mustache">
+  <div class="field file-progress">
+    <span class="name">{{name}}</span>
+    <div class="progress">
+      <div class="bar" style="width: 0%" ></div>
+    </div>
+    <span class="progress-value">0 %</span>
+  </div>
+</script>
+
+<script id="uploaded_template" type="text/mustache">
+  <div class="field transfer-file-{{id}}">
+    <span class="name">{{name}}</span>
+    <a href="{{url}}" data-method="delete" data-confirm="<%= t('confirm') %>" data-remote="true">
+      <%= t('destroy') %>
+    </a>
+  </div>
+</script>
+<% end %>

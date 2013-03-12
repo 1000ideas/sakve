@@ -1,0 +1,31 @@
+<div class="filter">
+  <div class="field">
+    <strong>Filtruj: </strong>
+
+    <%= label_tag :filter_name, Transfer.human_attribute_name(:name)  %>
+        <%= text_field_tag "filter[name]", filter(:name) %>
+    
+    <%= label_tag :filter_recipients, Transfer.human_attribute_name(:recipients)  %>
+        <%= text_field_tag "filter[recipients]", filter(:recipients) %>
+    
+    <%= label_tag :filter_user_id, Transfer.human_attribute_name(:user_id)  %>
+        <%= text_field_tag "filter[user_id]", filter(:user_id) %>
+    
+    <%= label_tag :filter_token, Transfer.human_attribute_name(:token)  %>
+        <%= text_field_tag "filter[token]", filter(:token) %>
+    
+    <%= label_tag :filter_object, Transfer.human_attribute_name(:object)  %>
+        <%= text_field_tag "filter[object_file_name]", filter(:object_file_name) %>
+    
+    <%= label_tag :filter_expires_at, Transfer.human_attribute_name(:expires_at)  %>
+        <%= text_field_tag "filter[expires_at]", filter(:expires_at) %>
+    
+
+    <%= submit_tag "Filtruj" %>
+  </div>
+
+  <div class="field">
+    <%= link_to "Wyczyść", transfers_path %>
+  </div>
+
+</div>

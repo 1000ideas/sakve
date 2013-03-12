@@ -22,10 +22,44 @@
   float: left; 
   position: relative;
   cursor: pointer;
-  border: 1px solid #333;
+  background-color: #fff;
+  border: 1px solid #7D7D7D;
   padding: 0 10px;
+  color: #7D7D7D;
   text-align: center;
   overflow: hidden;
 }
 
+.field .progress {
+  display: inline-block;
+  vertical-align: middle;
+  width: 230px;
+  border: 1px solid #7d7d7d;
+  background-color: #fff;
+  height: 20px;
+  margin: 10px;
+}
 
+.field .progress-value {
+  display: inline-block;
+  vertical-align: middle;
+  width: 30px;
+  height: 20px;
+  line-height: 20px;
+  margin: 10px;
+}
+
+.field .progress .bar {
+  height: 100%;
+  background-color: #E6085C;
+
+}
+
+.field span.name {
+  display: inline-block;
+  vertical-align: middle;
+  width: 150px;
+  margin: 10px 10px 10px 0;
+  line-height: 20px;
+  text-align: right;
+}

@@ -1,0 +1,24 @@
+<% content_for :submenu do %>
+<%= render "submenu" %>
+<% end %>
+
+<% title t('transfers.show.title') %>
+<% breadcrumbs_admin link_to(t('transfers.index.title'), transfers_path),
+                      link_to(t('transfers.show.title'), transfer_path) %>
+
+<p id="notice"><%= notice %></p>
+
+<dl>
+<dt><%= Transfer.human_attribute_name :name %>:</dt>
+<dd><%= @transfer.name %></dd>
+<dt><%= Transfer.human_attribute_name :recipients %>:</dt>
+<dd><%= @transfer.recipients %></dd>
+<dt><%= Transfer.human_attribute_name :user_id %>:</dt>
+<dd><%= @transfer.user_id %></dd>
+<dt><%= Transfer.human_attribute_name :token %>:</dt>
+<dd><%= @transfer.token %></dd>
+<dt><%= Transfer.human_attribute_name :object %>:</dt>
+<dd><%= @transfer.object_file_name %></dd>
+<dt><%= Transfer.human_attribute_name :expires_at %>:</dt>
+<dd><%= @transfer.expires_at %></dd>
+</dl>

@@ -13,6 +13,7 @@
   <%= admin_menu_link(:users) if current_user.has_role? :admin %>
   <%= admin_menu_link(:items) if current_user.has_role? :admin %>
   <%= admin_menu_link(:tags) if current_user.has_role? :admin %>
+  <%= admin_menu_link(:transfers) if current_user.has_role? :admin %>
 </div>
 <div id="submenu">
   <%= yield :submenu %>

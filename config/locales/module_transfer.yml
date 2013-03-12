@@ -1,0 +1,43 @@
+pl:
+  transfers:
+    submenu:
+      new: Dodaj Transfer
+      index: Lista transfers
+    form:
+      fileupload: Dodaj pliki
+    new:
+      title: Dodawanie Transfer
+    index:
+      title: transfers
+    edit:
+      title: Edycja Transfer
+  menu:
+    transfers: Transfers
+  activerecord:
+    attributes:
+      transfer:
+        name: Nazwa transferu
+        recipients: Lista odbiorców
+        user: Właściciel
+        user_id: ID Właściciela
+        token: Token
+        object: Archiwum z plikami
+        expires_at: Ważny do
+        files: Pliki
+      transfer_file:
+        token: Token grupujący
+    errors:
+      models:
+        transfer:
+          attributes:
+            name:
+              blank: nie może być pusta
+            files:
+              too_short: 'muszą zostać wybrane (conajmniej %{count} plik)'
+            recipients:
+              too_short: 'musi zawierać conajmniej %{count} poprawny adres email'
+        transfer_file:
+          attributes:
+            token:
+              wrong_length: "musi mieć długość %{count} znaków"
+

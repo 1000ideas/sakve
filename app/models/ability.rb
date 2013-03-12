@@ -14,6 +14,8 @@ class Ability
       can :read, :all
     end
 
+    can :create, TransferFile unless user.new_record?
+    can :destroy, TransferFile, user_id: user.id
 
   end
 end
