@@ -1,6 +1,8 @@
 class Item < ActiveRecord::Base
+  include Sakve::ItemTypes
+
   belongs_to :user
-  has_many :item_tags, include: :tag
+  has_many :item_tags, include: :tag, dependent: :destroy
   has_many :tags, through: :item_tags
 
   has_attached_file :object, 
@@ -17,7 +19,7 @@ class Item < ActiveRecord::Base
 
   def item_styles
     styles = {
-      thumb: ['128x128#', :png],
+      thumb: ['128x128#', :png]
     }
     if video?
       styles[:preview] = ['640x480>', :mp4]
@@ -44,79 +46,31 @@ class Item < ActiveRecord::Base
     @tags || tags_list.join(', ')
   end
 
-  def fix_mime_type(force = false)
-    if force || object_content_type == 'application/octet-stream'
-      object_content_type = Paperclip::ContentTypeDetector.new(object.path).detect
+  def self.search_by_tags(*tags)
+    tags = tags.flatten
+    return [] if tags.empty?
+    assoc = self.reflect_on_association(:tags)
+    self.joins(:tags).
+      where(assoc.table_name.to_sym => {name: tags}).
+      group("#{table_name}.id").
+      having("COUNT(`#{assoc.table_name}`.`#{assoc.association_primary_key}`) = ?", tags.size)
+  end
+
+  def self.search_by_name(*words)
+    words = words.flatten
+    return [] if words.empty?
+    words.inject(self) do |result, w|
+      result.where("`#{table_name}`.`name` LIKE ?", "%#{w}%")
     end
   end
 
-  def video?
-    object_content_type.match /^video/
+  def self.search(query)
+    words = query.query_tokenize
+    tags = query.query_tokenize(:tag)
+
+    self.search_by_tags(tags) | self.search_by_name(words)
   end
 
-  def image?
-    object_content_type.match /^image/
-  end
-
-  def audio?
-    object_content_type.match /^audio/
-  end
-
-  def document?
-    object_content_type.match /(word|excel|powerpoint|officedocument|opendocument)/
-  end
-
-  def presentation?
-    object_content_type.match /(powerpoint|presentation)$/
-  end
-
-  def spreadsheet?
-    object_content_type.match /(excel|spreadsheet)$/
-  end
-
-  def text_document?
-    document? and object_content_type.match /word|text/
-  end
-
-  def pdf_document?
-    object_content_type.match /pdf$/
-  end
-
-  def archive?
-    object_content_type.match /(bzip2$|[gl]zip$|zip$|lzma$|lzop$|xz$|commpress|archive|diskimage$)/
-  end
-
-  def webpage?
-   text_file? and object_content_type.match /(css|js|html|xml)/
-  end
-
-  def text_file?
-    object_content_type.match /^text/
-  end
-
-  def icon_name
-    if video?
-      :video
-    elsif audio?
-      :audio
-    elsif image?
-      :image
-    elsif archive?
-      :archive
-    elsif presentation?
-      :presentation
-    elsif spreadsheet?
-      :spreadsheet
-    elsif text_document?
-      :text_document
-    elsif webpage?
-      :webpage
-    elsif text_file?
-      :text
-    else
-      :none
-    end
-  end
 
   protected
 
@@ -136,7 +90,6 @@ class Item < ActiveRecord::Base
         t = Tag.where(name: tag).first || Tag.create(name: tag)  
         self.item_tags.create(tag_id: t.id)
       end
-
     end
   end
 end

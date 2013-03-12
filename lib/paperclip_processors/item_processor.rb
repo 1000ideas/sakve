@@ -1,7 +1,26 @@
-module Paperclip
-  class ItemProcessor < Processor
+module PaperclipProcessors
+  class ItemProcessor < Paperclip::Processor
+    # FFMpeg executable path
+    mattr_accessor :ffmpeg_path
+    @@ffmpeg_path = '/usr/bin/ffmpeg'
+    
+    # FFProbe executable path
+    mattr_accessor :ffprobe_path
+    @@ffprobe_path = '/usr/bin/ffprobe'
 
-    class VideoGeometry < Geometry
+    # Java VM executable path
+    mattr_accessor :java_path
+    @@java_path = '/usr/bin/java'
+
+    # JavaOpenDocument converter library (jar) path
+    mattr_accessor :jod_path
+    @@jod_path = '/usr/share/java/jodconverter/jodconverter-cli-2.2.2.jar'
+
+    def self.setup
+      yield self
+    end
+
+    class VideoGeometry < Paperclip::Geometry
       def self.parse_ffprobe(ffprobe_output)
         size = ffprobe_output[/Stream.*Video.*\n/, 0].split(', ').slice(2)
         g = parse(size)
@@ -30,15 +49,11 @@ module Paperclip
       end
     end
 
-    FFMPEG = '/usr/bin/ffmpeg'
-    FFPROBE = '/usr/bin/ffprobe'
-    JAVA = '/usr/bin/java'
-    JOD = '/usr/share/java/jodconverter/jodconverter-cli-2.2.2.jar'
     attr_reader :format
 
     def initialize(file, options = {}, attachment = nil)
       @file = file
-      @geometry = Geometry.parse(options[:geometry])
+      @geometry = Paperclip::Geometry.parse(options[:geometry])
       @crop = (@geometry.to_s[-1] == '#')
       @format = options[:format] || :png
 
@@ -49,15 +64,15 @@ module Paperclip
     end
 
     def ffmpeg(params = '', options = {})
-      Paperclip.run(FFMPEG, "#{params} 2>&1", options, log_command: true)
+      Paperclip.run(@@ffmpeg_path, "#{params} 2>&1", options, log_command: true)
     end
 
     def ffprobe(filepath)
-      Paperclip.run(FFPROBE, '-i :file 2>&1', file: filepath, log_command: true)
+      Paperclip.run(@@ffprobe_path, '-i :file 2>&1', file: filepath, log_command: true)
     end
 
     def jodconvert(params = '', options = {})
-      Paperclip.run("#{JAVA} -jar #{JOD}", params, options, log_command: true)
+      Paperclip.run("#{@@java_path} -jar #{@@jod_path}", params, options, log_command: true)
     end
 
     def make
@@ -86,7 +101,7 @@ module Paperclip
                src: File.expand_path(@file.path),
                img: File.expand_path(img.path) )
 
-        current_geometry = Geometry.from_file(img)
+        current_geometry = Paperclip::Geometry.from_file(img)
         scale, crop = current_geometry.transformation_to(@geometry, @crop)
         command = [ ':src' ]
         command << '-resize' << "'#{scale}'"
@@ -127,7 +142,7 @@ module Paperclip
         pdf = Tempfile.new([@basename, '.pdf'])
         jodconvert(':src :dst', src: File.expand_path(@file.path), dst: File.expand_path(pdf.path))
 
-        current_geometry = Geometry.from_file(pdf)
+        current_geometry = Paperclip::Geometry.from_file(pdf)
         scale, crop = current_geometry.transformation_to(@geometry, @crop)
 
         command = []
@@ -154,7 +169,7 @@ module Paperclip
     def process_image
       dst = Tempfile.new([@basename, ".#{@format}"])
 
-      current_geometry = Geometry.from_file(@file)
+      current_geometry = Paperclip::Geometry.from_file(@file)
       scale, crop = current_geometry.transformation_to(@geometry, @crop)
 
       command = []
@@ -172,7 +187,7 @@ module Paperclip
     def process_pdf
       dst = Tempfile.new([@basename, ".#{@format}"])
 
-      current_geometry = Geometry.from_file(@file)
+      current_geometry = Paperclip::Geometry.from_file(@file)
       scale, crop = current_geometry.transformation_to(@geometry, @crop)
 
       command = []
