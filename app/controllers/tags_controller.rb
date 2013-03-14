@@ -1,6 +1,6 @@
 class TagsController < ApplicationController
 
-  layout "l/layouts/admin"
+  layout 'standard'
 
   # GET /tags
   # GET /tags.xml

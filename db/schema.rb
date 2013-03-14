@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130306081619) do
+ActiveRecord::Schema.define(:version => 20130313081612) do
 
   create_table "attachments", :force => true do |t|
     t.string   "upload_file_name"
@@ -20,6 +20,14 @@ ActiveRecord::Schema.define(:version => 20130306081619) do
     t.datetime "upload_updated_at"
     t.datetime "created_at",          :null => false
     t.datetime "updated_at",          :null => false
+  end
+
+  create_table "folders", :force => true do |t|
+    t.string   "name"
+    t.integer  "parent_id"
+    t.integer  "user_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "item_tags", :force => true do |t|
@@ -41,6 +49,7 @@ ActiveRecord::Schema.define(:version => 20130306081619) do
     t.integer  "user_id"
     t.datetime "created_at",          :null => false
     t.datetime "updated_at",          :null => false
+    t.integer  "folder_id"
   end
 
   create_table "roles", :force => true do |t|
@@ -76,7 +85,7 @@ ActiveRecord::Schema.define(:version => 20130306081619) do
     t.string   "name"
     t.string   "recipients"
     t.integer  "user_id"
-    t.string   "token",               :limit => 64
+    t.string   "token"
     t.string   "object_file_name"
     t.string   "object_content_type"
     t.integer  "object_file_size"

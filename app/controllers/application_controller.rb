@@ -1,33 +1,24 @@
 class ApplicationController < ActionController::Base
+
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to new_user_session_url, alert:  exception.message
+    unless current_user
+      session[:access_page] = request.path
+      redirect_to new_user_session_url, alert:  exception.message
+    else
+      render action: '/shared/401'
+    end
   end
+
   rescue_from ActiveRecord::RecordNotFound do
     render action: "/shared/404"
   end
 
 
   protect_from_forgery
-  
   before_filter :default_url_options, :set_locale
   
   layout :layout_by_resource
 
-  def layout_by_resource
-    if devise_controller?
-      "l/layouts/admin_login"
-    else
-      "l/layouts/standard"
-    end
-  end
-
-
-  def index
-  end
-
-  def search
-  end
-  
   def switch_lang
     session[:locale] = params[:lang]
     render nothing:  true
@@ -52,7 +43,13 @@ class ApplicationController < ActionController::Base
   
 
   def after_sign_in_path_for(resource)
-    "/admin"
+    access_page, session[:access_page] = session[:access_page], nil
+    access_page || "/"
   end
+
+  def layout_by_resource
+    devise_controller? ? 'login' : 'standard'
+  end
+
 end
 

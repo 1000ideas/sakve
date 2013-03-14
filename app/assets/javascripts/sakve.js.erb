@@ -1,0 +1,168 @@
+<% url = Sakve::Application.routes.url_helpers %>
+
+(function(window) {
+var Helper = {
+  split: function ( val ) {
+    return val.split( /,\s*/ );
+  },
+  lastTerm: function ( term ) {
+    return Helper.split( term ).pop();
+  },
+  fileupload_init: function(element, options) {
+    if (!options) options = {};
+    var value = $(element).data('value');
+    $(element).wrap( $('<div>').addClass('button fileupload-button') );
+    $(element).after( $('<span>').text( value ) );
+    $(element).fileupload($.extend({
+      singleFileUploads: true,
+      dataType: 'json '
+    }, options) );
+  },
+  progress_function: function(e, data) {
+    if (data.context) {
+      var progress = parseInt(data.loaded / data.total * 100, 10) + "%";
+      $('.bar', data.context).css('width', progress)
+      $('.progress-value', data.context).text( progress)
+    }
+  }
+};
+
+window.Sakve = {
+  setup: function() {
+    var that = this;
+    that.load_templates();
+
+    $('.tags-autocomplete').autocomplete(that.tags_autocomplete_options);
+
+    $('.fileupload').each(function() {
+      that.item_upload_init(this);
+    });
+
+    $('.transfer-fileupload').each(function() {
+      that.transfer_init(this);
+    });
+
+    that.folder_creation_init();
+    that.file_multiupload_init();
+    that.file_transfer_init();
+
+  },
+  load_templates: function() {
+    this.templates = {
+      upload_progress: Mustache.compile( $('#upload_progress_template').text().trim() ),
+      uploaded: Mustache.compile( $('#uploaded_template').text().trim() )
+    }
+  },
+  tags_autocomplete_options: {
+    source: function(request, response) {
+      $.getJSON( "/tags.json", {
+        q: Helper.lastTerm( request.term )
+      }, response );
+    },
+    search: function() {
+      var term = Helper.lastTerm( this.value );
+      if ( term.length < 1 ) {
+        return false;
+      }
+    },
+    focus: function() {
+      return false;
+    },
+    select: function( event, ui ) {
+      var terms = Helper.split( this.value );
+      terms.pop();
+      terms.push( ui.item.value );
+      terms.push( "" );
+      this.value = terms.join( ", " );
+      return false;
+    }
+  },
+  transfer_init: function(element) {
+      var that = this;
+      Helper.fileupload_init(element, {
+        url: '<%= url.files_path(format: :json) %>',
+        add: function(e, data) {
+          var group = data.form.children('.group').first();
+          var file = data.files[0];
+          data.context = $( that.templates.upload_progress(file) );
+          group.append( data.context );
+          $("input[type=submit], button", data.form).attr('disabled', true);
+          data.submit();
+        },
+        progress: Helper.progress_function,
+        done: function(e, data) {
+          var uploaded = $( that.templates.uploaded({
+            id: data.result.id,
+            name: data.result.name,
+            url: data.jqXHR.getResponseHeader('Location')
+          }) );
+          $('#uploaded-files').append( uploaded );
+          data.context.remove();
+        },
+        stop: function(e) {
+          $(this).parents('form').find("input[type=submit], button").attr('disabled', false)
+        }
+      });
+  },
+  item_upload_init: function(element) {
+      var that = this;
+      Helper.fileupload_init(element, {
+        add: function(e, data) {
+          var group = $('#upload-in-progress', data.form);
+          var file = data.files[0];
+          data.context = $( that.templates.upload_progress(file) );
+          group.append( data.context );
+          data.submit();
+        },
+        progress: Helper.progress_function,
+        done: function(e, data) {
+          data.context.fadeOut(function() {
+            $(this).remove();
+          });
+          var url = $('#items-list').data('url');
+          $('#items-list').load(url);
+        },
+      });
+  },
+  folder_creation_init: function() {
+    $('#new-folder-dialog').dialog({
+      autoOpen: false,
+      modal: true,
+      width: 500
+    });
+  },
+  folder_creation_open: function() {
+    $('#new-folder-dialog').dialog('open');
+  },
+  file_multiupload_init: function() {
+    $('#multiupload-files-dialog').dialog({
+      autoOpen: false,
+      modal: true,
+      width: 600,
+      height: 400,
+      resizable: false
+    });
+  },
+  file_multiupload_open: function() {
+    $('#multiupload-files-dialog').dialog('open');
+  },
+  file_transfer_init: function() {
+    $('#transfer-files-dialog').dialog({
+      autoOpen: false,
+      modal: true,
+      width: 600,
+      height: 400,
+      resizable: false
+    });
+  },
+  file_transfer_open: function() {
+    $('#transfer-files-dialog').dialog('open');
+  }
+
+};
+
+})(window);
+
+$(function() {
+  Sakve.setup();
+});

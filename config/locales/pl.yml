@@ -21,6 +21,11 @@ pl:
   show: "Pokaż"
   destroy: "Usuń"
   sure: "Jesteś pewny?"
+  confirm:
+    text: 'Czy na pewno?'
+    title: 'Potwierdź'
+    ok: 'Ok'
+    cancel: 'Anuluj'
   sort:
     asc: "Sortuj rosnąco"
     desc: "Sortuj malejąco"

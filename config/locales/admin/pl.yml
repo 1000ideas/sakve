@@ -13,7 +13,6 @@ pl:
   unhide_news: "Uwidocznij aktualność"
   destroy: "Usuń"
   destroy_selected: "Usuń zaznaczone"
-  confirm: "Czy na pewno?"
   gallery_warning: "Uwaga: usunięcie tej galerii spowoduje usunięcie wszystkich jej podgalerii. Czy na pewno?"
   layout:
     logged_as: "Zalogowany jako:"

@@ -1,12 +1,20 @@
 pl:
+  folders:
+    form:
+      root_folder: '<jako folder nadrzędny>'
   items:
     submenu:
       new: Dodaj zasób
       index: Lista zasobów
+      new_folder: Dodaj folder
     new:
       title: Dodawanie zasobu
     index:
-      title: Zasoby
+      title: Pliki
+      upload: 'Dodaj pliki'
+      new_folder: 'Utwórz folder'
+    multiupload:
+      title: 'Dodawanie plików'
       fileupload: 'Dodaj pliki'
     edit:
       title: Edycja zasobu
@@ -14,6 +22,12 @@ pl:
     items: Zasoby
   activerecord:
     attributes:
+      folder:
+        name: Nazwa
+        user: Właściciel
+        user_id: ID właściciela
+        parent: Folder nadrzędny
+        subfolder: Podfoldery
       item:
         name: Nazwa
         type: Typ
@@ -22,11 +36,14 @@ pl:
         user_id: Uzytkownik
         thumb: Miniatura
 en:
+  folders:
+    form:
+      root_folder: '<as root folder>'
   items:
     submenu:
       new: Add item
       index: Item list
-      multinew: Add multiple items
+      new_folder: Create folder
     new:
       title: Adding an item
     multinew:
@@ -39,6 +56,12 @@ en:
     items: Items
   activerecord:
     attributes:
+      folder:
+        name: Name
+        user: Owner
+        user_id: Owner ID
+        parent: Parent folder
+        subfolder: Subfolders
       item:
         name: Name
         type: Type

@@ -1,2 +1,5 @@
 <%= link_to t('items.submenu.index'),items_path, class: "list" %>
-<%= link_to t('items.submenu.new'), new_item_path, class: "new" %>
+<%= link_to t('items.submenu.new'), new_item_path(folder: params[:folder]), class: "new" %>
+<%= link_to t('items.submenu.new_folder'), 'javascript: LazyAdmin.folder_creation_open();' , class: "new" %>
+
+

@@ -1,0 +1,74 @@
+TABLE.rows {
+    width: 100%;
+    border-collapse: collapse;
+}
+TABLE.rows TD,
+TABLE.rows TH {
+    padding: 10px;
+    text-align: center;
+}
+
+TABLE.rows TD.gallery_name,
+TABLE.rows TD.page_title {
+    text-align: left;
+}
+
+TABLE.rows TD.child-tab {
+    background-color: transparent !important;
+    width: 30px;
+}
+
+TABLE.rows TBODY TR.even TD {
+    background-color: #dddddd;
+}
+TABLE.rows TBODY TR.odd TD {
+    background-color: #ededed;
+}
+TABLE.rows TBODY TR.spacer TD {
+  height: 6px;
+  padding: 0;
+}
+TABLE.rows TBODY TR.spacer.as_child TD div {
+  width: 50px;
+  height: 100%;
+  background: #fff;
+}
+TR.spacer.ui-state-hover TD {
+    background: #E6085C;
+}
+
+TABLE.rows INPUT {
+    margin: 0 !important;
+}
+
+TABLE.rows .options {
+    text-align: right;
+    width: 150px;
+}
+TABLE.rows .options a {
+    width: 15px;
+    height: 16px;
+    margin: 0 5px;
+    text-indent: 9999px;
+    display: inline-block;
+    overflow: hidden;
+    vertical-align:middle;
+}
+TABLE.rows .options .show { background: image-url("admin/icons.png") no-repeat 0 -194px; width: 16px; }
+TABLE.rows .options .edit { background: image-url("admin/icons.png") no-repeat 0 -16px; width: 16px; }
+TABLE.rows .options .destroy { background: image-url("admin/icons.png") no-repeat 0 -35px; width: 13px; }
+TABLE.rows .options .hide { background: image-url("admin/icons.png") no-repeat 0 2px; width: 16px; }
+TABLE.rows .options .unhide { background: image-url("admin/icons.png") no-repeat 0 -152px; width: 16px; }
+TABLE.rows .options .promo_del { background: image-url("admin/icons.png") no-repeat 0 -137px; width: 16px; }
+TABLE.rows .options .promo_add { background: image-url("admin/icons.png") no-repeat 0 -118px; width: 16px; }
+
+
+.downloads th{
+    line-height: 20px;
+    border: 1px solid #A02066;
+    padding: 3px 7px;
+}
+.downloads{
+    margin:10px;
+}
+

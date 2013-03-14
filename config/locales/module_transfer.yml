@@ -9,6 +9,7 @@ pl:
       title: Dodawanie Transfer
     index:
       title: transfers
+      new_transfer: 'Prześlij pliki'
     edit:
       title: Edycja Transfer
   menu:

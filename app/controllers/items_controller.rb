@@ -1,36 +1,26 @@
 class ItemsController < ApplicationController
 
-  layout "l/layouts/admin"
+  layout "standard"
+  before_filter :create_new_folder
 
   # GET /items
   # GET /items.xml
   def index
     authorize! :menage, :all
-    @items = Item
+    @folders = Folder.global_roots
+    @user_folders = Folder.user_roots(current_user)
+    @current_folder ||= @folders.first
 
-    unless filter(:name).blank?
-      @items = @items.
-        where("`name` LIKE ?", "%#{filter(:name)}%")
-    end
-    unless filter(:type).blank?
-      @items = @items.
-        where("`type` LIKE ?", "%#{filter(:type)}%")
-    end
-    unless filter(:object_file_name).blank?
-      @items = @items.
-        where("`object_file_name` LIKE ?", "%#{filter(:object_file_name)}%")
-    end
-    unless filter(:user_id).blank?
-      @items = @items.
-        where("`user_id` LIKE ?", "%#{filter(:user_id)}%")
-    end
-    
-    @items = @items.order(sort_order) if sort_results?
-    
-    @items = @items.all.paginate page: params[:page]
+    @items = Item.where(folder_id: @current_folder.try(:id)) 
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html do
+        if params[:partial]
+          render @items
+        else
+          render
+        end
+      end
       format.xml  { render xml: @items }
     end
   end
@@ -43,18 +33,6 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render xml: @item }
-    end
-  end
-
-  # GET /items/new
-  # GET /items/new.xml
-  def new
-    authorize! :menage, :all
-    @item = Item.new
-
-    respond_to do |format|
-      format.html # new.html.erb
       format.xml  { render xml: @item }
     end
   end
@@ -110,7 +88,7 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to :back, notice: I18n.t('delete.success') } 
-      format.xml  { head :ok }
+      format.js
     end
   end
 
@@ -119,5 +97,12 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
 
     send_file @item.object.path(params[:style])
+  end
+
+  protected
+
+  def create_new_folder
+    @current_folder = Folder.where(id: params[:folder]).first
+    @folder = Folder.new parent: @current_folder
   end
 end

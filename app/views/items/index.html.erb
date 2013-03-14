@@ -1,73 +1,32 @@
-<% content_for :submenu do %>
-<%= render "submenu" %>
-<% end %>
-
 <% title t('items.index.title') %>
-<% breadcrumbs_admin link_to(t('items.index.title'), items_path) %>
 
-<p id="notice"><%= notice %></p>
+<section>
+  <h1>Global folders</h1>
+  <ul class="folders-list" id="root-folders">
+    <%= render @folders %>
+  </ul>
+</section>
 
-<%= form_tag do %>
-<div class="group">
-  <div class="field">
-    <%= file_field_tag :files, multiple: true, class: 'fileupload', name: 'item[object]', data: {value: t('.fileupload', default: 'Select files')} %>
-  </div>
+<section>
+  <h1>User folders</h1>
+  <ul class="folders-list" id="user-folders">
+    <%= render @user_folders %>
+  </ul>
+</section>
+
+
+<header>
+  <%= link_to_function t('.upload'), 'Sakve.file_multiupload_open()', class: :button %>
+  <%= link_to_function t('.new_folder'), 'Sakve.folder_creation_open()', class: :button %>
+</header>
+<ul class="file-list" id="items-list" data-url="<%= url_for((params || {}).merge(partial: true)) %>">
+  <%= render @items %>
+</ul>
+
+<div id="multiupload-files-dialog" title="<%= t('.upload') %>" class="dialog-box">
+  <%= render :partial => 'multiupload' %>
 </div>
-<% end %>
 
-<%= form_tag items_path, method: :get do %>
-
-<%= render "filter" %>
-<%= render partial: 'l/partials/switcher', object: @items %>
-
-<table class="rows">
-  <thead>
-    <tr>
-      <th>
-        <%= Item.human_attribute_name :thumb %>
-      </th>
-      <th>
-        <%= Item.human_attribute_name :name %>
-        <%= sort_tag :name, :asc %>
-        <%= sort_tag :name, :desc %>
-      </th>
-      <th>
-        <%= Item.human_attribute_name :object %>
-        <%= sort_tag :object_file_name, :asc %>
-        <%= sort_tag :object_file_name, :desc %>
-      </th>
-      <th>
-        <%= Item.human_attribute_name :tags %>
-      </th>
-      <th>
-        <%= Item.human_attribute_name :user_id %>
-        <%= sort_tag :user_id, :asc %>
-        <%= sort_tag :user_id, :desc %>
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @items.each do |item| %>
-    <tr  class="<%= cycle('odd', 'even') %>">
-        <td><%= image_tag item.thumb %></td>
-        <td><%= item.name %></td>
-        <td><%= item.object_file_name %></td>
-        <td><%= item.tags %></td>
-        <td><%= item.user %></td>
-      <td class="options">
-        <%= link_to t('edit'), edit_item_path(item), class: "edit", title: t('edit') %>
-        <%= link_to t('show'), item, class: "show", title: t('show'), target: "_blank" %>
-        <%= link_to t('destroy'), item, class: "destroy", title: t('destroy'), data: { confirm: t('confirm'), method: :delete } %>
-      </td>
-    </tr>
-    <tr class="spacer"><td></td></tr>
-    <% end %>
-  </tbody>
-</table>
-
-<% end %>
-
-<%= will_paginate @items %>
-
-
-
+<div id="new-folder-dialog" title="<%= t('.new_folder') %>" class="dialog-box">
+  <%= render partial: 'folders/form' %>
+</div>

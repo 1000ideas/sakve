@@ -6,7 +6,7 @@
  *= require admin/layout
  *= require admin/style
  *= require admin/layout/tabs
- *= require admin/layout/tables
+ *= require admin_ext/layout/tables
  *= require admin/layout/forms
  *= require admin/layout/custom-forms
  *= require admin/layout/gallery_photos
@@ -14,6 +14,7 @@
  *= require admin/layout/sort
  *= require admin/layout/switcher
  *= require admin/admin
+ *= require admin_extension
  *= require common
  */
 

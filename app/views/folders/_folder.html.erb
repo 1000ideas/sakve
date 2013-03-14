@@ -1,0 +1,6 @@
+<li>
+  <span><%= link_to folder.name, items_path(folder: folder.id) %></span>
+  <%= content_tag :ul do %>
+    <%= render folder.subfolders %>
+  <% end if folder.has_subfolders? %>
+</li>

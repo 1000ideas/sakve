@@ -1,9 +1,5 @@
 Sakve::Application.routes.draw do
   scope '(:locale)' do 
-    get "transfer_files/create"
-
-    get "transfer_files/destroy"
-
     devise_for :users, 
       path: "",
       path_names: {
@@ -15,7 +11,22 @@ Sakve::Application.routes.draw do
         :registration => 'account'
       }
 
-    resources :items
+    match 'items(/folder/:folder)(/:partial)(.:format)', 
+      to: 'items#index',
+      via: :get,
+      as: :items,
+      defaults: {
+        partial: false
+      }
+
+    match 'items(/folder/:folder)(.:format)', 
+      to: 'items#create',
+      via: :post,
+      as: :items
+
+    resources :items, except: [:index, :new, :create]
+
+    resources :folders, only: [:new, :create, :destroy]
     match 'items/:id/download/:style.:format', 
       to: 'items#download', 
       via: :get, 
@@ -31,21 +42,16 @@ Sakve::Application.routes.draw do
         token: /[0-9a-f]{64}/i
       }
 
-    resources :transfers do
+    resources :transfers, except: [:show, :new] do
       collection do
         resources :files, controller: :transfer_files, only: [:create, :destroy]
       end
     end
 
 
-    resources :users, controller: 'l/users' 
-    resource :admin, controller: 'l/admins', only: [:show] do
-      post :update_user, as: :update_user, on: :member
-    end
-
+    resources :users, controller: 'users' 
     match 'switch_lang/:lang', to: 'application#switch_lang', as:  :switch_lang
-    match 'search', to: 'application#search', as: :search
-    root to: 'application#index'
+    root to: 'items#index'
   end
-  root to: 'application#index'
+  root to: 'items#index'
 end

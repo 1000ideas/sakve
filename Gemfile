@@ -18,7 +18,7 @@ gem 'jquery-rails'
 gem 'debugger'
 
 gem 'l'
-gem "tiny_mce_uploads"
+gem "tiny_mce_uploads", path: '../gems/tiny_mce_uploads'
 
 gem "devise", "~> 2.0.0"
 gem "rolify"
@@ -29,3 +29,6 @@ gem "paperclip"
 gem "will_paginate", "~> 3.0.0"
 gem "acts_as_tree", "~> 0.1.1"
 gem 'jquery-fileupload-rails'
+
+
+gem 'i18n-js'

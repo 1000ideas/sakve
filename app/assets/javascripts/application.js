@@ -11,6 +11,11 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
+//= require jquery-ui
+//= require i18n
+//= require i18n/translations
+//= require mustache
+//= require jquery-fileupload/basic
 //= require jquery_ujs
-//= require lightbox
-//= require_tree .
+//= require jquery_ujs_extension
+//= require sakve

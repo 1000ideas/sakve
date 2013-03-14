@@ -15,16 +15,14 @@
 }
 
 .fileupload-button {
-  height: 20px;
-  line-height: 20px;
+  line-height: 1.5em;
   width: 100px;
-  margin: 10px 0;
-  float: left; 
   position: relative;
   cursor: pointer;
   background-color: #fff;
   border: 1px solid #7D7D7D;
-  padding: 0 10px;
+  border-radius: .5em;
+  padding: 0 1.5em;
   color: #7D7D7D;
   text-align: center;
   overflow: hidden;
@@ -51,7 +49,7 @@
 
 .field .progress .bar {
   height: 100%;
-  background-color: #E6085C;
+  background-color: #0085FF;
 
 }
 

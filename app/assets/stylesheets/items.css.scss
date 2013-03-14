@@ -1,0 +1,22 @@
+
+
+ul.file-list {
+  list-style: none;
+}
+
+ul.file-list li {
+  display: block;
+}
+
+ul.file-list li > div {
+  display: inline-block;
+}
+
+ul.file-list li > div.name {
+  width: 300px;
+}
+
+ul.file-list li > div.size {
+  text-align: center;
+  width: 100px;
+}

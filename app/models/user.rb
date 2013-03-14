@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+  has_many :items, dependent: :destroy
+  has_many :folder, dependent: :destroy
+
   rolify
   devise :database_authenticatable, :timeoutable,
          :rememberable, :trackable, :registerable
@@ -32,5 +35,9 @@ class User < ActiveRecord::Base
     roles.destroy
     add_role(value.to_sym)
   end
-  # attr_accessible :title, :body
+
+  def admin?
+    has_role?(:admin)
+  end
+
 end

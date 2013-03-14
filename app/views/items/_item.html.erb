@@ -1,0 +1,10 @@
+<li class="<%= cycle('odd', 'even') %> item-<%= item.id %>">
+    <div class="name"><%= item.name %></div>
+    <div class="size"><%= number_to_human_size item.object_file_size %></div>
+    <div class="date" title="<%= l item.created_at, format: :long %>">
+      <%= l item.created_at, format: :short %>
+    </div>
+    <div class="actions">
+    <%= link_to t('destroy'), item, class: "destroy", title: t('destroy'), data: { confirm: t('confirm.text'), method: :delete, remote: true } %>
+    </div>
+  </li>

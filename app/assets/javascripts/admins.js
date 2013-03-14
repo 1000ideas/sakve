@@ -7,4 +7,3 @@
 //= require jquery.uploadify
 //= require jquery.livequery
 //= require admin/admin
-//= require admin_extension

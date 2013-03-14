@@ -2,6 +2,10 @@ class Transfer < ActiveRecord::Base
   EXPIRES_IN_DAYS = 7
 
   belongs_to :user
+  scope :expired, lambda { where('`expires_at` < ?', DateTime.now) }
+  scope :active, lambda { where('`expires_at` >= ?', DateTime.now) }
+  scope :for_user, lambda { |user| user.admin? ? where(true) : where(user_id: user.id) }
+
 
   has_attached_file :object,
     path: ':partition/:class/:id/:filename'
@@ -35,7 +39,7 @@ class Transfer < ActiveRecord::Base
   end
 
   def self.delete_expired
-    self.where('`expires_at` < ?', DateTime.now).each(&:destroy)
+    self.expired.each(&:destroy)
   end
 
   def recipients_list

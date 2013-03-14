@@ -1,4 +1,4 @@
-<%= form_for(@transfer, html: {multipart: true}) do |f| %>
+<%= form_for(@transfer, remote: true, format: :js) do |f| %>
   <%= render partial: 'l/partials/errors', object: @transfer.errors %>
   <div class="group">
     <div class="field">
@@ -22,7 +22,7 @@
   </div>
   <% end %>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.button %>
   </div>
 <% end %>
 
@@ -40,7 +40,7 @@
 <script id="uploaded_template" type="text/mustache">
   <div class="field transfer-file-{{id}}">
     <span class="name">{{name}}</span>
-    <a href="{{url}}" data-method="delete" data-confirm="<%= t('confirm') %>" data-remote="true">
+    <a href="{{url}}" data-method="delete" data-confirm="<%= t('confirm.text') %>" data-remote="true">
       <%= t('destroy') %>
     </a>
   </div>

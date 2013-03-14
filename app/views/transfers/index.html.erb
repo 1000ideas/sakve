@@ -1,71 +1,13 @@
-<% content_for :submenu do %>
-<%= render "submenu" %>
-<% end %>
-
 <% title t('transfers.index.title') %>
-<% breadcrumbs_admin link_to(t('transfers.index.title'), transfers_path) %>
 
-<p id="notice"><%= notice %></p>
+<header>
+  <%= link_to_function t('.new_transfer'), 'Sakve.file_transfer_open()', class: :button %>
+</header>
 
-<%= form_tag transfers_path, method: :get do %>
+<ul id="transfers-list" data-url="<%= url_for((params || {}).merge(partial: true)) %>">
+    <%= render @transfers %>
+</ul>
 
-<%= render "filter" %>
-<%= render partial: 'l/partials/switcher', object: @transfers %>
-
-<table class="rows">
-  <thead>
-    <tr>
-      <th>
-        <%= Transfer.human_attribute_name :name %>
-        <%= sort_tag :name, :asc %>
-        <%= sort_tag :name, :desc %>
-      </th>
-      <th>
-        <%= Transfer.human_attribute_name :recipients %>
-      </th>
-      <th>
-        <%= Transfer.human_attribute_name :user %>
-      </th>
-      <th>
-        <%= Transfer.human_attribute_name :token %>
-        <%= sort_tag :token, :asc %>
-        <%= sort_tag :token, :desc %>
-      </th>
-      <th>
-        <%= Transfer.human_attribute_name :expires_at %>
-        <%= sort_tag :expires_at, :asc %>
-        <%= sort_tag :expires_at, :desc %>
-      </th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @transfers.each do |transfer| %>
-    <tr  class="<%= cycle('odd', 'even') %>">
-        <td><%= transfer.name %></td>
-        <td>
-          <ul>
-            <% transfer.recipients_list.each do |email| %>
-            <li><%= email %></li>
-            <% end %>
-          </ul>
-        </td>
-        <td><%= transfer.user %></td>
-        <td><%= link_to transfer.token, download_transfer_path(token: transfer.token), target: '_blank' %></td>
-        <td><%= transfer.expires_at %></td>
-      <td class="options">
-        <%= link_to t('edit'), edit_transfer_path(transfer), class: "edit", title: t('edit') %>
-        <%= link_to t('show'), transfer, class: "show", title: t('show'), target: "_blank" %>
-        <%= link_to t('destroy'), transfer, class: "destroy", title: t('destroy'), data: { confirm: t('confirm'), method: :delete } %>
-      </td>
-    </tr>
-    <tr class="spacer"><td></td></tr>
-    <% end %>
-  </tbody>
-</table>
-
-<% end %>
-
-<%= will_paginate @transfers %>
-
-
-
+<div id="transfer-files-dialog" title="<%= t('.new_transfer') %>" class="dialog-box">
+  <%= render partial: 'form' %>
+</div>

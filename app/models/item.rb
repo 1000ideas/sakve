@@ -2,6 +2,7 @@ class Item < ActiveRecord::Base
   include Sakve::ItemTypes
 
   belongs_to :user
+  belongs_to :folder
   has_many :item_tags, include: :tag, dependent: :destroy
   has_many :tags, through: :item_tags
 
@@ -13,9 +14,11 @@ class Item < ActiveRecord::Base
 
   before_save :fix_mime_type, :save_tags, :default_name
 
-  attr_accessible :name, :object, :type, :user_id, :tags
+  attr_accessible :name, :object, :type, :user_id, :tags, :folder_id, :folder
 
   validates :object, attachment_presence: true
+  validates :folder_id, presence: true
+
 
   def item_styles
     styles = {

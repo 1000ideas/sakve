@@ -1,0 +1,17 @@
+<%= form_for @folder, remote: true do |f| %>
+  <%= render partial: 'l/partials/errors', object: @folder.errors %>
+  <div class="group">
+    <div class="field">
+      <%= f.label :parent_id %>
+      <%= f.select :parent_id, options_for_select(Folder.names_tree_for_user(current_user), f.object.parent_id), include_blank: t('.root_folder') %>
+    </div>
+    <div class="field">
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </div>
+  </div>
+  <div class="actions">
+    <%= f.button %>
+  </div>
+<% end %>
+
