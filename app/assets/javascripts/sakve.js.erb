@@ -45,7 +45,15 @@ window.Sakve = {
     that.folder_creation_init();
     that.file_multiupload_init();
     that.file_transfer_init();
+    that.context_menu_init();
 
+  },
+  reassign_odd_even_rows: function(selector) {
+    var cycle = 0;
+    $(selector).find('li').each(function() {
+      $(this).removeClass('odd').removeClass('even').addClass(cycle % 2 == 0 ? 'odd' : 'even');
+      ++cycle;
+    });
   },
   load_templates: function() {
     this.templates = {
@@ -157,6 +165,34 @@ window.Sakve = {
   },
   file_transfer_open: function() {
     $('#transfer-files-dialog').dialog('open');
+  },
+  context_menu_init: function() {
+
+    //Folder context menu
+    $('.folder-list').contextMenu({
+      selector: 'li span',
+      callback: function(key, options) {
+        $('.actions a.' + key, options.$trigger).trigger('click');
+      },
+      items: {
+        open: { name: I18n.t('open'), icon: 'open' },
+        destroy: { name: I18n.t('destroy'), icon: 'destroy' }
+      },
+      animation: { show: 'show', hide: 'hide' }
+    });
+
+    //item context menu
+    $('.file-list').contextMenu({
+      selector: 'li',
+      callback: function(key, options) {
+        $('.actions a.' + key, options.$trigger).trigger('click');
+      },
+      items: {
+        edit: { name: I18n.t('edit'), icon: 'edit' },
+        destroy: { name: I18n.t('destroy'), icon: 'destroy' }
+      },
+      animation: { show: 'show', hide: 'hide' }
+    });
   }
 
 };

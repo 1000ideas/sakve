@@ -19,9 +19,11 @@ pl:
   edit: "Edytuj"
   back: "Powrót"
   show: "Pokaż"
+  open: 'Otwórz'
   destroy: "Usuń"
   sure: "Jesteś pewny?"
   confirm:
+    folder: 'Usunąć folder z całą jego zawartością?'
     text: 'Czy na pewno?'
     title: 'Potwierdź'
     ok: 'Ok'

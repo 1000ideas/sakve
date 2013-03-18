@@ -2,21 +2,31 @@
 
 ul.file-list {
   list-style: none;
+  padding: 0;
 }
 
 ul.file-list li {
   display: block;
+  padding: 1em;
+  background: #eee;
+  min-width: 800px;
 }
 
-ul.file-list li > div {
-  display: inline-block;
+ul.file-list li.even {
+  background: #ddd;
+}
+
+ul.file-list li {
+  div.name { display: inline-block; }
+  div.size { display: inline-block; }
+  div.date { display: inline-block; }
 }
 
 ul.file-list li > div.name {
-  width: 300px;
+  width: 50%;
 }
 
 ul.file-list li > div.size {
   text-align: center;
-  width: 100px;
+  width: 30%;
 }

@@ -1,6 +1,8 @@
 /*
  *= require_self
  *= require jquery-ui-custom
+ *= require jquery.contextMenu
+ *= require context-menu
  *= require fileupload
  *= require defaults
  *= require header

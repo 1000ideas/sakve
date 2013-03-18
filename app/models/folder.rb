@@ -7,12 +7,24 @@ class Folder < ActiveRecord::Base
   scope :global_roots, where(parent_id: nil, user_id: nil)
   scope :user_roots, lambda {|user| where(parent_id: nil, user_id: user.id) }
 
-  attr_accessible :name, :parent_id, :user_id, :user, :parent
+  attr_accessible :name, :parent_id, :user_id, :user, :parent, :global
 
-  validates :name, presence: true, uniqueness: {scope: :parent_id}
+  validates :name, presence: true, uniqueness: {scope: [:parent_id, :user_id]}
 
   def user=(u)
-    user_id = u.id unless u.admin?
+    self.user_id = u.id unless u.admin? && global
+  end
+
+  def global
+    if parent.nil?
+      @global
+    else
+      parent.user_id.nil?
+    end
+  end
+
+  def global=(v)
+    @global = v.to_i == 1
   end
 
   def has_parent?

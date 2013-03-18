@@ -26,13 +26,15 @@ Sakve::Application.routes.draw do
 
     resources :items, except: [:index, :new, :create]
 
-    resources :folders, only: [:new, :create, :destroy]
+
     match 'items/:id/download/:style.:format', 
       to: 'items#download', 
       via: :get, 
       as: :download_file
 
-    resources :tags
+    resources :folders, only: [:create, :destroy]
+    
+    resources :tags, only: :index
 
     match 'transfers/:token(.:format)', 
       to: 'transfers#download', 

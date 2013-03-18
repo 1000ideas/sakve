@@ -1,0 +1,17 @@
+<%-
+  html = %{
+    <div id="edit-item-dialog" title="#{t('items.edit.title')}">
+    #{render 'form'}
+    </div>
+  }
+-%>
+var context = $("<%=j html.html_safe %>".trim()).dialog({
+  modal: true,
+  resize: false,
+  close: function( event, ui ) {
+    $(this).dialog("destroy").remove();
+  }
+});
+
+$('.tags-autocomplete', context).autocomplete(Sakve.tags_autocomplete_options);
+

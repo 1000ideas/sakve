@@ -28,6 +28,7 @@ pl:
         user_id: ID właściciela
         parent: Folder nadrzędny
         subfolder: Podfoldery
+        global: Folder globalny (tylko dla folderów nadrzednych)
       item:
         name: Nazwa
         type: Typ

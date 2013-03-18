@@ -1,4 +1,4 @@
-<%= form_for(@item) do |f| %>
+<%= form_for(@item, remote: true) do |f| %>
 <%= render partial: 'l/partials/errors', object: @item.errors %>
   <div class="group">
     <% if f.object.object? %>
@@ -10,10 +10,6 @@
     <div class="field">
       <%= f.label :name %>
       <%= f.text_field :name  %>
-    </div>
-    <div class="field">
-      <%= f.label :object %>
-      <%= f.file_field :object  %>
     </div>
     <div class="field">
       <%= f.label :tags %>

@@ -1,5 +1,11 @@
 <li>
-  <span><%= link_to folder.name, items_path(folder: folder.id) %></span>
+  <%= content_tag :span do %>
+    <%= link_to folder.name, items_path(folder: folder.id) %>
+    <div class="hidden-actions actions">
+      <%= link_to t('open'), items_path(folder: folder.id), class: 'open', data: {method: :get} %>
+      <%= link_to t('destroy'), folder, class: "destroy", data: { confirm: t('confirm.folder'), method: :delete, remote: true } %>
+    </div>
+  <% end %>
   <%= content_tag :ul do %>
     <%= render folder.subfolders %>
   <% end if folder.has_subfolders? %>

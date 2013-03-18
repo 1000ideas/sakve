@@ -41,6 +41,10 @@ class ItemsController < ApplicationController
   def edit
     authorize! :menage, :all
     @item = Item.find(params[:id])
+
+    respond_to do |format|
+      format.js
+    end
   end
 
   # POST /items

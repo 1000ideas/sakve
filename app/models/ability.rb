@@ -6,6 +6,12 @@ class Ability
 
     can :manage, :all if user.admin?
 
+    can [:create, :destroy], Folder do |f|
+      user.admin? || f.user_id == user.id
+    end
+
+    can :create_master, Folder if user.admin?
+
     can :create, TransferFile unless user.new_record?
     can :destroy, TransferFile, user_id: user.id
 

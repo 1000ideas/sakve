@@ -1,3 +1,4 @@
 $('li.item-<%= @item.id %>').fadeOut(function() {
   $(this).remove();
+  Sakve.reassign_odd_even_rows('.file-list');
 });

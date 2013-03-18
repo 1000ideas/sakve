@@ -3,6 +3,8 @@ class FoldersController < ApplicationController
     @folder = Folder.new(params[:folder])
     @folder.user = current_user
 
+    authorize! :create, @folder
+
     if @folder.save
       @folders = Folder.global_roots
       @user_folders = Folder.user_roots(current_user)
@@ -15,10 +17,16 @@ class FoldersController < ApplicationController
 
   def destroy
     @folder = Folder.find(params[:id])
+
+    authorize! :destroy, @folder
+
+    @folders = Folder.global_roots
+    @user_folders = Folder.user_roots(current_user)
+
     @folder.destroy
 
     respond_to do |format|
-      format.js { render text: 'window.location.reload();' }
+      format.js
     end
   end
 end
