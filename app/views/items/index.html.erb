@@ -14,19 +14,20 @@
   </ul>
 </section>
 
+<section id="files">
+  <header>
+    <%= link_to_function t('.upload'), 'Sakve.file_multiupload_open()', class: :button %>
+    <%= link_to_function t('.new_folder'), 'Sakve.folder_creation_open()', class: :button %>
+  </header>
+  <ul class="file-list" id="items-list" data-url="<%= url_for((params || {}).merge(partial: true)) %>">
+    <%= render @items %>
+  </ul>
 
-<header>
-  <%= link_to_function t('.upload'), 'Sakve.file_multiupload_open()', class: :button %>
-  <%= link_to_function t('.new_folder'), 'Sakve.folder_creation_open()', class: :button %>
-</header>
-<ul class="file-list" id="items-list" data-url="<%= url_for((params || {}).merge(partial: true)) %>">
-  <%= render @items %>
-</ul>
+  <div id="multiupload-files-dialog" title="<%= t('.upload') %>" class="dialog-box">
+    <%= render :partial => 'multiupload' %>
+  </div>
 
-<div id="multiupload-files-dialog" title="<%= t('.upload') %>" class="dialog-box">
-  <%= render :partial => 'multiupload' %>
-</div>
-
-<div id="new-folder-dialog" title="<%= t('.new_folder') %>" class="dialog-box">
-  <%= render partial: 'folders/form' %>
-</div>
+  <div id="new-folder-dialog" title="<%= t('.new_folder') %>" class="dialog-box">
+    <%= render partial: 'folders/form' %>
+  </div>
+</section>
