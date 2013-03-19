@@ -74,11 +74,11 @@ class ItemsController < ApplicationController
 
     respond_to do |format|
       if @item.update_attributes(params[:item])
-      format.html { redirect_to(items_path, notice: I18n.t('update.success') ) }
-      format.xml  { head :ok }
+        format.html { redirect_to(items_path, notice: I18n.t('update.success') ) }
+        format.js
       else
-      format.html { render action: "edit" }
-      format.xml  { render xml: @item.errors, status: :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.js
       end
     end
   end

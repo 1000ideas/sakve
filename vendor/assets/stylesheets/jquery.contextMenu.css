@@ -107,6 +107,7 @@
 .context-menu-item.icon.icon-open:before { background-position: 0 -178px; }
 .context-menu-item.icon.icon-destroy:before { background-position: 0 -24px; }
 .context-menu-item.icon.icon-edit:before { background-position: 0 -2px; }
+.context-menu-item.icon.icon-download:before { background-position: 0 -310px; }
 
 /* vertically align inside labels */
 .context-menu-input > label > * { vertical-align: top; }

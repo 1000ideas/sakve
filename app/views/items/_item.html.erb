@@ -6,6 +6,7 @@
   </div>
   <div class="hidden-actions actions">
     <%= link_to t('edit'), edit_item_path(item), class: 'edit', data: {remote: true} %>
+    <%= link_to t('download'), item.object.url(:original), class: 'download', data: {method: :get} %>
     <%= link_to t('destroy'), item, class: "destroy", data: { confirm: t('confirm.text'), method: :delete, remote: true } %>
   </div>
 </li>

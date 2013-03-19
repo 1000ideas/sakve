@@ -1,0 +1,16 @@
+var form = $('#edit_item_<%= @item.id %>');
+<%- if @item.errors.any? -%>
+var errors = $("<%= j render(partial: 'l/partials/errors', object: @transfer.errors).strip %>");
+var error_explanation = form.find('#error_explanation');
+if (error_explanation.length == 0) {
+  form.prepend( errors )
+} else {
+  error_explanation.replaceWith( errors );
+}
+<%- else -%>
+  debugger
+var url = $('#items-list').data('url');
+$('#items-list').load(url);
+var dialog_box = form.parent();
+dialog_box.dialog('close');
+<%- end -%>

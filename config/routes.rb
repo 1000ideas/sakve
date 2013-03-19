@@ -15,9 +15,7 @@ Sakve::Application.routes.draw do
       to: 'items#index',
       via: :get,
       as: :items,
-      defaults: {
-        partial: false
-      }
+      defaults: { partial: false }
 
     match 'items(/folder/:folder)(.:format)', 
       to: 'items#create',
@@ -27,10 +25,11 @@ Sakve::Application.routes.draw do
     resources :items, except: [:index, :new, :create]
 
 
-    match 'items/:id/download/:style.:format', 
+    match 'items/:id/download(/:style).:format', 
       to: 'items#download', 
       via: :get, 
-      as: :download_file
+      as: :download_item,
+      defaults: { style: :original }
 
     resources :folders, only: [:create, :destroy]
     

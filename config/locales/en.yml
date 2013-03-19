@@ -4,4 +4,12 @@
 en:
   hello: "Hello world"
   destroy: 'Remove'
-  confirm: 'Are you sure?'
+  open: 'Open'
+  download: 'Download'
+  edit: 'Edit'
+  confirm:
+    folder: 'Remove folder with content?'
+    text: 'Are you really sure?'
+    title: 'Confirm'
+    ok: 'Ok'
+    cancel: 'Cancel'

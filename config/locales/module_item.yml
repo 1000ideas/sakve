@@ -44,13 +44,14 @@ en:
     submenu:
       new: Add item
       index: Item list
-      new_folder: Create folder
     new:
       title: Adding an item
     multinew:
       title: Adding items
     index:
       title: Items
+      upload: 'Add files'
+      new_folder: Create folder
     edit:
       title: Editing an item
   menu:

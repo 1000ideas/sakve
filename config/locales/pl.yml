@@ -21,6 +21,7 @@ pl:
   show: "Pokaż"
   open: 'Otwórz'
   destroy: "Usuń"
+  download: 'Pobierz'
   sure: "Jesteś pewny?"
   confirm:
     folder: 'Usunąć folder z całą jego zawartością?'

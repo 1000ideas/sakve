@@ -10,6 +10,7 @@ ul.file-list li {
   padding: 1em;
   background: #eee;
   min-width: 800px;
+  cursor: pointer;
 }
 
 ul.file-list li.even {
@@ -17,16 +18,8 @@ ul.file-list li.even {
 }
 
 ul.file-list li {
-  div.name { display: inline-block; }
-  div.size { display: inline-block; }
-  div.date { display: inline-block; }
-}
-
-ul.file-list li > div.name {
-  width: 50%;
-}
-
-ul.file-list li > div.size {
-  text-align: center;
-  width: 30%;
+  div.select { display: inline-block; width: 10%; }
+  div.name { display: inline-block; width: 50%; }
+  div.size { display: inline-block; width: 20%; text-align: center; }
+  div.date { display: inline-block; width: auto; text-align: center; }
 }
