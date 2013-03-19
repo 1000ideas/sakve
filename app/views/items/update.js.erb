@@ -8,7 +8,6 @@ if (error_explanation.length == 0) {
   error_explanation.replaceWith( errors );
 }
 <%- else -%>
-  debugger
 var url = $('#items-list').data('url');
 $('#items-list').load(url);
 var dialog_box = form.parent();

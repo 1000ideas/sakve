@@ -13,9 +13,16 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem 'jquery-rails'
+group :development do
+  gem 'debugger'
+  gem 'better_errors'
+  gem 'binding_of_caller'
+end
 
-gem 'debugger'
+gem 'jquery-rails'
+gem 'jquery-ui-rails'
+gem 'jquery-fileupload-rails'
+gem 'i18n-js'
 
 gem 'l'
 gem "tiny_mce_uploads", path: '../gems/tiny_mce_uploads'
@@ -28,7 +35,4 @@ gem "globalize3", "~> 0.3.0"
 gem "paperclip"
 gem "will_paginate", "~> 3.0.0"
 gem "acts_as_tree", "~> 0.1.1"
-gem 'jquery-fileupload-rails'
 
-
-gem 'i18n-js'
