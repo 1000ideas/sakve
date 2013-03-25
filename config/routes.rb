@@ -11,13 +11,13 @@ Sakve::Application.routes.draw do
         :registration => 'account'
       }
 
-    match 'items(/folder/:folder)(/:partial)(.:format)', 
+    match 'items(-:folder)(/:partial)(.:format)', 
       to: 'items#index',
       via: :get,
       as: :items,
       defaults: { partial: false }
 
-    match 'items(/folder/:folder)(.:format)', 
+    match 'items(-:folder)(.:format)', 
       to: 'items#create',
       via: :post,
       as: :items

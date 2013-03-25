@@ -6,11 +6,21 @@ class Ability
 
     can :manage, :all if user.admin?
 
-    can [:create, :destroy], Folder do |f|
-      user.admin? || f.user_id == user.id
+    can :create, Item do |item|
+      user.admin? || item.folder.user_id == user.id
     end
 
-    can :create_master, Folder if user.admin?
+    can :read, Item unless user.new_record?
+    #can :manage, Item unless user.new_record?
+
+
+    can :create, Folder do |f|
+      (f.global? && user.admin?) || (! f.global? && f.user_id == user.id)
+    end
+
+    can :destroy, Folder do |f|
+      user.admin? || f.user_id == user.id
+    end
 
     can :create, TransferFile unless user.new_record?
     can :destroy, TransferFile, user_id: user.id

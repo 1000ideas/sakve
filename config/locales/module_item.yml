@@ -1,5 +1,8 @@
 pl:
   folders:
+    global_root_folder: '<globalny folder nadrzędny>'
+    user_root_folder: '<nadrzędny folder użytkownika>'
+    default_name: 'Folder główny'
     form:
       root_folder: '<jako folder nadrzędny>'
   items:
@@ -27,6 +30,7 @@ pl:
         user: Właściciel
         user_id: ID właściciela
         parent: Folder nadrzędny
+        parent_id: Folder nadrzędny
         subfolder: Podfoldery
         global: Folder globalny (tylko dla folderów nadrzednych)
       item:
@@ -38,6 +42,7 @@ pl:
         thumb: Miniatura
 en:
   folders:
+    default_name: 'Main folder'
     form:
       root_folder: '<as root folder>'
   items:

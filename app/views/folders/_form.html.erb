@@ -3,31 +3,14 @@
   <div class="group">
     <div class="field">
       <%= f.label :parent_id %>
-      <%= f.select :parent_id, options_for_select(Folder.names_tree_for_user(current_user), f.object.parent_id), include_blank: t('.root_folder') %>
+      <%= f.select :parent_id, options_for_select(Folder.names_tree_for_user(current_user), f.object.parent_id) %>
     </div>
     <div class="field">
       <%= f.label :name %>
       <%= f.text_field :name %>
     </div>
-    <%= content_tag :div, class: "field" do %>
-      <%= f.label :global %>
-      <%= f.check_box :global %>
-      <% end if can? :create_master, Folder %>
   </div>
   <div class="actions">
     <%= f.button %>
   </div>
 <% end %>
-<script type="text/javascript">
-  (function($) {
-    var toggle_global_folder_checkbox = function() {
-      var show = $(this).val() == "";
-      $('#new_folder #folder_global').attr('disabled', !show).parent().toggle(show);
-    };
-
-    var selector = $('#new_folder #folder_parent_id');
-    
-    toggle_global_folder_checkbox.call(selector);
-    selector.change(toggle_global_folder_checkbox);
-  })(jQuery);
-</script>

@@ -6,8 +6,8 @@ class FoldersController < ApplicationController
     authorize! :create, @folder
 
     if @folder.save
-      @folders = Folder.global_roots
-      @user_folders = Folder.user_roots(current_user)
+      @folders = Folder.global_root.subfolders
+      @user_folders = Folder.user_root(current_user).subfolders
     end
 
     respond_to do |format|
@@ -20,8 +20,8 @@ class FoldersController < ApplicationController
 
     authorize! :destroy, @folder
 
-    @folders = Folder.global_roots
-    @user_folders = Folder.user_roots(current_user)
+    @folders = Folder.global_root.subfolders
+    @user_folders = Folder.user_root(current_user).subfolders
 
     @folder.destroy
 

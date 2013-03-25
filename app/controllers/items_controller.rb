@@ -6,10 +6,12 @@ class ItemsController < ApplicationController
   # GET /items
   # GET /items.xml
   def index
-    authorize! :menage, :all
-    @folders = Folder.global_roots
-    @user_folders = Folder.user_roots(current_user)
-    @current_folder ||= @folders.first
+    authorize! :read, Item
+    @global_folder = Folder.global_root
+    @user_folder = Folder.user_root(current_user)
+    @current_folder ||= @global_folder
+
+    @item = Item.new(folder: @current_folder)
 
     @items = Item.where(folder_id: @current_folder.try(:id)) 
 
@@ -50,10 +52,11 @@ class ItemsController < ApplicationController
   # POST /items
   # POST /items.xml
   def create
-    authorize! :menage, :all
     @item = Item.new(params[:item])
-
     @item.user = current_user
+
+    authorize! :create, @item
+    raise @item
 
     respond_to do |format|
       if @item.save

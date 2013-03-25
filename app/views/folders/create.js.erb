@@ -10,6 +10,7 @@ if (error_explanation.length == 0) {
 <% else %>
 var dialog_box = form.parent();
 dialog_box.dialog('close');
+$('#error_explanation', form).remove();
 form.each(function() { this.reset(); });
 $('#root-folders').html("<%=j render @folders %>".trim());
 $('#user-folders').html("<%=j render @user_folders %>".trim());

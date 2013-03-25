@@ -1,3 +1,4 @@
+<% if can? :create, @item %>
 <%= form_tag items_path(format: :json) do %>
 <section class="group">
   <%= hidden_field_tag 'item[folder_id]', @current_folder.id %>
@@ -17,3 +18,4 @@
     <span class="progress-value">0 %</span>
   </div>
 </script>
+<% end %>

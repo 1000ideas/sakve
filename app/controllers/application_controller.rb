@@ -5,7 +5,9 @@ class ApplicationController < ActionController::Base
       session[:access_page] = request.path
       redirect_to new_user_session_url, alert:  exception.message
     else
-      render action: '/shared/401'
+      raise exception
+
+      #render action: '401'
     end
   end
 
@@ -45,6 +47,10 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     access_page, session[:access_page] = session[:access_page], nil
     access_page || "/"
+  end
+
+  def after_sign_out_path_for(resource)
+    new_user_session_path
   end
 
   def layout_by_resource

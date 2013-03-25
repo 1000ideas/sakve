@@ -9,6 +9,8 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, :set_role
 
+  after_create :create_private_folder
+
   validates :email, :presence => true
   validates :email, :uniqueness => true
   validates :email, :format => { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i }
@@ -38,6 +40,12 @@ class User < ActiveRecord::Base
 
   def admin?
     has_role?(:admin)
+  end
+
+protected
+
+  def create_private_folder
+    Folder.create!(user_id: self.id) 
   end
 
 end

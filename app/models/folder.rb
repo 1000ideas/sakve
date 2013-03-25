@@ -3,28 +3,25 @@ class Folder < ActiveRecord::Base
   belongs_to :parent, class_name: 'Folder'
   has_many :subfolders, class_name: 'Folder', foreign_key: :parent_id
   has_many :items, dependent: :destroy
-  scope :roots, where(parent_id: nil)
-  scope :global_roots, where(parent_id: nil, user_id: nil)
-  scope :user_roots, lambda {|user| where(parent_id: nil, user_id: user.id) }
 
   attr_accessible :name, :parent_id, :user_id, :user, :parent, :global
 
-  validates :name, presence: true, uniqueness: {scope: [:parent_id, :user_id]}
+  validates :name, presence: true, if: :has_parent?
+  validates :name, uniqueness: {scope: [:parent_id, :user_id, :global], case_sensitive: false}, unless: :global?
+  validates :name, uniqueness: {scope: [:parent_id, :global], case_sensitive: false}, if: :global?
+  validate :only_one_root, unless: :has_parent?
 
-  def user=(u)
-    self.user_id = u.id unless u.admin? && global
-  end
-
-  def global
-    if parent.nil?
-      @global
+  def name
+    n = super
+    if n.blank?
+      global? ? I18n.t('folders.global_root_folder') : I18n.t('folders.user_root_folder')
     else
-      parent.user_id.nil?
+      n
     end
   end
 
-  def global=(v)
-    @global = v.to_i == 1
+  def global=(value)
+    write_attribute(:global,has_parent? ? parent.global : value)
   end
 
   def has_parent?
@@ -34,7 +31,7 @@ class Folder < ActiveRecord::Base
   def ancestors
     ancestors = []
     p = parent
-    unless p.nil?
+    until p.nil?
       ancestors << p
       p = p.parent
     end
@@ -45,16 +42,41 @@ class Folder < ActiveRecord::Base
     subfolders.count > 0 
   end
 
+  def self.global_root
+    Folder.where(global: true, parent_id: nil).first || Folder.create(global: true)
+  end
+
+  def self.user_root(user)
+    Folder.where(global: false, parent_id: nil, user_id: user.id).first
+  end
+
+
+  def self.default(user)
+    global_root || user_root(user)
+  end
+
   def self.names_tree_for_user(user)
     folders = []
-    folders += self.global_roots if user.admin?
-    folders += self.user_roots(user)
-    folders.map(&:for_select_with_children).flatten(1)
+    folders << self.global_root if user.admin?
+    folders << self.user_root(user)
+    folders.map{ |f| f.for_select_with_children(-1) }.flatten(1)
   end
 
   def for_select_with_children(level = 0)
-    prefix = '-'*level
+    prefix = level > 0 ? '-'*level : ''
     self_name = [ "#{prefix} #{name}", id ]
     [ self_name ] + subfolders.map{|f| f.for_select_with_children(level+1) }.flatten(1)
   end
+
+protected
+
+  def only_one_root
+    root_folder = self.class.where(global: global, parent_id: nil)
+    root_folder = root_folder.where(user_id: self.user_id) unless global?
+    if root_folder.count > 0 
+      errors.add(:parent_id, :blank)
+    end
+  end
+
+
 end

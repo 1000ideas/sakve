@@ -130,6 +130,10 @@ window.Sakve = {
           var url = $('#items-list').data('url');
           $('#items-list').load(url);
         },
+        error: function(e, data) {
+
+          debugger
+        }
       });
   },
   folder_creation_init: function() {

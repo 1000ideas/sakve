@@ -6,6 +6,9 @@
     <% if flash[:alert] %>
       <div class="alert"><%= flash[:alert] %></div>
     <% end %>
+    <% if flash[:notice] %>
+      <div class="alert"><%= flash[:notice] %></div>
+    <% end %>
     <%= f.label :email %>
     <%= f.text_field :email %>
       <div class="cb"></div>
