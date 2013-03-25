@@ -8,7 +8,7 @@
 </section>
 
 <section>
-  <h1><%= link_to 'Prywatne pliki', items_path(folder: @user_folder.id) %></h1>
+  <h1><%= link_to 'Prywatne pliki', items_path(folder: :user) %></h1>
   <ul class="folders-list" id="user-folders">
     <%= render @user_folder.subfolders %>
   </ul>
@@ -17,7 +17,7 @@
 <section id="files">
   <header>
     <%= link_to_function t('.upload'), 'Sakve.file_multiupload_open()', class: :button if can? :create, @item  %>
-    <%= link_to_function t('.new_folder'), 'Sakve.folder_creation_open()', class: :button %>
+    <%= link_to_function t('.new_folder'), 'Sakve.folder_creation_open()', class: :button if can? :create, @folder %>
   </header>
   <ul class="file-list" id="items-list" data-url="<%= url_for((params || {}).merge(partial: true)) %>">
     <%= render @items %>

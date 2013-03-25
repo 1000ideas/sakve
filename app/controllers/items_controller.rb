@@ -9,10 +9,9 @@ class ItemsController < ApplicationController
     authorize! :read, Item
     @global_folder = Folder.global_root
     @user_folder = Folder.user_root(current_user)
-    @current_folder ||= @global_folder
+    @current_folder ||= params[:folder] == 'user' ? @user_folder : @global_folder
 
-    @item = Item.new(folder: @current_folder)
-
+    @item = Item.new(folder: @current_folder, user: current_user)
     @items = Item.where(folder_id: @current_folder.try(:id)) 
 
     respond_to do |format|
@@ -27,22 +26,20 @@ class ItemsController < ApplicationController
     end
   end
 
-  # GET /items/1
-  # GET /items/1.xml
+  # GET /items/1.json
   def show
-    authorize! :menage, :all
     @item = Item.find(params[:id])
+    authorize! :read, @item
 
     respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render xml: @item }
+      format.json  { render json: @item }
     end
   end
 
   # GET /items/1/edit
   def edit
-    authorize! :menage, :all
     @item = Item.find(params[:id])
+    authorize! :update, @item
 
     respond_to do |format|
       format.js
@@ -56,7 +53,6 @@ class ItemsController < ApplicationController
     @item.user = current_user
 
     authorize! :create, @item
-    raise @item
 
     respond_to do |format|
       if @item.save
@@ -72,8 +68,8 @@ class ItemsController < ApplicationController
   # PUT /items/1
   # PUT /items/1.xml
   def update
-    authorize! :menage, :all
     @item = Item.find(params[:id])
+    authorize! :update, @item
 
     respond_to do |format|
       if @item.update_attributes(params[:item])
@@ -89,8 +85,8 @@ class ItemsController < ApplicationController
   # DELETE /items/1
   # DELETE /items/1.xml
   def destroy
-    authorize! :menage, :all
     @item = Item.find(params[:id])
+    authorize! :destroy, @item
     @item.destroy
 
     respond_to do |format|
@@ -110,6 +106,6 @@ class ItemsController < ApplicationController
 
   def create_new_folder
     @current_folder = Folder.where(id: params[:folder]).first
-    @folder = Folder.new parent: @current_folder
+    @folder = Folder.new parent: @current_folder, user: current_user
   end
 end

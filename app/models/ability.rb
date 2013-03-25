@@ -7,10 +7,12 @@ class Ability
     can :manage, :all if user.admin?
 
     can :create, Item do |item|
-      user.admin? || item.folder.user_id == user.id
+      user.admin? || (item.folder.user_id == user.id && item.user_id == user.id)
     end
 
-    can :read, Item unless user.new_record?
+    can [:read, :update, :destroy], Item do |item|
+      user.admin? || item.user_id == user.id
+    end
     #can :manage, Item unless user.new_record?
 
 
