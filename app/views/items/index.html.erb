@@ -6,13 +6,14 @@
     <%= render @global_folder.subfolders %>
   </ul>
 </section>
-
+<% if @user_folder %>
 <section>
   <h1><%= link_to 'Prywatne pliki', items_path(folder: :user) %></h1>
   <ul class="folders-list" id="user-folders">
     <%= render @user_folder.subfolders %>
   </ul>
 </section>
+<% end %>
 
 <section id="files">
   <header>

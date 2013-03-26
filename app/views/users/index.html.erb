@@ -11,17 +11,15 @@
 <table class="rows">
   <thead>
     <tr>
-      <th></th>
       <th><%= User.human_attribute_name :email %></th>
-      <th><%= User.human_attribute_name :role %></th>
+      <th><%= User.human_attribute_name :groups %></th>
     </tr>
   </thead>
   <tbody>
     <% @users.each do |user| %>
       <tr class="<%= cycle('odd', 'even') %>">
-        <td><%= selection_tag user %></td>
         <td><%= user.email %></td>
-        <td><%= user.role %></td>
+        <td><%= user.groups.map(&:title).join(', ') %></td>
         <td class="options">
           <%= link_to t('show'), user, class: "show", title: t('show'), target: '_blank' %>
           <%= link_to t('edit'), edit_user_path(user), class: "edit", title: t('edit') %>
@@ -33,7 +31,3 @@
     <% end %>
   </tbody>
 </table>
-
-<%= link_to t('destroy_selected'), 
-  "javascript: LazyAdmin.destroy_selected('.selection','users')", 
-  data: {confirm: t('confirm') } %>

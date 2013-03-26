@@ -46,6 +46,8 @@ window.Sakve = {
     that.file_multiupload_init();
     that.file_transfer_init();
     that.context_menu_init();
+    that.translation_tabs_init();
+    that.file_list_init();
 
   },
   reassign_odd_even_rows: function(selector) {
@@ -198,8 +200,15 @@ window.Sakve = {
       },
       animation: { show: 'show', hide: 'hide' }
     });
+  },
+  translation_tabs_init: function() {
+    $('.translations-tabs').tabs();
+  },
+  file_list_init: function() {
+    $('.file-list').selectable({
+      filter: 'li' 
+    });
   }
-
 };
 
 })(window);

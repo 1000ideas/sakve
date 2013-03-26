@@ -1,13 +1,14 @@
 class User < ActiveRecord::Base
+  has_many :user_groups, include: :group
+  has_many :groups, through: :user_groups
   has_many :items, dependent: :destroy
   has_many :folder, dependent: :destroy
 
-  rolify
   devise :database_authenticatable, :timeoutable,
          :rememberable, :trackable, :registerable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :set_role
+  attr_accessible :email, :password, :password_confirmation, :remember_me, :group_ids
 
   after_create :create_private_folder
 
@@ -22,24 +23,18 @@ class User < ActiveRecord::Base
     email
   end
 
-  def role
-    if has_role?(:admin)
-      "admin"
-    elsif has_role?(:user)
-      "user"
-    elsif has_any_role?
-      "norole"
-    end
+  def add_group(name)
+    group = Group.where(name: name).first || Group.create(name: name, title: name.titleize)
+    user_groups.find_or_create_by_user_id_and_group_id(self.id, group.id)
+    group
   end
-  alias_attribute :set_role, :role
 
-  def set_role=(value)
-    roles.destroy
-    add_role(value.to_sym)
+  def belongs_to_group? name
+    groups.where(name: name).exists?
   end
 
   def admin?
-    has_role?(:admin)
+    belongs_to_group? :admin
   end
 
 protected

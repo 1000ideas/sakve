@@ -23,3 +23,23 @@ ul.file-list li {
   div.size { display: inline-block; width: 20%; text-align: center; }
   div.date { display: inline-block; width: auto; text-align: center; }
 }
+
+ul.file-list .ui-selecting {
+  background: #333;
+  color: #fff;
+}
+
+ul.file-list .ui-selecting.even {
+  background: #000;
+  color: #eee;
+}
+
+ul.file-list .ui-selected {
+  background: #666;
+  color: #eee;
+}
+
+ul.file-list .ui-selected.even {
+  background: #555;
+  color: #ddd;
+}

@@ -23,6 +23,7 @@ a.button {
 
 .dialog-box { display: none; }
 
+textarea,
 input[type=text],
 input[type=email],
 input[type=password] {
@@ -31,6 +32,12 @@ input[type=password] {
   line-height: 2em;
   padding: 0 0.6em;
   border-radius: .5em;
+  font-family: inherit;
+}
+
+textarea {
+  padding: 0.4em;
+  line-height: 1.2em;
 }
 
 .hidden-actions { display: none; }

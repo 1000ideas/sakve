@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery.ui.all
+//= require jquery.tinysort
 //= require i18n
 //= require i18n/translations
 //= require mustache

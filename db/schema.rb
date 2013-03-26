@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130322094630) do
+ActiveRecord::Schema.define(:version => 20130326125314) do
 
   create_table "attachments", :force => true do |t|
     t.string   "upload_file_name"
@@ -29,6 +29,27 @@ ActiveRecord::Schema.define(:version => 20130322094630) do
     t.datetime "created_at",                    :null => false
     t.datetime "updated_at",                    :null => false
     t.boolean  "global",     :default => false, :null => false
+  end
+
+  create_table "group_translations", :force => true do |t|
+    t.integer  "group_id"
+    t.string   "locale"
+    t.string   "title"
+    t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+  end
+
+  add_index "group_translations", ["group_id"], :name => "index_group_translations_on_group_id"
+  add_index "group_translations", ["locale"], :name => "index_group_translations_on_locale"
+
+  create_table "groups", :force => true do |t|
+    t.string   "name"
+    t.string   "title"
+    t.string   "description"
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
+    t.integer  "members_count", :default => 0, :null => false
   end
 
   create_table "item_tags", :force => true do |t|
@@ -53,17 +74,6 @@ ActiveRecord::Schema.define(:version => 20130322094630) do
     t.integer  "folder_id"
   end
 
-  create_table "roles", :force => true do |t|
-    t.string   "name"
-    t.integer  "resource_id"
-    t.string   "resource_type"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
-  end
-
-  add_index "roles", ["name", "resource_type", "resource_id"], :name => "index_roles_on_name_and_resource_type_and_resource_id"
-  add_index "roles", ["name"], :name => "index_roles_on_name"
-
   create_table "tags", :force => true do |t|
     t.string   "name",                       :null => false
     t.datetime "created_at",                 :null => false
@@ -86,14 +96,21 @@ ActiveRecord::Schema.define(:version => 20130322094630) do
     t.string   "name"
     t.string   "recipients"
     t.integer  "user_id"
-    t.string   "token"
+    t.string   "token",               :limit => 64
     t.string   "object_file_name"
     t.string   "object_content_type"
     t.integer  "object_file_size"
     t.datetime "object_updated_at"
     t.datetime "expires_at"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+  end
+
+  create_table "user_groups", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "group_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "users", :force => true do |t|
@@ -110,12 +127,5 @@ ActiveRecord::Schema.define(:version => 20130322094630) do
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
-
-  create_table "users_roles", :id => false, :force => true do |t|
-    t.integer "user_id"
-    t.integer "role_id"
-  end
-
-  add_index "users_roles", ["user_id", "role_id"], :name => "index_users_roles_on_user_id_and_role_id"
 
 end

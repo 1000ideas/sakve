@@ -14,8 +14,8 @@
       <%= f.password_field :password_confirmation %>
     </div>
     <div class="field">
-      <%= f.label :set_role %>
-      <%= f.collection_select :set_role, ["admin", "user"], :to_s, :to_s, selected: f.object.role %>
+      <%= f.label :group_ids %>
+      <%= f.collection_select :group_ids, Group.sorted_with_translation, :id, :title, {}, {multiple: true} %>
     </div>
   </div>
   <div class="actions">

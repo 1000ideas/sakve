@@ -47,6 +47,7 @@ class Folder < ActiveRecord::Base
   end
 
   def self.user_root(user)
+    return nil if user.nil?
     Folder.where(global: false, parent_id: nil, user_id: user.id).first
   end
 

@@ -1,0 +1,33 @@
+<%= form_for(@group) do |f| %>
+  <%= render partial: 'l/partials/errors', object: @group.errors %>
+  <% if f.object.new_record? %>
+  <div class="field">
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </div>
+<% end %>
+
+  <div class="translations-tabs">
+    <ul>
+      <% I18n.available_locales.each do |locale| %>
+        <li><%= link_to locale, "#translation-tab-#{locale}"%></li>
+      <% end %>
+    </ul>
+    <%= f.fields_for :translations do |ff| %>
+      <%= content_tag :div, id: "translation-tab-#{ff.object.locale}" do %>
+        <%= ff.hidden_field :locale %>
+        <div class="field">
+          <%= ff.label :title %><br />
+          <%= ff.text_field :title %>
+        </div>
+        <div class="field">
+          <%= ff.label :description %><br />
+          <%= ff.text_area :description %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+  <div class="actions">
+    <%= f.button %>
+  </div>
+<% end %>

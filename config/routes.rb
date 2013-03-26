@@ -1,4 +1,6 @@
 Sakve::Application.routes.draw do
+
+
   scope '(:locale)' do 
     devise_for :users, 
       path: "",
@@ -49,7 +51,8 @@ Sakve::Application.routes.draw do
     end
 
 
-    resources :users, controller: 'users' 
+    resources :groups
+    resources :users
     match 'switch_lang/:lang', to: 'application#switch_lang', as:  :switch_lang
     root to: 'items#index'
   end
