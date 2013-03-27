@@ -2,9 +2,14 @@
   <%= render partial: 'l/partials/errors', object: @user.errors %>
   <div class="group">
     <div class="field">
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </div>
+    <div class="field">
       <%= f.label :email %>
       <%= f.text_field :email %>
     </div>
+    <% if @user == current_user %>
     <div class="field">
       <%= f.label :password %>
       <%= f.password_field :password %>
@@ -13,12 +18,13 @@
       <%= f.label :password_confirmation %>
       <%= f.password_field :password_confirmation %>
     </div>
+    <% end %>
     <div class="field">
       <%= f.label :group_ids %>
       <%= f.collection_select :group_ids, Group.sorted_with_translation, :id, :title, {}, {multiple: true} %>
     </div>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.button %>
   </div>
 <% end %>

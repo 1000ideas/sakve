@@ -1,23 +1,17 @@
-<% title [t('admin.title'), '::', t('.title') ] * ' ' %>
-<h2>Resend confirmation instructions</h2>
+<% title [t('meta.title'), '::', t('.title') ] * ' ' %>
+<div id="confirm-box" class="center-box">
+  <h2><%= t '.title' %></h2>
 
 <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name)) do |f| %>
+    <%= render partial: 'l/partials/errors', object: resource.errors, locals: { class_name: :alert } %>
 
-  <% if resource.errors.any? %>
-    <div class="alert">
-      <%= t('errors.template.header', count: resource.errors.count, model: resource_name) %>
-    </div>
-    <ul class="error-list">
-      <% resource.errors.full_messages.each do |msg| %>
-        <li><%= msg   %></li>
-      <% end %>
-    </ul>
-  <% end %>
+  <div class="field">
+    <%= f.label :email %>
+    <%= f.text_field :email %>
+  </div>
 
-  <p><%= f.label :email %></p>
-  <p><%= f.text_field :email %></p>
-
-  <p><%= f.submit "Resend confirmation instructions" %></p>
+  <%= f.button t('.submit') %>
 <% end %>
 
 <%= render partial: "devise/shared/links" %>
+</div>

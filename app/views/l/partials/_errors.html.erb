@@ -1,10 +1,12 @@
 <% if errors.any? %>
-  <div id="error_explanation">
-    <h2><%= t 'errors.template.header', count: errors.count %></h2>
+  <%- id ||= 'error_explanation' -%>
+  <%- class_name ||= nil -%>
+  <%= content_tag :div, id: id, class: class_name do %>
+    <h3><%= t 'errors.template.header', count: errors.count %></h3>
     <ul>
       <% errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
     </ul>
-  </div>
+  <% end %>
 <% end %>

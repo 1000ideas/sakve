@@ -1,33 +1,17 @@
-<% content_for :submenu do %>
-  <%= render 'submenu' %>
-<% end %>
-
 <% title t('users.index.title') %>
-<% breadcrumbs_admin link_to(t('users.index.title'), users_path) %>
 
 <p id="notice"><%= notice %></p>
-<%= render partial: 'l/partials/switcher', object: @users %>
 
-<table class="rows">
-  <thead>
-    <tr>
-      <th><%= User.human_attribute_name :email %></th>
-      <th><%= User.human_attribute_name :groups %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @users.each do |user| %>
-      <tr class="<%= cycle('odd', 'even') %>">
-        <td><%= user.email %></td>
-        <td><%= user.groups.map(&:title).join(', ') %></td>
-        <td class="options">
-          <%= link_to t('show'), user, class: "show", title: t('show'), target: '_blank' %>
-          <%= link_to t('edit'), edit_user_path(user), class: "edit", title: t('edit') %>
-          <%= link_to t('destroy'), user, class: "destroy", title: t('destroy'),
-            data: {confirm: t('confirm'), method: :delete } %>
-        </td>
-      </tr>
-      <tr class="spacer"><td></td></tr>
-    <% end %>
-  </tbody>
-</table>
+<ul>
+  <% @users.each do |user| %>
+    <ul class="<%= cycle('odd', 'even') %>">
+      <div><%= user.email %></div>
+      <div><%= user.groups.map(&:title).join(', ') %></div>
+      <div class="options">
+        <%= link_to t('show'), user, class: "show", title: t('show'), target: '_blank' %>
+        <%= link_to t('edit'), edit_user_path(user), class: "edit", title: t('edit') %>
+        <%= link_to t('destroy'), user, class: "destroy", title: t('destroy'), data: {confirm: t('confirm'), method: :delete } %>
+      </div>
+    </li>
+  <% end %>
+</ul>

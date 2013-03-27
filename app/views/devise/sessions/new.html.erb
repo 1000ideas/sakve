@@ -1,25 +1,26 @@
-<% title [t('admin.title'), '::', t('.title') ] * ' ' %>
-<div id="login_box">
+<% title [t('meta.title'), '::', t('.title') ] * ' ' %>
+<div id="login-box" class="center-box">
   <h2><%= t('.title') %></h2>
 
+  <%= content_tag :div, alert, class: :alert unless alert.blank? %>
+  <%= content_tag :div, notice, class: :notice unless notice.blank? %>
+
   <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-    <% if flash[:alert] %>
-      <div class="alert"><%= flash[:alert] %></div>
-    <% end %>
-    <% if flash[:notice] %>
-      <div class="alert"><%= flash[:notice] %></div>
-    <% end %>
-    <%= f.label :email %>
-    <%= f.text_field :email %>
-      <div class="cb"></div>
-    <%= f.label :password %>
-    <%= f.password_field :password %>
-    <% if devise_mapping.rememberable? -%>
-      <div class="fl cl remember">
-        <span class="fr"><%= f.check_box :remember_me %></span><span class="fl"><%= f.label :remember_me %></span></div>
-    <% end -%>
-      <div class="cb"></div>
-    <%= f.submit t('.submit') %>
+    <div class="field">
+      <%= f.label :email %>
+      <%= f.text_field :email %>
+    </div>
+    <div class="field">
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+    </div>
+    <%- if devise_mapping.rememberable? -%>
+    <div class="field field-with-checkbox">
+      <%= f.label :remember_me %>
+      <%= f.check_box :remember_me %>
+    </div>
+    <%- end -%>
+    <%= f.button t('.submit') %>
   <% end %>
 
   <%= render partial: "devise/shared/links" %>

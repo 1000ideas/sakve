@@ -1,14 +1,20 @@
 class User < ActiveRecord::Base
+  @@showable_attributes = %w(name email)
+  mattr_reader :showable_attributes
+
   has_many :user_groups, include: :group
   has_many :groups, through: :user_groups
   has_many :items, dependent: :destroy
   has_many :folder, dependent: :destroy
 
   devise :database_authenticatable, :timeoutable,
-         :rememberable, :trackable, :registerable
+         :rememberable, :trackable, :registerable,
+         :recoverable
 
   # Setup accessible (or protected) attributes for your model
-  attr_accessible :email, :password, :password_confirmation, :remember_me, :group_ids
+  attr_accessible :first_name, :last_name, :name, :email, 
+    :password, :password_confirmation, :remember_me, :group_ids,
+    :reset_password_sent_at, :reset_password_token
 
   after_create :create_private_folder
 
@@ -17,10 +23,18 @@ class User < ActiveRecord::Base
   validates :email, :format => { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i }
   validates :password, :presence => true, :confirmation => true, :length => {:minimum => 5}, :on => :create
   validates :password, :allow_blank => true, :confirmation => true, :length => {:minimum => 5}, :on => :update
+  validates :first_name, :last_name, presence: true
 
+  def name
+    "#{first_name} #{last_name}"
+  end
+
+  def name=(value)
+    self.first_name, self.last_name = value.split(/\s+/, 2)
+  end
 
   def to_s 
-    email
+    "#{name} <#{email}>"
   end
 
   def add_group(name)
@@ -36,6 +50,7 @@ class User < ActiveRecord::Base
   def admin?
     belongs_to_group? :admin
   end
+
 
 protected
 

@@ -1,28 +1,24 @@
-<% title [t('admin.title'), '::', t('.title') ] * ' ' %>
-<h2>Change your password</h2>
+<% title [t('meta.title'), '::', t('.title') ] * ' ' %>
+<div id="password-box" class="center-box">
+  <h2><%= t '.title' %></h2>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+  <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+    <%= render partial: 'l/partials/errors', object: resource.errors, locals: { class_name: :alert } %>
 
-  <% if resource.errors.any? %>
-    <div class="alert">
-      <%= t('errors.template.header', count: resource.errors.count, model: resource_name) %>
+    <%= f.hidden_field :reset_password_token %>
+
+    <div class="field">
+      <%= f.label :password %>
+      <%= f.password_field :password %>
     </div>
-    <ul class="error-list">
-      <% resource.errors.full_messages.each do |msg| %>
-        <li><%= msg   %></li>
-      <% end %>
-    </ul>
+
+    <div class="field">
+      <%= f.label :password_confirmation %>
+      <%= f.password_field :password_confirmation %>
+    </div>
+
+    <%= f.button t('.submit') %>
   <% end %>
 
-  <%= f.hidden_field :reset_password_token %>
-
-  <p><%= f.label :password %></p>
-  <p><%= f.password_field :password %></p>
-
-  <p><%= f.label :password_confirmation %></p>
-  <p><%= f.password_field :password_confirmation %></p>
-
-  <p><%= f.submit "Change my password" %></p>
-<% end %>
-
-<%= render partial: "devise/shared/links" %>
+  <%= render partial: "devise/shared/links" %>
+</div>

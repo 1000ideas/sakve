@@ -1,10 +1,12 @@
-<% content_for :submenu do %>
-  <%= render "submenu" %>
-<% end %>
-
 <% title t('users.show.title') %>
-<% breadcrumbs_admin link_to(t('users.show.title'), users_path) %>
 
 <p id="notice"><%= notice %></p>
 
-<h2><%= @user.email %></h2>
+<h2><%= @user %></h2>
+
+<dl>
+  <% User.showable_attributes.each do |attr| %>
+  <dt><%= User.human_attribute_name attr %></dt>
+  <dd><%= @user.send attr %></dd>
+  <% end %>
+</dl>

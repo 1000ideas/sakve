@@ -20,6 +20,12 @@ pl:
         title: Logowanie
         submit: Zaloguj
     passwords:
+      new:
+        title: 'Przypominj hasło'
+        submit: 'Wyślij link do zmiany hasła na maila'
+      edit:
+        title: 'Zmień hasło'
+        submit: 'Zmień hasło i zaloguj'
       send_instructions: 'You will receive an email with instructions about how to reset your password in a few minutes.'
       updated: 'Your password was changed successfully. You are now signed in.'
     confirmations:
@@ -31,7 +37,17 @@ pl:
       destroyed: 'Bye! Your account was successfully cancelled. We hope to see you again soon.'
       new:
         title: 'Zarejestruj się'
-        register: 'Zarejestuj'
+        submit: 'Zarejestuj'
+      edit:
+        title: Edytuj informacje profilowe
+        submit: Aktualizuj dane
+        leave_blank: "Pozostaw puste jeśli nie chcesz zmieniać hasła"
+        current_password: "Wpisz aktualne hasło aby potwierdzić zmiany"
+        cancel:
+          title: Usuń konto
+          info: Aby usunąć konto kliknij w poniższy link
+          cancel: Usuń konto
+          sure: Jesteś pewnień że nie chcesz już mieć u nas konta?
     unlocks:
       send_instructions: 'You will receive an email with instructions about how to unlock your account in a few minutes.'
       unlocked: 'Your account was successfully unlocked. You are now signed in.'

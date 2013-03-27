@@ -2,7 +2,6 @@ pl:
   transfer_mailer:
     after_create:
       subject: '[Sakve] Ktoś wysłał Ci plik'
-  main:
   newsletter: 
     name: "Newsletter"
     info: "Wpisz swój adres e-mail, aby otrzymywać nasz biuletyn elektroniczny."
@@ -13,9 +12,9 @@ pl:
     already_exists: 'Podany adres już istnieje.'
     invalid: 'Błędny adres e-mail.'
     confirmation:
-      subject: "Newsletter - Potwierdź swój adres email"
+      subject: "[Sakve] Newsletter - Potwierdź swój adres email"
     send_mail:
-      subject: "Newsletter"
+      subject: "[Sakve] Newsletter"
   edit: "Edytuj"
   back: "Powrót"
   show: "Pokaż"
@@ -343,6 +342,9 @@ pl:
         content: "Treść"
         parent_id: "Strona nadrzędna"
       user:
+        name: Imię i nazwisko
+        first_name: Imię
+        last_name: Nazwisko
         email: "Adres email"
         password: "Hasło"
         password_confirmation: "Powtórz hasło"
