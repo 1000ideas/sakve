@@ -1,10 +1,19 @@
 class Group < ActiveRecord::Base
-  PROTECTED_GROUPS = %w(admin mods)
+  @@protected_groups = %w(name email)
+  mattr_reader :protected_groups
 
   has_many :user_groups
   has_many :members, through: :user_groups 
+  has_many :shares, as: :collaborator
+  has_many :shared_items, through: :shares, source: :resource, source_type: 'Item'
+  has_many :shared_folders, through: :shares, source: :resource, source_type: 'Folder'
 
   scope :sorted_with_translation, lambda { with_translations(I18n.locale).order("`#{translations_table_name}`.title") }
+
+  scope :starts_with, lambda { |query| 
+    with_translations(I18n.locale).where("`name` like :q OR `#{translations_table_name}`.`title` LIKE :q", q: "#{query}%")
+  }
+
   translates :title, :description
 
   before_destroy :disable_deleting_protected_group
@@ -17,6 +26,10 @@ class Group < ActiveRecord::Base
   validates :name, presence: true, format: {with: %r{[a-z][a-z0-9]*}}, uniqueness: :true
   validates :title, presence: true
 
+  def to_s
+    title
+  end
+
   def build_missing_translations
     I18n.available_locales.map do |l|
       self.translation_for(l, true)
@@ -24,7 +37,7 @@ class Group < ActiveRecord::Base
   end
 
   def protected?
-    PROTECTED_GROUPS.include? self.name
+    @@protected_groups.include? self.name
   end
 
   private

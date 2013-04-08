@@ -5,6 +5,13 @@ class Item < ActiveRecord::Base
   belongs_to :folder
   has_many :item_tags, include: :tag, dependent: :destroy
   has_many :tags, through: :item_tags
+  has_many :shares, as: :resource
+  has_many :users,  through: :shares, source: :collaborator, source_type: 'User'
+  has_many :groups,  through: :shares, source: :collaborator, source_type: 'Group'
+
+  scope :shared_for, lambda { |user|
+    select("DISTINCT `#{table_name}`.*").joins(:shares).where('(`shares`.`collaborator_type` = ? AND `shares`.`collaborator_id` = ?) OR (`shares`.`collaborator_type` = ? AND `shares`.`collaborator_id` IN (?))', user.class.name, user.id, 'Group', user.group_ids || []).where('`user_id` != ?', user.id)
+  }
 
   has_attached_file :object, 
     styles: Proc.new {|object| object.instance.item_styles } ,
@@ -18,6 +25,15 @@ class Item < ActiveRecord::Base
 
   validates :object, attachment_presence: true
   validates :folder_id, presence: true
+  validates :name, uniqueness: { scope: :folder_id, case_sensitive: false }
+
+  def public?
+    self.folder.global?
+  end
+
+  def shared_for? user
+    users.exists?(user) || user.groups.map{|g| groups.exists?(g) }.inject{|a,b| a || b} || folder.shared_for?(user)
+  end
 
 
   def item_styles
@@ -74,6 +90,13 @@ class Item < ActiveRecord::Base
     self.search_by_tags(tags) | self.search_by_name(words)
   end
 
+  def self.access_denied_image(style)
+
+  end
+
+  def name_for_download(increment = nil)
+    "#{name.parameterize}#{".#{increment}" unless increment.nil?}#{File.extname(object.original_filename)}"
+  end
 
   protected
 

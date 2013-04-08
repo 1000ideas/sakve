@@ -3,6 +3,7 @@ class GroupsController < ApplicationController
   # GET /groups.json
   def index
     @groups = Group.all
+    authorize! :read, @groups
 
     respond_to do |format|
       format.html # index.html.erb

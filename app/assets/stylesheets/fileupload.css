@@ -1,3 +1,13 @@
+.fileupload-dropzone {
+  border: 5px dashed #DDD;
+  background: #EEE;
+  margin: 1em auto;
+}
+
+.fileupload-dropzone > div {
+  margin: 5em auto;
+}
+
 .fileupload-button input[type=file] {
   float: none;
   position: absolute;
@@ -6,6 +16,7 @@
   opacity: 0;
   filter: alpha(opacity=0);
   width: auto;
+  height: 100%;
   margin: 0;
   padding: 0;
   border: 0;
@@ -15,13 +26,13 @@
 }
 
 .fileupload-button {
-  line-height: 1.5em;
+  line-height: 3em;
   width: 100px;
   position: relative;
   cursor: pointer;
   background-color: #fff;
   border: 1px solid #7D7D7D;
-  border-radius: .5em;
+  border-radius: 1em;
   padding: 0 1.5em;
   color: #7D7D7D;
   text-align: center;

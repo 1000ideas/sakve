@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
 
   rescue_from CanCan::AccessDenied do |exception|
+    head 401 and return if request.format != :html
     unless current_user
       session[:access_page] = request.path
       redirect_to new_user_session_url, alert:  exception.message
@@ -15,14 +16,51 @@ class ApplicationController < ActionController::Base
 
 
   protect_from_forgery
-  before_filter :default_url_options, :set_locale
+  before_filter :set_locale
 
   layout :layout_by_resource
 
   def switch_lang
-    session[:locale] = params[:lang]
-    render nothing:  true
+    I18n.locale = session[:locale] = params[:lang].to_sym
+    referer_params = Rails.application.routes.recognize_path(request.referer, method: :get)
+    redirect_to Rails.application.routes.url_for(referer_params.merge(only_path: true, locale: I18n.locale))
+  rescue ActionController::RoutingError
+    redirect_to root_path
   end
+
+  def collaborators
+    authorize! :read, Group
+    authorize! :read, User
+
+    @collaborators = []
+
+    @collaborators += User.
+      starts_with(params[:q]).
+      where('`id` != ?', current_user.id).
+      limit(5).
+      map do |u|
+      {
+        type: u.class.model_name.plural,
+        type_name: u.class.model_name.human,
+        name: u.to_s,
+        id: u.id
+      }
+    end
+
+    @collaborators += Group.starts_with(params[:q]).limit(5).map do |g|
+      {
+        type: g.class.model_name.plural,
+        type_name: g.class.model_name.human,
+        name: g.to_s,
+        id: g.id
+      }
+    end
+
+    respond_to do |format|
+      format.json { render json: @collaborators }
+    end
+  end
+
 
 
   protected
@@ -31,10 +69,8 @@ class ApplicationController < ActionController::Base
   private
 
   def set_locale
-    if params[:locale]
-      lang = params[:locale] || I18n.default_locale
+      lang = session[:locale] || params[:locale] || I18n.default_locale
       I18n.locale = lang.to_sym
-    end
   end
 
   def default_url_options(options={})

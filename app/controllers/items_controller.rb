@@ -1,7 +1,6 @@
 class ItemsController < ApplicationController
 
   layout "standard"
-  before_filter :create_new_folder
 
   # GET /items
   # GET /items.xml
@@ -9,10 +8,19 @@ class ItemsController < ApplicationController
     authorize! :read, Item
     @global_folder = Folder.global_root
     @user_folder = Folder.user_root(current_user)
-    @current_folder ||= params[:folder] == 'user' ? @user_folder : @global_folder
+    @shared_folders = Folder.shared_for(current_user)
+    @current_folder = Folder.where(id: params[:folder]).first || (params[:folder] == 'user' ? @user_folder : @global_folder)
+    @current_folder = nil if params[:folder] == 'shared'
 
     @item = Item.new(folder: @current_folder, user: current_user)
-    @items = Item.where(folder_id: @current_folder.try(:id)) 
+
+    if @current_folder
+      @items = Item.where(folder_id: @current_folder.try(:id)) 
+    elsif params[:folder] == 'shared'
+      @items = Item.shared_for(current_user)
+    end
+
+    @folder = Folder.new parent: @current_folder, user: current_user, global: @current_folder.try(:global)
 
     respond_to do |format|
       format.html do
@@ -34,6 +42,15 @@ class ItemsController < ApplicationController
     respond_to do |format|
       format.json  { render json: @item }
     end
+  end
+
+  def download 
+    @item = Item.find(params[:id])
+    authorize! :read, @item
+
+    send_file @item.object.path(params[:style]), filename: @item.name_for_download
+  rescue CanCan::AccessDenied
+    send_data Item.access_denied_image(params[:style]), type: 'image/png'
   end
 
   # GET /items/1/edit
@@ -82,6 +99,27 @@ class ItemsController < ApplicationController
     end
   end
 
+  def share
+    @item = Item.find(params[:id])
+    authorize! :share, @item
+
+    params[:with] ||= {}
+
+    params[:with][:users].try(:each) do |user_id|
+      user = User.where(id: user_id).first
+      @item.users << user if user && @item.users.exclude?(user)
+    end
+
+    params[:with][:groups].try(:each) do |group_id|
+      group = Group.where(id: group_id)
+      @item.groups << group if group && @item.groups.exclude?(group)
+    end
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   # DELETE /items/1
   # DELETE /items/1.xml
   def destroy
@@ -95,17 +133,6 @@ class ItemsController < ApplicationController
     end
   end
 
-  def download 
-    authorize! :menage, :all
-    @item = Item.find(params[:id])
-
-    send_file @item.object.path(params[:style])
-  end
-
   protected
 
-  def create_new_folder
-    @current_folder = Folder.where(id: params[:folder]).first
-    @folder = Folder.new parent: @current_folder, user: current_user
-  end
 end

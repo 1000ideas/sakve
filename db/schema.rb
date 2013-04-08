@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130327094105) do
+ActiveRecord::Schema.define(:version => 20130402131439) do
 
   create_table "attachments", :force => true do |t|
     t.string   "upload_file_name"
@@ -73,6 +73,17 @@ ActiveRecord::Schema.define(:version => 20130327094105) do
     t.datetime "updated_at",          :null => false
     t.integer  "folder_id"
   end
+
+  create_table "shares", :force => true do |t|
+    t.integer  "collaborator_id"
+    t.string   "collaborator_type"
+    t.integer  "resource_id"
+    t.string   "resource_type"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  add_index "shares", ["collaborator_id", "collaborator_type", "resource_id", "resource_type"], :name => "unique_shares", :unique => true
 
   create_table "tags", :force => true do |t|
     t.string   "name",                       :null => false

@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
-source 'http://1000i.co/gems'
+#source 'http://1000i.co/gems'
 
-gem 'rails', '3.2.12'
+gem 'rails', '3.2.13'
 gem 'sqlite3'
 gem "mysql2"
 
@@ -24,15 +24,13 @@ gem 'jquery-ui-rails'
 gem 'jquery-fileupload-rails'
 gem 'i18n-js'
 
-gem 'l'
-gem "tiny_mce_uploads", path: '../gems/tiny_mce_uploads'
+gem 'l', path: '../gems/l'
+#gem "tiny_mce_uploads", path: '../gems/tiny_mce_uploads'
 
-gem "devise", "~> 2.0.0"
-gem "rolify"
+gem "devise", "~> 2.2.0"
 gem "cancan"
 
 gem "globalize3", "~> 0.3.0"
 gem "paperclip"
 gem "will_paginate", "~> 3.0.0"
-gem "acts_as_tree", "~> 0.1.1"
 

@@ -5,7 +5,14 @@ class User < ActiveRecord::Base
   has_many :user_groups, include: :group
   has_many :groups, through: :user_groups
   has_many :items, dependent: :destroy
-  has_many :folder, dependent: :destroy
+  has_many :folders, dependent: :destroy
+  has_many :shares, as: :collaborator
+  has_many :shared_items, through: :shares, source: :resource, source_type: 'Item'
+  has_many :shared_folders, through: :shares, source: :resource, source_type: 'Folder'
+
+  scope :starts_with, lambda { |query|
+    where('`first_name` like :q OR `last_name` LIKE :q OR `email` LIKE :q', q: "#{query}%")
+  }
 
   devise :database_authenticatable, :timeoutable,
          :rememberable, :trackable, :registerable,
@@ -51,11 +58,16 @@ class User < ActiveRecord::Base
     belongs_to_group? :admin
   end
 
+  def has_shared_items?
+    self.groups.inject( self.shared_items.any? ) do |memo, group|
+      memo || group.shared_items.any?
+    end
+  end
 
 protected
 
   def create_private_folder
-    Folder.create!(user_id: self.id) 
+    Folder.create!(user_id: self.id, global: false) 
   end
 
 end

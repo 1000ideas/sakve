@@ -5,13 +5,6 @@
     </div>
   }
 -%>
-var context = $("<%=j html.html_safe %>".trim()).dialog({
-  modal: true,
-  resize: false,
-  close: function( event, ui ) {
-    $(this).dialog("destroy").remove();
-  }
-});
-
+var context = Sakve.open_dialog('edit-item-dialog', '<%= t('.title') %>', '<%= j render('form') %>',  <%= {resizable: false, width: 600, height: 300}.to_json.html_safe %>);
 $('.tags-autocomplete', context).autocomplete(Sakve.tags_autocomplete_options);
 

@@ -11,11 +11,13 @@ var Helper = {
   fileupload_init: function(element, options) {
     if (!options) options = {};
     var value = $(element).data('value');
+    $(element).wrap( $('<div>').addClass('fileupload-dropzone') );
     $(element).wrap( $('<div>').addClass('button fileupload-button') );
     $(element).after( $('<span>').text( value ) );
     $(element).fileupload($.extend({
       singleFileUploads: true,
-      dataType: 'json '
+      dataType: 'json',
+      dropZone: $(element).parents('.fileupload-dropzone')
     }, options) );
   },
   progress_function: function(e, data) {
@@ -24,6 +26,16 @@ var Helper = {
       $('.bar', data.context).css('width', progress)
       $('.progress-value', data.context).text( progress)
     }
+  },
+  open_dialog: function(id, title, content, options) {
+    options = $.extend(options, {
+      modal: true,
+      close: function( event, ui ) {
+        $(this).dialog("destroy").remove();
+      }
+    });
+    html = "<div id=\"" + id + "\" title=\"" + title + "\">" + content + "</div>";
+    return $(html).dialog(options);
   }
 };
 
@@ -87,12 +99,33 @@ window.Sakve = {
       return false;
     }
   },
+  collaborators_autocomplete_options: {
+    source: function(request, response) {
+      $.getJSON( "/collaborators.json", {
+        q: request.term
+      }, response );
+    },
+    select: function( event, ui ) {
+      if ( $('#with_' + ui.item.type + '_' + ui.item.id).length == 0 ) {
+        $('<li>')
+          .append( Sakve.templates[ui.item.type + '_share'](ui.item) )
+          .appendTo( $('#share_' + ui.item.type) );
+      }
+      this.value = '';
+      return false;
+    }
+  },
+  collaborators_render_item: function( ul, item ) {
+    return $('<li>')
+      .append('<a>' + Sakve.templates.collaborator_select( item ) + '</a>' )
+      .appendTo( ul );
+  },
   transfer_init: function(element) {
       var that = this;
       Helper.fileupload_init(element, {
         url: '<%= url.files_path(format: :json) %>',
         add: function(e, data) {
-          var group = data.form.children('.group').first();
+          var group = $(e.target.form).children('.group').first();
           var file = data.files[0];
           data.context = $( that.templates.upload_progress(file) );
           group.append( data.context );
@@ -118,7 +151,7 @@ window.Sakve = {
       var that = this;
       Helper.fileupload_init(element, {
         add: function(e, data) {
-          var group = $('#upload-in-progress', data.form);
+          var group = $(e.target.form).find('#upload-in-progress');
           var file = data.files[0];
           data.context = $( that.templates.upload_progress(file) );
           group.append( data.context );
@@ -133,8 +166,6 @@ window.Sakve = {
           $('#items-list').load(url);
         },
         error: function(e, data) {
-
-          debugger
         }
       });
   },
@@ -174,29 +205,36 @@ window.Sakve = {
   },
   context_menu_init: function() {
 
+    var contains_action_link = function(key, options) {
+      return $('.actions a.' + key, options.$trigger).length == 0
+    };
+
+    var execute_action = function(key, options) {
+      $('.actions a.' + key, options.$trigger).trigger('click');
+    };
+
     //Folder context menu
     $('.folder-list').contextMenu({
       selector: 'li span',
-      callback: function(key, options) {
-        $('.actions a.' + key, options.$trigger).trigger('click');
-      },
+      callback: execute_action,
       items: {
-        open: { name: I18n.t('open'), icon: 'open' },
-        destroy: { name: I18n.t('destroy'), icon: 'destroy' }
+        open: { name: I18n.t('open'), icon: 'open', disabled: contains_action_link },
+        share: { name: I18n.t('share'), icon: 'share', disabled: contains_action_link },
+        destroy: { name: I18n.t('destroy'), icon: 'destroy', disabled: contains_action_link }
       },
       animation: { show: 'show', hide: 'hide' }
     });
 
+
     //item context menu
     $('.file-list').contextMenu({
       selector: 'li',
-      callback: function(key, options) {
-        $('.actions a.' + key, options.$trigger).trigger('click');
-      },
+      callback: execute_action,
       items: {
-        edit: { name: I18n.t('edit'), icon: 'edit' },
-        download: { name: I18n.t('download'), icon: 'download' },
-        destroy: { name: I18n.t('destroy'), icon: 'destroy' }
+        edit: { name: I18n.t('edit'), icon: 'edit', disabled: contains_action_link },
+        download: { name: I18n.t('download'), icon: 'download', disabled: contains_action_link },
+        share: { name: I18n.t('share'), icon: 'share', disabled: contains_action_link },
+        destroy: { name: I18n.t('destroy'), icon: 'destroy', disabled: contains_action_link }
       },
       animation: { show: 'show', hide: 'hide' }
     });
@@ -208,7 +246,8 @@ window.Sakve = {
     $('.file-list').selectable({
       filter: 'li' 
     });
-  }
+  },
+  open_dialog: Helper.open_dialog
 };
 
 })(window);

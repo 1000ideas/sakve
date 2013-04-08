@@ -21,6 +21,7 @@ pl:
   open: 'Otwórz'
   destroy: "Usuń"
   download: 'Pobierz'
+  share: "Udostępnij"
   sure: "Jesteś pewny?"
   confirm:
     folder: 'Usunąć folder z całą jego zawartością?'
@@ -332,6 +333,9 @@ pl:
       even: "musi być parzyste"
 
   activerecord:
+    models:
+      user: Użytkownik
+      group: Grupa
     attributes:
       l/page:
         parent: "Strona rodzic"
