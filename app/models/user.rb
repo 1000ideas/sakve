@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
   end
 
   def add_group(name)
-    group = Group.where(name: name).first || Group.create(name: name, title: name.titleize)
+    group = Group.where(name: name).first || Group.create(name: name, title: name.to_s.titleize)
     user_groups.find_or_create_by_user_id_and_group_id(self.id, group.id)
     group
   end

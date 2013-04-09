@@ -1,5 +1,5 @@
 class Group < ActiveRecord::Base
-  @@protected_groups = %w(name email)
+  @@protected_groups = %w(admin mods)
   mattr_reader :protected_groups
 
   has_many :user_groups

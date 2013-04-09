@@ -3,6 +3,7 @@ Group.protected_groups.each do |name|
 end
 
 admin = User.create! email: 'admin@admin.pl',
+  name: "Admin 1000ideas",
   password:  "admin", 
   password_confirmation: "admin"
 
