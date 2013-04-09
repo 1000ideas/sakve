@@ -1,4 +1,4 @@
-Group::PROTECTED_GROUPS.each do |name|
+Group.protected_groups.each do |name|
   Group.create(name: name, title: name.titleize)
 end
 
