@@ -6,5 +6,6 @@
  *= require defaults
  *= require header
  *= require items
+ *= require users
  *= require footer
  */

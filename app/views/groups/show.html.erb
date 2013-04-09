@@ -15,6 +15,7 @@
   <%= @group.description %>
 </p>
 
-
-<%= link_to 'Edit', edit_group_path(@group) %> |
+<% if can? :update, @group %>
+  <%= link_to 'Edit', edit_group_path(@group) %> |
+<% end %>
 <%= link_to 'Back', groups_path %>

@@ -2,9 +2,14 @@
 
 <p id="notice"><%= notice %></p>
 
-<ul>
+<ul class="users-list">
+  <li class="header">
+    <div>Nazwa użytkownika</div>
+    <div>Grupy</div>
+    <div class="options">Akcje</div>
+  </li>
   <% @users.each do |user| %>
-    <ul class="<%= cycle('odd', 'even') %>">
+    <li class="<%= cycle('odd', 'even') %>">
       <div><%= user.email %></div>
       <div><%= user.groups.map(&:title).join(', ') %></div>
       <div class="options">

@@ -8,10 +8,10 @@ class Ability
       if user.admin?
         can :manage, User 
         can :manage, Group
+      else
+        can :read, User
+        can :read, Group
       end
-
-      can :read, Group
-      can :read, User
 
       can :create, Item do |item|
         (item.folder.try(:global) && user.admin?) || (item.folder.try(:user) == user && item.user == user)
@@ -28,7 +28,6 @@ class Ability
       can :share, Item, user_id: user.id
 
       can :create, Folder do |f|
-        Rails.logger.debug f.to_yaml
         !f.parent_id.nil? && ((f.global? && user.admin?) || (! f.global? && f.parent.try(:user) == user && f.user == user))
       end
 

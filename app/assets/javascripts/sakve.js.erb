@@ -227,7 +227,7 @@ window.Sakve = {
 
 
     //item context menu
-    $('.file-list').contextMenu({
+    if ($('.file-list').length > 0) $('.file-list').contextMenu({
       selector: 'li',
       callback: execute_action,
       items: {

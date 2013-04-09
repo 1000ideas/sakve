@@ -16,7 +16,7 @@
     <td><%= group.title %></td>
     <td><%= group.description %></td>
     <td><%= link_to 'Show', group %></td>
-    <td><%= link_to 'Edit', edit_group_path(group) %></td>
+    <td><%= link_to 'Edit', edit_group_path(group) if can? :update, group %></td>
     <td><%= link_to 'Destroy', group, method: :delete, data: { confirm: 'Are you sure?' }  unless group.protected? %></td>
   </tr>
 <% end %>
@@ -24,4 +24,4 @@
 
 <br />
 
-<%= link_to 'New Group', new_group_path %>
+<%= link_to 'New Group', new_group_path if can? :create, Group %>
