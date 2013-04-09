@@ -6,12 +6,12 @@ class ApplicationController < ActionController::Base
       session[:access_page] = request.path
       redirect_to new_user_session_url, alert:  exception.message
     else
-      render action: '401'
+      render action: '401', status: 401
     end
   end
 
   rescue_from ActiveRecord::RecordNotFound do
-    render action: '404'
+    render action: '404', status: 404
   end
 
 

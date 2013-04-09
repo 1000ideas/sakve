@@ -6,8 +6,8 @@ class FoldersController < ApplicationController
     authorize! :create, @folder
 
     if @folder.save
-      @folders = Folder.global_root.subfolders
-      @user_folders = Folder.user_root(current_user).subfolders
+      @folders = Folder.global_root.try(:subfolders) || []
+      @user_folders = Folder.user_root(current_user).try(:subfolders) || []
     end
 
     respond_to do |format|
@@ -41,8 +41,8 @@ class FoldersController < ApplicationController
 
     authorize! :destroy, @folder
 
-    @folders = Folder.global_root.subfolders
-    @user_folders = Folder.user_root(current_user).subfolders
+    @folders = Folder.global_root.try(:subfolders) || []
+    @user_folders = Folder.user_root(current_user).try(:subfolders) || []
 
     @folder.destroy
 

@@ -1,9 +1,8 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  transfer_id: 1
-  object: MyString
+  user_id: 1
+  token: '0123456789abcdef'
+  object_file_name: 'plik.pdf'
+  object_file_size: 1234567890
+  object_content_type: 'application/pdf'
 
-two:
-  transfer_id: 1
-  object: MyString

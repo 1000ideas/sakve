@@ -14,10 +14,16 @@ group :assets do
 end
 
 group :development do
-  gem 'debugger'
   gem 'better_errors'
   gem 'binding_of_caller'
 end
+
+group :test do
+  gem 'capybara'
+  gem 'capybara-webkit'
+end
+  
+gem 'debugger', group: [:test, :development]
 
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
@@ -25,7 +31,7 @@ gem 'jquery-fileupload-rails'
 gem 'i18n-js'
 
 gem 'l', path: '../gems/l'
-#gem "tiny_mce_uploads", path: '../gems/tiny_mce_uploads'
+gem "tiny_mce_uploads", path: '../gems/tiny_mce_uploads'
 
 gem "devise", "~> 2.2.0"
 gem "cancan"
@@ -33,4 +39,4 @@ gem "cancan"
 gem "globalize3", "~> 0.3.0"
 gem "paperclip"
 gem "will_paginate", "~> 3.0.0"
-
+gem 'acts_as_tree'

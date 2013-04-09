@@ -1,11 +1,16 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
-one:
-  name: MyString
-  title: MyString
-  description: MyString
+admins:
+  name: admin
+  title: Admin
+  description: Admins
 
-two:
-  name: MyString
-  title: MyString
-  description: MyString
+mods:
+  name: mod
+  title: Mod
+  description: Mods
+
+test:
+  name: test
+  title: Test group
+  description: Group for test purpose

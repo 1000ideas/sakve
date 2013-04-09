@@ -9,7 +9,7 @@ class TransferFilesController < ApplicationController
 
     @file = TransferFile.new(
       object: params[:object],
-      token: params[:transfer][:group_token],
+      token: params[:transfer].try(:[], :group_token),
       user: current_user
     )
 

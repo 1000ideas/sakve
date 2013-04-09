@@ -1,18 +1,26 @@
 require 'test_helper'
 
 class FoldersControllerTest < ActionController::TestCase
-  test "should get new" do
-    get :new
+  setup do
+    @user = users(:admin)
+    @folder = folders(:global_subfolder)
+  end
+
+  test "should get share" do
+    sign_in @folder.user
+    put :share, id: folders(:admin).id, format: :js
     assert_response :success
   end
 
   test "should get create" do
-    get :create
+    sign_in @folder.user
+    post :create, folder: {name: 'Nowy folder', parent: folders(:global)}, format: :js
     assert_response :success
   end
 
   test "should get destroy" do
-    get :destroy
+    sign_in @folder.user
+    delete :destroy, id: @folder.id, format: :js
     assert_response :success
   end
 
