@@ -1,0 +1,11 @@
+<% if @item.video? %>
+  <video width="640" height="480" controls="controls">
+    <source src="<%= @item.object.url(:mp4) %>" type="video/mp4" />
+    <%= image_tag @item.object.url(:preview) %>
+  </video>
+<% elsif @item.object.styles.has_key? :preview %>
+  <%= image_tag @item.object.url(:preview) %>
+<% else %>
+  <%= image_tag @item.object.url(:thumb) %>
+<% end %>
+<%= link_to t('.download'), @item.object.url(:original, false), class: :download %>

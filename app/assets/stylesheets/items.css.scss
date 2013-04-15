@@ -88,3 +88,11 @@ ul.file-list .ui-selected.even {
   background: #555;
   color: #ddd;
 }
+
+#show-item-dialog {
+  text-align: center;
+
+  a.download {
+    display: block;
+  }
+}

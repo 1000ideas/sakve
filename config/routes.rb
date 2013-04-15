@@ -15,6 +15,7 @@ Sakve::Application.routes.draw do
       }
 
     match 'items(-:folder)(/:partial)(.:format)', 
+      partial: /true|false/,
       to: 'items#index',
       via: :get,
       as: :items,
@@ -29,7 +30,7 @@ Sakve::Application.routes.draw do
       put :share, on: :member
     end
 
-    match 'items/:id/download(/:style).:format', 
+    match 'items/:id/download(/:style)/:name.:format', 
       to: 'items#download', 
       via: :get, 
       as: :download_item,

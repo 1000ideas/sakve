@@ -7,6 +7,10 @@ Paperclip.configure do |config|
     attachment.instance.token
   end
 
+  config.interpolates :name do |attachment, style|
+    attachment.instance.name.parameterize
+  end
+
   config.register_processor(:item_processor, PaperclipProcessors::ItemProcessor)
 end
 

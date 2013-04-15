@@ -31,6 +31,9 @@ pl:
       fileupload: 'Dodaj pliki'
     edit:
       title: Edycja zasobu
+    show:
+      title: "Zasób: %{name}"
+      download: "Pobierz oryginalny plik"
     share_form:
       search_collaborator: 'Wybierz komu chcesz udostepnić plik'
       submit: 'Zapisz'
@@ -79,6 +82,9 @@ en:
       breadcrumbs: 'Where am I?'
     edit:
       title: Editing an item
+    show:
+      title: "Item: %{name}"
+      download: "Download original file"
   menu:
     items: Items
   activerecord:

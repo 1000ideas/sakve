@@ -104,6 +104,7 @@
   background-position: 0 0;  
 }
 
+.context-menu-item.icon.icon-show:before { background-position: 0 -178px; }
 .context-menu-item.icon.icon-open:before { background-position: 0 -178px; }
 .context-menu-item.icon.icon-destroy:before { background-position: 0 -24px; }
 .context-menu-item.icon.icon-edit:before { background-position: 0 -2px; }

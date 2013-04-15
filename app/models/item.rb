@@ -17,7 +17,7 @@ class Item < ActiveRecord::Base
     styles: Proc.new {|object| object.instance.item_styles } ,
     processors: [:item_processor],
     path: ':partition/:class/:id/:style/:filename',
-    url: '/:class/:id/download/:style.:extension'
+    url: '/:class/:id/download/:style/:name.:extension'
 
   before_save :fix_mime_type, :save_tags, :default_name
 
@@ -35,19 +35,24 @@ class Item < ActiveRecord::Base
     users.exists?(user) || user.groups.map{|g| groups.exists?(g) }.inject{|a,b| a || b} || folder.shared_for?(user)
   end
 
+  def content_type(style = nil)
+    style ||= :original
+    MIME::Types.type_for(Item.last.object.path(style)).first.try(:content_type)
+  end
+
 
   def item_styles
     styles = {
       thumb: ['128x128#', :png]
     }
     if video?
-      styles[:preview] = ['640x480>', :mp4]
+      styles[:mp4] = ['640x480>', :mp4]
       styles[:flash] = ['640x480>', :flv]
-    elsif presentation?
-      styles[:preview] = ['200', :pdf]
-    elsif image? or pdf_document?
+      styles[:preview] = ['640x480>', :png]
+    elsif image? or pdf_document? or document?
       styles[:preview] = ['640x480>', :png]
     end
+    styles[:slides] = ['200', :pdf] if presentation?
     styles
   end
 
@@ -94,8 +99,9 @@ class Item < ActiveRecord::Base
 
   end
 
-  def name_for_download(increment = nil)
-    "#{name.parameterize}#{".#{increment}" unless increment.nil?}#{File.extname(object.original_filename)}"
+  def name_for_download(extension = nil, increment = nil)
+    extension = File.extname(object.original_filename).gsub(/^\./, '') if extension.nil?
+    "#{name.parameterize}#{".#{increment}" unless increment.nil?}.#{extension}"
   end
 
   protected

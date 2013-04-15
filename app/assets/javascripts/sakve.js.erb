@@ -231,6 +231,7 @@ window.Sakve = {
       selector: 'li',
       callback: execute_action,
       items: {
+        show: { name: I18n.t('show'), icon: 'show', disabled: contains_action_link },
         edit: { name: I18n.t('edit'), icon: 'edit', disabled: contains_action_link },
         download: { name: I18n.t('download'), icon: 'download', disabled: contains_action_link },
         share: { name: I18n.t('share'), icon: 'share', disabled: contains_action_link },
