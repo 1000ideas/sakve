@@ -32,14 +32,18 @@ class Folder < ActiveRecord::Base
     ! parent_id.nil?
   end
 
-  def ancestors
+  # Pobiera listę folderów nadrzędnych, od najbliższego do najdalszego. 
+  # Parametd +include_self+ określa czy pierwszym elementem na liscie jest
+  # obiekt, czy rodzic
+  def ancestors(include_self = false)
     ancestors = []
+    ancestors << self if include_self
     p = parent
     until p.nil?
       ancestors << p
       p = p.parent
     end
-    ancestors.reverse
+    ancestors
   end
 
   def has_subfolders?

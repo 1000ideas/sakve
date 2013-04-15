@@ -1,8 +1,53 @@
+article.content {
+  display: table;
+  width: 100%;
+}
+
+article.content > section {
+  display: table-cell;
+  vertical-align: top;
+}
+
+section#left-menu {
+  width: 300px;
+  min-width: 300px;
+}
+
+section#files > header {
+  height: 20px;
+  margin: 5px 0;
+  white-space: nowrap;
+}
+
+ul.breadcrumbs {
+  margin: 5px 0;
+  padding: 0;
+  height: 20px;
+  line-height: 20px;
+  list-style: none;
+  display: inline-block;
+}
+
+ul.breadcrumbs > li {
+  display: inline-block;
+}
+
+ul.breadcrumbs > li:after {
+  content: '>';
+  display: inline-block;
+  margin: 0 5px;
+}
+
+ul.breadcrumbs > li:last-child:after {
+  display: none;
+}
+
 
 
 ul.file-list {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 ul.file-list li {

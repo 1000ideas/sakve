@@ -25,6 +25,7 @@ pl:
       public: 'Pliki publiczne'
       private: 'Prywatne pliki użytkownika'
       shared: 'Współdzielone pliki'
+      breadcrumbs: 'Gdzie ja jestem?'
     multiupload:
       title: 'Dodawanie plików'
       fileupload: 'Dodaj pliki'
@@ -75,6 +76,7 @@ en:
       public: 'Public files'
       private: 'User files (private)'
       shared: 'Shared files'
+      breadcrumbs: 'Where am I?'
     edit:
       title: Editing an item
   menu:

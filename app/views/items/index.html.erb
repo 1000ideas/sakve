@@ -1,32 +1,43 @@
 <% title t('items.index.title') %>
 
-<section>
-  <h1><%= link_to t('.public'), items_path %></h1>
-  <ul class="folders-list" id="root-folders">
-    <%= render @global_folder.subfolders %>
+<section id="left-menu">
+  <ul>
+    <li>
+      <h1><%= link_to t('.public'), items_path %></h1>
+      <ul class="folders-list" id="root-folders">
+        <%= render @global_folder.subfolders %>
+      </ul>
+    </li>
+  <% if @user_folder %>
+    <li>
+      <h1><%= link_to t('.private'), items_path(folder: :user) %></h1>
+      <ul class="folders-list" id="user-folders">
+        <%= render @user_folder.subfolders %>
+      </ul>
+    </li>
+  <% end %>
+  <% if @shared_folders.any? || current_user.has_shared_items?  %>
+    <li>
+      <h1><%= link_to t('.shared'), items_path(folder: :shared) %></h1>
+      <ul class="folders-list" id="user-folders">
+        <%= render @shared_folders %>
+      </ul>
+    </li>
+  <% end %>
   </ul>
 </section>
-<% if @user_folder %>
-<section>
-  <h1><%= link_to t('.private'), items_path(folder: :user) %></h1>
-  <ul class="folders-list" id="user-folders">
-    <%= render @user_folder.subfolders %>
-  </ul>
-</section>
-<% if @shared_folders.any? || current_user.has_shared_items?  %>
-<section>
-  <h1><%= link_to t('.shared'), items_path(folder: :shared) %></h1>
-  <ul class="folders-list" id="user-folders">
-    <%= render @shared_folders %>
-  </ul>
-</section>
-<% end %>
-<% end %>
-
 <section id="files">
-  <header>
+  <header class="buttons">
     <%= link_to_function t('.upload'), 'Sakve.file_multiupload_open()', class: :button if can? :create, @item  %>
     <%= link_to_function t('.new_folder'), 'Sakve.folder_creation_open()', class: :button if can? :create, @folder %>
+  </header>
+  <header class="bread">
+    <span><%= t('.breadcrumbs') %></span>
+    <ul class="breadcrumbs">
+      <% folders_breadcrumbs(@current_folder).each do |flink| %>
+        <li><%= flink %></li>
+      <% end %>
+    </ul>
   </header>
   <ul class="file-list" id="items-list" data-url="<%= url_for((params || {}).merge(partial: true)) %>">
     <%= render @items %>

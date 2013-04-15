@@ -1,5 +1,10 @@
 <% if can? :create, @item %>
 <%= form_tag items_path(format: :json) do %>
+<ul class="breadcrumbs">
+  <% folders_breadcrumbs(@current_folder).each do |flink| %>
+  <li><%= flink %></li>
+  <% end %>
+</ul>
 <section class="group">
   <%= hidden_field_tag 'item[folder_id]', @current_folder.id %>
   <%= file_upload_tag 'item[object]', class: 'fileupload' %>
