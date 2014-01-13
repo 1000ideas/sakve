@@ -5,9 +5,7 @@
     <meta name="description" content="<%= yield_description %>" />
     <meta name="keywords" content="<%= yield_keywords %>" />
     <%= stylesheet_link_tag 'admins' %>
-    <%= tiny_mce_uploads_stylesheets_if_needed %>
     <%= javascript_include_tag 'admins' %>
-    <%= tiny_mce_uploads_javascripts_if_needed %>
     <%= yield :head %>
     <%= csrf_meta_tag %>
   </head>

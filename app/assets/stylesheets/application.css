@@ -5,6 +5,7 @@
  *= require fileupload
  *= require defaults
  *= require header
+ *= require context.menu
  *= require items
  *= require users
  *= require footer

@@ -22,9 +22,11 @@ module PaperclipProcessors
 
     class VideoGeometry < Paperclip::Geometry
       def self.parse_ffprobe(ffprobe_output)
-        size = ffprobe_output[/Stream.*Video.*\n/, 0].split(', ').slice(2)
-        g = parse(size)
-        VideoGeometry.new(g.width, g.height, g.modifier)
+        size = ffprobe_output[/Stream.*(Video.*)$/, 1]
+          .match(/([1-9]\d*)x(\d+)/)
+          .captures
+          .map(&:to_i)
+        VideoGeometry.new(size.first, size.last)
       end
 
 

@@ -1,10 +1,10 @@
-<li class="<%= cycle('odd', 'even') %> item-<%= item.id %>">
+<li class="<%= cycle('odd', 'even') %> item-<%= item.id %>" data-context="true">
   <div class="name"><%= item.name %></div>
   <div class="size"><%= number_to_human_size item.object_file_size %></div>
   <div class="date" title="<%= l item.created_at, format: :long %>">
     <%= l item.created_at, format: :short %>
   </div>
-  <div class="hidden-actions actions">
+  <div class="actions" data-context-target="true">
     <%= link_to t('show'), item, class: 'show', data: {remote: true} if can? :read, item %>
     <%= link_to t('edit'), edit_item_path(item), class: 'edit', data: {remote: true} if can? :edit, item %>
     <%= link_to t('download'), item.object.url(:original), class: 'download', data: {method: :get} %>

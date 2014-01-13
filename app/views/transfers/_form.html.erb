@@ -17,7 +17,7 @@
     <% if f.object.new_record? %>
     <div class="field">
       <%= f.hidden_field :group_token %>
-      <%= file_upload_tag :object, class: 'transfer-fileupload' %>
+      <%= file_field_tag(:object, multiple: true, class: 'transfer-fileupload', data: { value: t('.fileupload', default: 'Select files'), file_upload: true }) %>
     </div>
     <% end %>
   </div>
