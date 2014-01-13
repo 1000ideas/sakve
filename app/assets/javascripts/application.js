@@ -19,5 +19,7 @@
 //= require jquery-fileupload/basic
 //= require jquery_ujs
 //= require jquery_ujs_extension
-//= require jquery.contextMenu
+// require jquery.contextMenu
+//= require context.menu
 //= require sakve
+

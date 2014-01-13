@@ -1,10 +1,11 @@
 module ApplicationHelper
 
   def file_upload_tag(name, options = {})
-    file_field_tag name, options.merge(
+    options.merge!(
       multiple: true,
       data: { value: t('.fileupload', default: 'Select files') }
     )
+    file_field_tag(name, options)
   end
 
   def multiselect_tag resource, checked = false, options = {}

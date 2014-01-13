@@ -1,0 +1,45 @@
+[data-context] {
+  position: relative;
+  [data-context-target] {
+    &.opened { display: block; }
+
+    display: none;
+    position: absolute;
+    overflow: visible;
+    margin: 0;
+    z-index: 1;
+    background-color: #ccc;
+    border: 1px solid #aaa;
+    right: 0;
+    top: 100%;
+    text-align: left;
+
+    &.from-mouse {
+      right: auto;
+      top: auto;
+    }
+
+    a {
+      text-align: left;
+      display: block;
+      width: auto;
+      line-height: 2em;
+      padding: .5em;
+      min-width: 10em;
+      margin: 0;
+      color: #333;
+
+      &:before {
+        position: relative;
+        top: -2px;
+        margin-right: .3em;
+      }
+
+      &:hover {
+        background-color: #aaa;
+        color: #fff;
+      }
+    }
+
+  }
+}

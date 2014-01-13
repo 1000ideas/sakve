@@ -1,9 +1,9 @@
 //= require jquery
-//= require jquery-ui
-//= require mustache
-//= require jquery-fileupload/basic
+//= require jquery.ui.all
 //= require jquery_ujs
+//= require jquery-fileupload/basic
 //= require lightbox
-//= require jquery.uploadify
-//= require jquery.livequery
-//= require admin/admin
+//= require custom_selector
+//= require custom_file_input
+//= require tinymce-rails
+//= require lazy/admin

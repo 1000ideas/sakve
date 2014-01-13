@@ -57,9 +57,7 @@ window.Sakve = {
     that.folder_creation_init();
     that.file_multiupload_init();
     that.file_transfer_init();
-    that.context_menu_init();
     that.translation_tabs_init();
-    that.file_list_init();
 
   },
   reassign_odd_even_rows: function(selector) {
@@ -203,50 +201,8 @@ window.Sakve = {
   file_transfer_open: function() {
     $('#transfer-files-dialog').dialog('open');
   },
-  context_menu_init: function() {
-
-    var contains_action_link = function(key, options) {
-      return $('.actions a.' + key, options.$trigger).length == 0
-    };
-
-    var execute_action = function(key, options) {
-      $('.actions a.' + key, options.$trigger).trigger('click');
-    };
-
-    //Folder context menu
-    $('.folder-list').contextMenu({
-      selector: 'li span',
-      callback: execute_action,
-      items: {
-        open: { name: I18n.t('open'), icon: 'open', disabled: contains_action_link },
-        share: { name: I18n.t('share'), icon: 'share', disabled: contains_action_link },
-        destroy: { name: I18n.t('destroy'), icon: 'destroy', disabled: contains_action_link }
-      },
-      animation: { show: 'show', hide: 'hide' }
-    });
-
-
-    //item context menu
-    if ($('.file-list').length > 0) $('.file-list').contextMenu({
-      selector: 'li',
-      callback: execute_action,
-      items: {
-        show: { name: I18n.t('show'), icon: 'show', disabled: contains_action_link },
-        edit: { name: I18n.t('edit'), icon: 'edit', disabled: contains_action_link },
-        download: { name: I18n.t('download'), icon: 'download', disabled: contains_action_link },
-        share: { name: I18n.t('share'), icon: 'share', disabled: contains_action_link },
-        destroy: { name: I18n.t('destroy'), icon: 'destroy', disabled: contains_action_link }
-      },
-      animation: { show: 'show', hide: 'hide' }
-    });
-  },
   translation_tabs_init: function() {
     $('.translations-tabs').tabs();
-  },
-  file_list_init: function() {
-    $('.file-list').selectable({
-      filter: 'li' 
-    });
   },
   open_dialog: Helper.open_dialog
 };

@@ -7,7 +7,7 @@
 </ul>
 <section class="group">
   <%= hidden_field_tag 'item[folder_id]', @current_folder.id %>
-  <%= file_upload_tag 'item[object]', class: 'fileupload' %>
+  <%= file_field_tag('item[object]', multiple: true, class: 'fileupload', data: { value: t('.fileupload', default: 'Select files'), file_upload: true }) %>
 </section>
 <section class="group" id="upload-in-progress">
 

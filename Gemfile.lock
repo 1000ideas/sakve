@@ -1,0 +1,217 @@
+GIT
+  remote: git://github.com/1000ideas/l.git
+  revision: 3a01ccb9b7283a0b50686aa566d0c553de0e060f
+  branch: tinymce-integration
+  specs:
+    l (0.8.0)
+      better_errors
+      binding_of_caller
+      devise (~> 2.0.0)
+      jquery-fileupload-rails
+      jquery-ui-rails
+      paperclip
+      quiet_assets
+
+GIT
+  remote: git://github.com/1000ideas/tinymce-rails.git
+  revision: e970dd788732411d200f0b35c9b4bf4bfd238bd6
+  branch: rails_3_2
+  specs:
+    tinymce-rails (0.0.3)
+      jquery-fileupload-rails
+      jquery-ui-rails
+      paperclip
+      rails-i18n
+
+GEM
+  remote: https://rubygems.org/
+  remote: http://1000i.pl:8808/
+  specs:
+    actionmailer (3.2.16)
+      actionpack (= 3.2.16)
+      mail (~> 2.5.4)
+    actionpack (3.2.16)
+      activemodel (= 3.2.16)
+      activesupport (= 3.2.16)
+      builder (~> 3.0.0)
+      erubis (~> 2.7.0)
+      journey (~> 1.0.4)
+      rack (~> 1.4.5)
+      rack-cache (~> 1.2)
+      rack-test (~> 0.6.1)
+      sprockets (~> 2.2.1)
+    activemodel (3.2.16)
+      activesupport (= 3.2.16)
+      builder (~> 3.0.0)
+    activerecord (3.2.16)
+      activemodel (= 3.2.16)
+      activesupport (= 3.2.16)
+      arel (~> 3.0.2)
+      tzinfo (~> 0.3.29)
+    activeresource (3.2.16)
+      activemodel (= 3.2.16)
+      activesupport (= 3.2.16)
+    activesupport (3.2.16)
+      i18n (~> 0.6, >= 0.6.4)
+      multi_json (~> 1.0)
+    acts_as_tree (0.1.1)
+    arel (3.0.3)
+    bcrypt-ruby (3.1.2)
+    better_errors (1.1.0)
+      coderay (>= 1.0.0)
+      erubis (>= 2.6.6)
+    binding_of_caller (0.7.2)
+      debug_inspector (>= 0.0.1)
+    builder (3.0.4)
+    cancan (1.6.10)
+    capybara (2.2.1)
+      mime-types (>= 1.16)
+      nokogiri (>= 1.3.3)
+      rack (>= 1.0.0)
+      rack-test (>= 0.5.4)
+      xpath (~> 2.0)
+    capybara-webkit (1.1.0)
+      capybara (~> 2.0, >= 2.0.2)
+      json
+    climate_control (0.0.3)
+      activesupport (>= 3.0)
+    cocaine (0.5.3)
+      climate_control (>= 0.0.3, < 1.0)
+    coderay (1.1.0)
+    coffee-rails (3.2.2)
+      coffee-script (>= 2.2.0)
+      railties (~> 3.2.0)
+    coffee-script (2.2.0)
+      coffee-script-source
+      execjs
+    coffee-script-source (1.6.3)
+    columnize (0.3.6)
+    debug_inspector (0.0.2)
+    debugger (1.6.5)
+      columnize (>= 0.3.1)
+      debugger-linecache (~> 1.2.0)
+      debugger-ruby_core_source (~> 1.3.1)
+    debugger-linecache (1.2.0)
+    debugger-ruby_core_source (1.3.1)
+    devise (2.0.6)
+      bcrypt-ruby (~> 3.0)
+      orm_adapter (~> 0.0.3)
+      railties (~> 3.1)
+      warden (~> 1.1.1)
+    erubis (2.7.0)
+    execjs (2.0.2)
+    globalize3 (0.3.1)
+      activemodel (>= 3.0.0)
+      activerecord (>= 3.0.0)
+      paper_trail (~> 2)
+    hike (1.2.3)
+    i18n (0.6.9)
+    i18n-js (2.1.2)
+      i18n
+    journey (1.0.4)
+    jquery-fileupload-rails (0.4.1)
+      actionpack (>= 3.1)
+      railties (>= 3.1)
+    jquery-rails (3.0.4)
+      railties (>= 3.0, < 5.0)
+      thor (>= 0.14, < 2.0)
+    jquery-ui-rails (4.1.1)
+      railties (>= 3.1.0)
+    json (1.8.1)
+    mail (2.5.4)
+      mime-types (~> 1.16)
+      treetop (~> 1.4.8)
+    mime-types (1.25.1)
+    mini_portile (0.5.2)
+    multi_json (1.8.4)
+    mysql2 (0.3.14)
+    nokogiri (1.6.1)
+      mini_portile (~> 0.5.0)
+    orm_adapter (0.0.7)
+    paper_trail (2.7.2)
+      activerecord (~> 3.0)
+      railties (~> 3.0)
+    paperclip (3.5.2)
+      activemodel (>= 3.0.0)
+      activesupport (>= 3.0.0)
+      cocaine (~> 0.5.3)
+      mime-types
+    polyglot (0.3.3)
+    quiet_assets (1.0.2)
+      railties (>= 3.1, < 5.0)
+    rack (1.4.5)
+    rack-cache (1.2)
+      rack (>= 0.4)
+    rack-ssl (1.3.3)
+      rack
+    rack-test (0.6.2)
+      rack (>= 1.0)
+    rails (3.2.16)
+      actionmailer (= 3.2.16)
+      actionpack (= 3.2.16)
+      activerecord (= 3.2.16)
+      activeresource (= 3.2.16)
+      activesupport (= 3.2.16)
+      bundler (~> 1.0)
+      railties (= 3.2.16)
+    rails-i18n (3.0.0)
+      i18n (~> 0.5)
+      rails (>= 3.0.0, < 4.0.0)
+    railties (3.2.16)
+      actionpack (= 3.2.16)
+      activesupport (= 3.2.16)
+      rack-ssl (~> 1.3.2)
+      rake (>= 0.8.7)
+      rdoc (~> 3.4)
+      thor (>= 0.14.6, < 2.0)
+    rake (10.1.1)
+    rdoc (3.12.2)
+      json (~> 1.4)
+    sass (3.2.13)
+    sass-rails (3.2.6)
+      railties (~> 3.2.0)
+      sass (>= 3.1.10)
+      tilt (~> 1.3)
+    sprockets (2.2.2)
+      hike (~> 1.2)
+      multi_json (~> 1.0)
+      rack (~> 1.0)
+      tilt (~> 1.1, != 1.3.0)
+    sqlite3 (1.3.8)
+    thor (0.18.1)
+    tilt (1.4.1)
+    treetop (1.4.15)
+      polyglot
+      polyglot (>= 0.3.1)
+    tzinfo (0.3.38)
+    uglifier (2.4.0)
+      execjs (>= 0.3.0)
+      json (>= 1.8.0)
+    warden (1.1.1)
+      rack (>= 1.0)
+    will_paginate (3.0.5)
+    xpath (2.0.0)
+      nokogiri (~> 1.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  acts_as_tree (~> 0.1.1)
+  cancan
+  capybara
+  capybara-webkit
+  coffee-rails (~> 3.2.1)
+  debugger
+  globalize3 (~> 0.3.0)
+  i18n-js
+  jquery-rails
+  l!
+  mysql2
+  rails (= 3.2.16)
+  rails-i18n
+  sass-rails (~> 3.2.3)
+  sqlite3
+  tinymce-rails!
+  uglifier (>= 1.0.3)
+  will_paginate (~> 3.0)

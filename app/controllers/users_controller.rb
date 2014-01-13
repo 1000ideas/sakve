@@ -1,4 +1,4 @@
-class UsersController < L::UsersController
+class UsersController < L::Admin::UsersController
 
   layout 'standard'
 
@@ -35,6 +35,9 @@ class UsersController < L::UsersController
   def update
     @user = User.find(params[:id])
     authorize! :update, @user
+    
+    @user.updated_by = current_user
+
     if @user.update_attributes(params[:user])
       redirect_to users_path, notice: I18n.t('update.success')
     else

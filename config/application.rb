@@ -16,7 +16,8 @@ end
 module Sakve
   class Application < Rails::Application
     config.time_zone = 'Warsaw'
-    config.i18n.default_locale = :pl
+    config.i18n.enforce_available_locales = false
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '*.{rb,yml}').to_s]
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '*.{rb,yml}').to_s]
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', 'admin', '*.{rb,yml}').to_s]
     config.i18n.available_locales = [:pl, :en]

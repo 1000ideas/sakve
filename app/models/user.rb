@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+
   @@showable_attributes = %w(name email)
   mattr_reader :showable_attributes
 
@@ -16,9 +17,9 @@ class User < ActiveRecord::Base
 
   devise :database_authenticatable, :timeoutable,
          :rememberable, :trackable, :registerable,
-         :recoverable
+         :recoverable, :validatable
 
-  # Setup accessible (or protected) attributes for your model
+  attr_accessor :updated_by
   attr_accessible :first_name, :last_name, :name, :email, 
     :password, :password_confirmation, :remember_me, :group_ids,
     :reset_password_sent_at, :reset_password_token
@@ -68,6 +69,14 @@ protected
 
   def create_private_folder
     Folder.create!(user_id: self.id, global: false) 
+  end
+
+  def updated_by_admin?
+    updated_by.present? and updated_by.admin?
+  end
+
+  def password_required?
+    super && !updated_by_admin?
   end
 
 end
