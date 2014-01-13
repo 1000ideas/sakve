@@ -9,7 +9,7 @@
       <% if @transfer.expired? %>
         <p>Plik nie jest już dostepny</p>
       <% else %>
-        <p title="<%= l @transfer.expires_at, format: :long %>">Plik jest jescze dostępny przez <%= distance_of_time_in_words(Time.now, @transfer.expires_at) %></p>
+        <p title="<%= l @transfer.expires_at, format: :long %>">Plik jest jeszcze dostępny przez: <%= @transfer.expiration_distance %></p>
         <p><%= link_to 'Pobierz', download_transfer_path(token: @transfer.token, format: :zip) %></p>
       <% end %>
     </div>

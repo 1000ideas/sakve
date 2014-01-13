@@ -5,11 +5,13 @@ pl:
       index: Lista transfers
     form:
       fileupload: Dodaj pliki
+      expires_in: "Wygaśnie za (dni)"
     new:
       title: Dodawanie Transfer
     index:
       title: transfers
       new_transfer: 'Prześlij pliki'
+      infinite: 'zawsze'
     edit:
       title: Edycja Transfer
   menu:

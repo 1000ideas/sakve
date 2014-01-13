@@ -1,5 +1,4 @@
 class Transfer < ActiveRecord::Base
-  EXPIRES_IN_DAYS = 7
 
   belongs_to :user
   scope :expired, lambda { where('`expires_at` < ?', DateTime.now) }
@@ -15,7 +14,7 @@ class Transfer < ActiveRecord::Base
   attr_writer :group_token
 
   #before_validation :compress_files
-  after_create :generate_token, :delete_transfer_files, :set_expires_at, :send_mail_to_recipients
+  after_create :generate_token, :delete_transfer_files, :send_mail_to_recipients
 
   validates :token, uniqueness: true
   validates :name, presence: true
@@ -48,6 +47,14 @@ class Transfer < ActiveRecord::Base
 
   def expired?
     expires_at < DateTime.now
+  end
+
+  def expiration_distance
+    if self.expires_at < (Time.now + 1.month)
+      ActionController::Base.helpers.distance_of_time_in_words(Time.now, self.expires_at).to_s
+    else
+      I18n.t('transfers.index.infinite')
+    end
   end
 
   private
@@ -88,10 +95,6 @@ class Transfer < ActiveRecord::Base
 
   def delete_transfer_files
     self.files.each(&:destroy) if @delete_files
-  end
-
-  def set_expires_at
-    update_attributes(expires_at: DateTime.now + EXPIRES_IN_DAYS.days)
   end
 
   def send_mail_to_recipients

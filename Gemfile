@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-#source 'http://1000i.co/gems'
+source 'http://1000i.co/gems'
 
 gem 'rails', '3.2.13'
 gem 'sqlite3'
@@ -28,10 +28,10 @@ gem 'debugger', group: [:test, :development]
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'jquery-fileupload-rails'
-gem 'i18n-js'
+gem 'i18n-js', github: "cblavier/i18n-js"
 
-gem 'l', path: '../gems/l'
-gem "tiny_mce_uploads", path: '../gems/tiny_mce_uploads'
+gem 'l'#, path: '../gems/l'
+gem "tiny_mce_uploads"#, path: '../gems/tiny_mce_uploads'
 
 gem "devise", "~> 2.2.0"
 gem "cancan"

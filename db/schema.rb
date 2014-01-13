@@ -32,12 +32,12 @@ ActiveRecord::Schema.define(:version => 20130402131439) do
   end
 
   create_table "group_translations", :force => true do |t|
-    t.integer  "group_id"
-    t.string   "locale"
-    t.string   "title"
-    t.string   "description"
+    t.integer  "group_id",    :null => false
+    t.string   "locale",      :null => false
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+    t.string   "title"
+    t.string   "description"
   end
 
   add_index "group_translations", ["group_id"], :name => "index_group_translations_on_group_id"

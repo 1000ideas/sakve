@@ -122,6 +122,22 @@ window.Sakve = {
   },
   transfer_init: function(element) {
       var that = this;
+      $( "#slider" ).slider({
+        value: 7,
+        min: 1,
+        max: 31,
+        step: 1,
+        animate: "fast",
+        slide: function( event, ui ) {
+          if ( ui.value == 31) {
+            $( "#amount" ).val( '\u221e' );
+          }
+          else {
+            $( "#amount" ).val( ui.value );
+          }
+        }
+      });
+      $( "#amount" ).val( $( "#slider" ).slider( "value" ) );
       Helper.fileupload_init(element, {
         url: '<%= url.files_path(format: :json) %>',
         add: function(e, data) {
