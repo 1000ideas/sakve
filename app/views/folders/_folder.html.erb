@@ -1,4 +1,4 @@
-<li id="folder-<%= folder.id %>">
+<li class="<%= (current_user.admin? or !folder.global?) ? "droppable" : "" %>" id="folder-<%= folder.id %>">
   <%= content_tag :span do %>
     <%= link_to folder.name, items_path(folder: folder.id) %>
     <div class="hidden-actions actions">

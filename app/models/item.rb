@@ -40,7 +40,6 @@ class Item < ActiveRecord::Base
     MIME::Types.type_for(Item.last.object.path(style)).first.try(:content_type)
   end
 
-
   def item_styles
     styles = {
       thumb: ['128x128#', :png]

@@ -222,12 +222,12 @@ window.Sakve = {
     $('.translations-tabs').tabs();
   },
   file_drag_drop: function() {
-    $( "ul.file-list li" ).draggable({
+    $( "ul.file-list li.draggable" ).draggable({
       containment: $(this).parent().parent().parent(),
       helper: "clone"
     });
 
-    $( "section#left-menu ul li h1, section#left-menu ul li ul li" ).droppable({
+    $( "section#left-menu ul li h1.droppable, section#left-menu ul li ul li.droppable" ).droppable({
       accept: 'ul.file-list li',
       greedy: true,
       tolerance: "pointer",

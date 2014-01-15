@@ -1,4 +1,4 @@
-<li class="<%= cycle('odd', 'even') %> item-<%= item.id %>" id="item-<%= item.id %>" data-context="true">
+<li class="<%= cycle('odd', 'even') %> item-<%= item.id %> <%= !item.shared_for?(current_user) ? ((current_user.admin? or !item.folder.global?) ? "draggable" : "") : "" %>" id="item-<%= item.id %>" data-context="true">
   <div class="name"><%= item.name %></div>
   <div class="size"><%= number_to_human_size item.object_file_size %></div>
   <div class="date" title="<%= l item.created_at, format: :long %>">
