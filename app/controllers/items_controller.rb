@@ -103,6 +103,14 @@ class ItemsController < ApplicationController
     end
   end
 
+  def change_folder
+    item = Item.find(params[:item_id])
+    folder_id = params[:folder_id]
+    item.update_attributes(folder_id: folder_id)
+
+    render nothing: true
+  end
+
   def share
     @item = Item.find(params[:id])
     authorize! :share, @item

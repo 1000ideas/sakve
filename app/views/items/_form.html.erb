@@ -9,11 +9,15 @@
     <% end %>
     <div class="field">
       <%= f.label :name %>
-      <%= f.text_field :name  %>
+      <%= f.text_field :name %>
+    </div>
+    <div class="field">
+      <%= f.label :folder_id %>
+      <%= f.select :folder_id, options_from_collection_for_select(current_user.folders, :id, :name) %>
     </div>
     <div class="field">
       <%= f.label :tags %>
-      <%= f.text_field :tags, class: 'tags-autocomplete'  %>
+      <%= f.text_field :tags, class: 'tags-autocomplete' %>
     </div>
   </div>
 <div class="actions">

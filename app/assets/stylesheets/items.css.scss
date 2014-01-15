@@ -11,6 +11,17 @@ article.content > section {
 section#left-menu {
   width: 300px;
   min-width: 300px;
+
+  ul {
+
+    .folders-list {
+
+      li {
+        padding: 10px 0;
+        font-size: 1.1em;
+      }
+    }
+  }
 }
 
 section#files > header {

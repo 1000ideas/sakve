@@ -3,14 +3,14 @@
 <section id="left-menu">
   <ul>
     <li>
-      <h1><%= link_to t('.public'), items_path %></h1>
+      <h1 id="folder-<%= @global_folder.id %>"><%= link_to t('.public'), items_path %></h1>
       <ul class="folders-list" id="root-folders">
         <%= render @global_folder.subfolders %>
       </ul>
     </li>
   <% if @user_folder %>
     <li>
-      <h1><%= link_to t('.private'), items_path(folder: :user) %></h1>
+      <h1 id="folder-<%= @user_folder.id %>"><%= link_to t('.private'), items_path(folder: :user) %></h1>
       <ul class="folders-list" id="user-folders">
         <%= render @user_folder.subfolders %>
       </ul>

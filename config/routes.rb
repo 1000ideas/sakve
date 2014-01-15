@@ -61,6 +61,8 @@ Sakve::Application.routes.draw do
     resources :groups
     resources :users
     match 'switch_lang/:lang', to: 'application#switch_lang', as:  :switch_lang, lang: locale_regex
+    match 'change_folder', to: 'items#change_folder', via: :post
+
     root to: 'items#index'
   end
   root to: 'items#index'

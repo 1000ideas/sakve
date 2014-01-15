@@ -58,6 +58,7 @@ window.Sakve = {
     that.file_multiupload_init();
     that.file_transfer_init();
     that.translation_tabs_init();
+    that.file_drag_drop();
 
   },
   reassign_odd_even_rows: function(selector) {
@@ -219,6 +220,31 @@ window.Sakve = {
   },
   translation_tabs_init: function() {
     $('.translations-tabs').tabs();
+  },
+  file_drag_drop: function() {
+    $( "ul.file-list li" ).draggable({
+      containment: $(this).parent().parent().parent(),
+      helper: "clone"
+    });
+
+    $( "section#left-menu ul li h1, section#left-menu ul li ul li" ).droppable({
+      accept: 'ul.file-list li',
+      greedy: true,
+      tolerance: "pointer",
+      drop: function(e, ui) {
+        $.ajax({
+          type  : "POST",
+          url   : "/change_folder/",
+          data  : {
+            'item_id': $(ui.draggable).attr( 'id' ).substr(5),
+            'folder_id': $(this).attr( 'id' ).substr(7),
+          },
+          success: function() {
+            $(ui.draggable).fadeOut( 'slow' );
+          }
+        });
+      }
+    });
   },
   open_dialog: Helper.open_dialog
 };
