@@ -19,8 +19,9 @@ test:
 production:
   adapter: mysql2
   database: sakve
-  username: root
-  password: root
+  username: sakve
+  password: wMsf5ARwu2T2xHqb
   encoding: utf8
   pool: 5
   timeout: 5000
+  host: localhost

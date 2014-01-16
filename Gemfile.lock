@@ -127,11 +127,9 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.25.1)
-    mini_portile (0.5.2)
     multi_json (1.8.4)
     mysql2 (0.3.14)
-    nokogiri (1.6.1)
-      mini_portile (~> 0.5.0)
+    nokogiri (1.5.9)
     orm_adapter (0.0.7)
     paper_trail (2.7.2)
       activerecord (~> 3.0)
@@ -213,6 +211,7 @@ DEPENDENCIES
   jquery-rails
   l!
   mysql2
+  nokogiri (= 1.5.9)
   rails (= 3.2.16)
   rails-i18n
   sass-rails (~> 3.2.3)

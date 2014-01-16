@@ -32,3 +32,4 @@ gem 'rails-i18n'
 gem "globalize3", "~> 0.3.0"
 gem "will_paginate", "~> 3.0"
 gem 'acts_as_tree', '~> 0.1.1'
+gem "nokogiri", '1.5.9'

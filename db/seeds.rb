@@ -4,8 +4,8 @@ end
 
 admin = User.create! email: 'admin@admin.pl',
   name: "Admin 1000ideas",
-  password:  "admin", 
-  password_confirmation: "admin"
+  password:  "adminadmin", 
+  password_confirmation: "adminadmin"
 
 admin.add_group :admin
 
