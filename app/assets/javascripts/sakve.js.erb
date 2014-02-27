@@ -41,7 +41,11 @@ var Helper = {
 
 window.Sakve = {
   setup: function() {
+    console.profileEnd()
+    console.profile('Setup');
     var that = this;
+    $(function(){ $(document).foundation(); });
+
     that.load_templates();
 
     $('.tags-autocomplete').autocomplete(that.tags_autocomplete_options);
@@ -50,23 +54,22 @@ window.Sakve = {
       that.item_upload_init(this);
     });
 
+    // $(document).on('opened', '#multiupload-files-modal', function(event) {
+    //   $('.fileupload', this).each(function() {
+    //     that.item_upload_init(this);
+    //   });
+    // });
+
+
     $('.transfer-fileupload').each(function() {
       that.transfer_init(this);
     });
 
-    that.folder_creation_init();
-    that.file_multiupload_init();
-    that.file_transfer_init();
-    that.translation_tabs_init();
     that.file_drag_drop();
+    console.profileEnd();
 
   },
   reassign_odd_even_rows: function(selector) {
-    var cycle = 0;
-    $(selector).find('li').each(function() {
-      $(this).removeClass('odd').removeClass('even').addClass(cycle % 2 == 0 ? 'odd' : 'even');
-      ++cycle;
-    });
   },
   load_templates: function() {
     this.templates = {
@@ -184,47 +187,11 @@ window.Sakve = {
         }
       });
   },
-  folder_creation_init: function() {
-    $('#new-folder-dialog').dialog({
-      autoOpen: false,
-      modal: true,
-      width: 500
-    });
-  },
-  folder_creation_open: function() {
-    $('#new-folder-dialog').dialog('open');
-  },
-  file_multiupload_init: function() {
-    $('#multiupload-files-dialog').dialog({
-      autoOpen: false,
-      modal: true,
-      width: 600,
-      height: 400,
-      resizable: false
-    });
-  },
-  file_multiupload_open: function() {
-    $('#multiupload-files-dialog').dialog('open');
-  },
-  file_transfer_init: function() {
-    $('#transfer-files-dialog').dialog({
-      autoOpen: false,
-      modal: true,
-      width: 600,
-      height: 400,
-      resizable: false
-    });
-  },
-  file_transfer_open: function() {
-    $('#transfer-files-dialog').dialog('open');
-  },
-  translation_tabs_init: function() {
-    $('.translations-tabs').tabs();
-  },
   file_drag_drop: function() {
     $( "ul.file-list li.draggable" ).draggable({
       containment: $(this).parent().parent().parent(),
-      helper: "clone"
+      helper: "clone",
+      cancel: ".actions"
     });
 
     $( "section#left-menu ul li h1.droppable, section#left-menu ul li ul li.droppable" ).droppable({

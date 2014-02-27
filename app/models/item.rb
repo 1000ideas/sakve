@@ -13,7 +13,7 @@ class Item < ActiveRecord::Base
     select("DISTINCT `#{table_name}`.*").joins(:shares).where('(`shares`.`collaborator_type` = ? AND `shares`.`collaborator_id` = ?) OR (`shares`.`collaborator_type` = ? AND `shares`.`collaborator_id` IN (?))', user.class.name, user.id, 'Group', user.group_ids || []).where('`user_id` != ?', user.id)
   }
 
-  has_attached_file :object, 
+  has_attached_file :object,
     styles: Proc.new {|object| object.instance.item_styles } ,
     processors: [:item_processor],
     path: ':partition/:class/:id/:style/:filename',
@@ -23,7 +23,10 @@ class Item < ActiveRecord::Base
 
   attr_accessible :name, :object, :type, :user_id, :user, :tags, :folder_id, :folder
 
-  validates :object, attachment_presence: true
+  validates :object,
+    attachment_presence: true,
+    attachment_content_type: { content_type: /.*/i }
+
   validates :folder_id, presence: true
   validates :name, uniqueness: { scope: :folder_id, case_sensitive: false }
 
@@ -118,7 +121,7 @@ class Item < ActiveRecord::Base
         end
       end
       tag_list.each do |tag|
-        t = Tag.where(name: tag).first || Tag.create(name: tag)  
+        t = Tag.where(name: tag).first || Tag.create(name: tag)
         self.item_tags.create(tag_id: t.id)
       end
     end

@@ -1,27 +1,37 @@
 <% title [t('meta.title'), '::', t('.title') ] * ' ' %>
-<div id="login-box" class="center-box">
-  <h2><%= t('.title') %></h2>
 
-  <%= content_tag :div, alert, class: :alert unless alert.blank? %>
-  <%= content_tag :div, notice, class: :notice unless notice.blank? %>
+<div class="row">
+  <div class="small-10 small-centered medium-8 large-6 columns">
+    <h2><%= t('.title') %></h2>
 
-  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-    <div class="field">
-      <%= f.label :email %>
-      <%= f.text_field :email %>
-    </div>
-    <div class="field">
-      <%= f.label :password %>
-      <%= f.password_field :password %>
-    </div>
-    <%- if devise_mapping.rememberable? -%>
-    <div class="field field-with-checkbox">
-      <%= f.label :remember_me %>
-      <%= f.check_box :remember_me %>
-    </div>
-    <%- end -%>
-    <%= f.button t('.submit') %>
-  <% end %>
+    <%= content_tag :div, class: 'alert-box warning', data: {alert: true} do %>
+      <%= alert %>
+      <%= link_to raw('&times;'), '#', class: :close %>
+    <% end unless alert.blank? %>
+    <%= content_tag :div, class: 'alert-box success', data: {alert: true} do %>
+      <%= notice %>
+      <%= link_to raw('&times;'), '#', class: :close %>
+    <% end unless notice.blank? %>
 
-  <%= render partial: "devise/shared/links" %>
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: {class: :custom}) do |f| %>
+      <div class="field">
+        <%= f.label :email %>
+        <%= f.text_field :email, tabindex: 1, autofocus: true %>
+      </div>
+      <div class="field">
+        <%= f.label :password %>
+        <%= f.password_field :password, tabindex: 2 %>
+      </div>
+      <%- if devise_mapping.rememberable? -%>
+      <div class="field">
+        <%= f.check_box :remember_me, tabindex: 3 %>
+        <%= f.label :remember_me %>
+      </div>
+      <%- end -%>
+      <%= f.button t('.submit'), tabindex: 4 %>
+    <% end %>
+
+    <%= render partial: "devise/shared/links" %>
+
+  </div>
 </div>

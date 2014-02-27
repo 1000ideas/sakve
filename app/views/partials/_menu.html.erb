@@ -1,10 +1,22 @@
-<ul>
-  <%= content_tag :li, link_to('Users', users_path) if can? :manage, User %>
-  <%= content_tag :li, link_to('Groups', groups_path) if can? :read, Group %>
-  <%= content_tag :li, link_to('Items',items_path) if can? :read, Item %>
-  <%= content_tag :li, link_to('Transfer', transfers_path) if can? :create, Transfer %>
-  <%= content_tag :li, link_to('Logout', destroy_user_session_path, method: :delete), title: current_user if current_user %>
+<header>
+  <div class="row">
+    <nav class="small-8 medium-8 large-8 columns main-menu">
+      <ul>
+        <%= content_tag :li, link_to('Items',items_path) if can? :read, Item %>
+        <%= content_tag :li, link_to('Transfer', transfers_path) if can? :create, Transfer %>
+        <%= content_tag :li, link_to('Groups', groups_path) if can? :read, Group %>
+      </ul>
+    </nav>
+    <nav class="small-4 medium-4 large-4 columns">
+      <ul>
+        <%= content_tag :li, link_to(current_user.email, edit_user_registration_path) if current_user %>
+        <%= content_tag :li, link_to('Logout', destroy_user_session_path, method: :delete) if current_user %>
+      </ul>
+    </nav>
+  </div>
+<!-- <ul>
   <% (I18n.available_locales - [I18n.locale]).each do |lang| %>
     <%= content_tag :li, link_to("Switch to #{lang}", switch_lang_path(lang: lang)) %>
   <% end %>
 </ul>
+ --></header>

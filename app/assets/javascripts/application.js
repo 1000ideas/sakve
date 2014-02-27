@@ -11,15 +11,20 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require jquery
-//= require jquery.ui.all
+//= require jquery_ujs
+//= require foundation
+//= require jquery.ui.draggable
+//= require jquery.ui.droppable
+//= require jquery.ui.autocomplete
+//= require jquery.ui.slider
 //= require jquery.tinysort
 //= require i18n
 //= require i18n/translations
 //= require mustache
 //= require jquery-fileupload/basic
-//= require jquery_ujs
 //= require jquery_ujs_extension
-// require jquery.contextMenu
 //= require context.menu
 //= require sakve
+
+
 

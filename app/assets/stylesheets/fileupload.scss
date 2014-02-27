@@ -1,7 +1,15 @@
+@import 'overrides';
+@import 'foundation/components/buttons';
+
+input[type=file].fileupload {
+  display: none;
+}
+
 .fileupload-dropzone {
   border: 5px dashed #DDD;
   background: #EEE;
   margin: 1em auto;
+  text-align: center;
 }
 
 .fileupload-dropzone > div {
@@ -9,6 +17,7 @@
 }
 
 .fileupload-button input[type=file] {
+  display: block;
   float: none;
   position: absolute;
   top: 0;
@@ -26,17 +35,7 @@
 }
 
 .fileupload-button {
-  line-height: 3em;
-  width: 100px;
-  position: relative;
-  cursor: pointer;
-  background-color: #fff;
-  border: 1px solid #7D7D7D;
-  border-radius: 1em;
-  padding: 0 1.5em;
-  color: #7D7D7D;
-  text-align: center;
-  overflow: hidden;
+  @include button();
 }
 
 .field .progress {

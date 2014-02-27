@@ -1,23 +1,26 @@
 (($, I18n) ->
   confirmationPopup = (link) ->
     message = link.data('confirm')
-    html = """
-      <div id="confirm-dialog" title="#{I18n.t('confirm.title')}">
+    html = $("""<div id="confirm-dialog" class="reveal-modal tiny" data-reveal>
         <p>#{message}</p>
-      </div>
-      """
+        <a href="#" class="button button-ok">#{I18n.t('confirm.ok')}</a>
+        <a href="#" class="button button-cancel">#{I18n.t('confirm.cancel')}</a>
+      </div>""")
 
-    buttons = {}
-    buttons[I18n.t('confirm.ok')] = ->
+    html.find('.button-ok').on 'click', (event) ->
+      event.preventDefault()
       $.rails.confirmLink link
-      $(this).dialog 'close'
-    buttons[I18n.t('confirm.cancel')] = ->
-      $(this).dialog 'close'
+      $(html).foundation('reveal', 'close')
 
-    $( html ).dialog
-      resizable: false
-      modal: true
-      buttons: buttons
+    html.find('.button-cancel').on 'click', (event) ->
+      event.preventDefault()
+      $(html).foundation('reveal', 'close')
+
+    $('body').append(html)
+    $('#confirm-dialog').foundation()
+    $('#confirm-dialog').on 'closed',  ->
+      $(this).remove()
+    $('#confirm-dialog').foundation('reveal', 'open')
 
   $.rails.allowAction = (link) ->
     return true if ! link.data('confirm') || link.data('confirmed') == true

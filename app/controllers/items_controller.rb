@@ -1,7 +1,5 @@
 class ItemsController < ApplicationController
 
-  layout "standard"
-
   # GET /items
   # GET /items.xml
   def index
@@ -15,7 +13,7 @@ class ItemsController < ApplicationController
     @item = Item.new(folder: @current_folder, user: current_user)
 
     if @current_folder
-      @items = Item.where(folder_id: @current_folder.try(:id)) 
+      @items = Item.where(folder_id: @current_folder.try(:id))
     elsif params[:folder] == 'shared'
       @items = Item.shared_for(current_user)
     end
@@ -34,6 +32,20 @@ class ItemsController < ApplicationController
     end
   end
 
+  def multiupload
+    @global_folder = Folder.global_root
+    @user_folder = Folder.user_root(current_user)
+    @shared_folders = Folder.shared_for(current_user)
+    @current_folder = Folder.where(id: params[:folder]).first || (params[:folder] == 'user' ? @user_folder : @global_folder)
+    @current_folder = nil if params[:folder] == 'shared'
+
+    @item = Item.new(folder: @current_folder, user: current_user)
+
+    respond_to do |format|
+      format.html { render layout: !request.xhr? }
+    end
+  end
+
   # GET /items/1.json
   def show
     @item = Item.find(params[:id])
@@ -45,11 +57,11 @@ class ItemsController < ApplicationController
     end
   end
 
-  def download 
+  def download
     @item = Item.find(params[:id])
     authorize! :read, @item
 
-    send_file @item.object.path(params[:style]), 
+    send_file @item.object.path(params[:style]),
       filename: @item.name_for_download(params[:format]),
       content_type: @item.content_type(params[:style]),
       disposition: 'inline'
@@ -140,7 +152,7 @@ class ItemsController < ApplicationController
     @item.destroy
 
     respond_to do |format|
-      format.html { redirect_to :back, notice: I18n.t('delete.success') } 
+      format.html { redirect_to :back, notice: I18n.t('delete.success') }
       format.js
     end
   end

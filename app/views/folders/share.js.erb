@@ -1,18 +1,16 @@
-if ( $('#share-folder-dialog').length == 0 ) {
-  var context = Sakve.open_dialog('share-folder-dialog', '<%= t('.title', name: @folder.name) %>', '<%=j render('share_form') %>', {
-    width: 600,
-    height: 300
-  });
+$('<div data-reveal>')
+  .addClass('reveal-modal small')
+  .html("<%= j render('share_form') %>")
+  .appendTo('body')
+  .foundation()
+  .on('closed', function() { $(this).remove(); })
+  .foundation('reveal', 'open')
+  .find('#search_collaborator')
+  .autocomplete(Sakve.collaborators_autocomplete_options)
+  .data('ui-autocomplete')._renderItem = Sakve.collaborators_render_item;
 
-  Sakve.templates = $.extend(Sakve.templates, {
-    collaborator_select: Mustache.compile( $('#collaborator_select').text().trim() ),
-    groups_share:  Mustache.compile( $('#group_share').text().trim() ),
-    users_share:  Mustache.compile( $('#user_share').text().trim() )
-  });
-
-  context
-    .find('#search_collaborator')
-    .autocomplete(Sakve.collaborators_autocomplete_options)
-    .data('ui-autocomplete')._renderItem = Sakve.collaborators_render_item;
-  
-}
+Sakve.templates = $.extend(Sakve.templates, {
+  collaborator_select: Mustache.compile( $('#collaborator_select').text().trim() ),
+  groups_share:  Mustache.compile( $('#group_share').text().trim() ),
+  users_share:  Mustache.compile( $('#user_share').text().trim() )
+});

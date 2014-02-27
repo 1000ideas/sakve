@@ -1,12 +1,13 @@
 <% if errors.any? %>
   <%- id ||= 'error_explanation' -%>
   <%- class_name ||= nil -%>
-  <%= content_tag :div, id: id, class: class_name do %>
+  <%= content_tag :div, id: id, class: 'alert-box warning', data: {alert: true} do %>
     <h3><%= t 'errors.template.header', count: errors.count %></h3>
     <ul>
       <% errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
     </ul>
+    <%= link_to raw('&times;'), '#', class: :close %>
   <% end %>
 <% end %>

@@ -8,4 +8,4 @@
 <% else %>
   <%= image_tag @item.object.url(:thumb) %>
 <% end %>
-<%= link_to t('.download'), @item.object.url(:original, false), class: :download %>
+<%= link_to t('.download'), @item.object.url(:original, false), class: [:button, :download] %>

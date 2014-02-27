@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   before_filter :set_locale
 
-  layout :layout_by_resource
+  layout 'application'
 
   def switch_lang
     I18n.locale = session[:locale] = params[:lang].to_sym
@@ -87,8 +87,5 @@ class ApplicationController < ActionController::Base
     new_user_session_path
   end
 
-  def layout_by_resource
-    devise_controller? ? 'login' : 'standard'
-  end
 
 end
