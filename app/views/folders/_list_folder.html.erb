@@ -1,0 +1,8 @@
+<li class="row folder-<%= folder.id %>" id="folder-<%= folder.id %>" data-context="true">
+  <div class="name columns small-11"><%= folder.name %></div>
+  <div class="actions" data-context-target="true">
+    <%= link_to t('open'), items_path(folder: folder.id), class: 'open', data: {method: :get} %>
+      <%= link_to t('destroy'), folder, class: "destroy", data: { confirm: t('confirm.folder'), method: :delete, remote: true } %>
+      <%= link_to( t('share'), share_folder_path(folder), class: "share", data: { method: :put, remote: true }) if can?(:share, folder) %>
+  </div>
+</li>

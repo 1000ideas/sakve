@@ -59,6 +59,8 @@ Sakve::Application.routes.draw do
 
     match 'collaborators(.:format)', to: 'application#collaborators', as: :collaborators
 
+    get :search, to: "application#search"
+
     resources :groups
     resources :users
     match 'switch_lang/:lang', to: 'application#switch_lang', as:  :switch_lang, lang: locale_regex

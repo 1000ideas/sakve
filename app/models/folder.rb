@@ -20,6 +20,14 @@ class Folder < ActiveRecord::Base
 
   before_save :ensure_global
 
+  def self.search(query)
+    words = query.query_tokenize
+    return [] if words.empty?
+    words.inject(self) do |result, w|
+      result.where("`#{table_name}`.`name` LIKE ?", "%#{w}%")
+    end
+  end
+
   def shared_for? user
     users.exists? (user) || user.groups.map {|g| groups.exists?(g) }.inject{|a,b| a || b }
   end
@@ -32,7 +40,7 @@ class Folder < ActiveRecord::Base
     ! parent_id.nil?
   end
 
-  # Pobiera listę folderów nadrzędnych, od najbliższego do najdalszego. 
+  # Pobiera listę folderów nadrzędnych, od najbliższego do najdalszego.
   # Parametd +include_self+ określa czy pierwszym elementem na liscie jest
   # obiekt, czy rodzic
   def ancestors(include_self = false)
@@ -47,7 +55,7 @@ class Folder < ActiveRecord::Base
   end
 
   def has_subfolders?
-    subfolders.count > 0 
+    subfolders.count > 0
   end
 
   def self.global_root
@@ -89,7 +97,7 @@ protected
   def only_one_root
     root_folder = self.class.where(global: global, parent_id: nil)
     root_folder = root_folder.where(user_id: self.user_id) unless global?
-    if root_folder.count > 0 
+    if root_folder.count > 0
       errors.add(:parent_id, :blank)
     end
   end

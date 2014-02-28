@@ -23,4 +23,11 @@ body > header {
       }
     }
   }
+
+  .search-form {
+    fieldset {
+      padding: 0;
+      border: 0;
+    }
+  }
 }

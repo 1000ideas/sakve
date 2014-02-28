@@ -20,6 +20,15 @@ class ApplicationController < ActionController::Base
 
   layout 'application'
 
+  def search
+    @folders = Folder.search(search_query)
+    @items = Item.search(search_query)
+
+    respond_to do |format|
+      format.html
+    end
+  end
+
   def switch_lang
     I18n.locale = session[:locale] = params[:lang].to_sym
     referer_params = Rails.application.routes.recognize_path(request.referer, method: :get)
@@ -85,6 +94,10 @@ class ApplicationController < ActionController::Base
 
   def after_sign_out_path_for(resource)
     new_user_session_path
+  end
+
+  def search_query
+    params[:search][:query] if params[:search]
   end
 
 

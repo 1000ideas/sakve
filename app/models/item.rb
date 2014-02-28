@@ -10,7 +10,8 @@ class Item < ActiveRecord::Base
   has_many :groups,  through: :shares, source: :collaborator, source_type: 'Group'
 
   scope :shared_for, lambda { |user|
-    select("DISTINCT `#{table_name}`.*").joins(:shares).where('(`shares`.`collaborator_type` = ? AND `shares`.`collaborator_id` = ?) OR (`shares`.`collaborator_type` = ? AND `shares`.`collaborator_id` IN (?))', user.class.name, user.id, 'Group', user.group_ids || []).where('`user_id` != ?', user.id)
+    select("DISTINCT `#{table_name}`.*")
+      .joins(:shares).where('(`shares`.`collaborator_type` = ? AND `shares`.`collaborator_id` = ?) OR (`shares`.`collaborator_type` = ? AND `shares`.`collaborator_id` IN (?))', user.class.name, user.id, 'Group', user.group_ids || []).where('`user_id` != ?', user.id)
   }
 
   has_attached_file :object,
@@ -93,7 +94,6 @@ class Item < ActiveRecord::Base
   def self.search(query)
     words = query.query_tokenize
     tags = query.query_tokenize(:tag)
-
     self.search_by_tags(tags) | self.search_by_name(words)
   end
 

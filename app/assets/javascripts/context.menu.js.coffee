@@ -27,7 +27,7 @@ class ContextMenu
       @open_context_menu_for(event.currentTarget, $(document).scrollLeft() + event.clientX - offset.left,  $(document).scrollTop() + event.clientY - offset.top)
 
     $(document).on 'click', (event) =>
-      return if $(event.target).closest('[data-context-target]').length > 0
+      # return if $(event.target).closest('[data-context-target]').length > 0
       return if $(event.target).closest('[data-context-button]').length > 0
       @close_all_context_menus()
 

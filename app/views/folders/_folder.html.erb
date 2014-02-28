@@ -1,7 +1,7 @@
-<li class="<%= (current_user.admin? or !folder.global?) ? "droppable" : "" %>" id="folder-<%= folder.id %>">
+<li class="<%= (current_user.admin? or !folder.global?) ? "droppable" : "" %>" id="folder-<%= folder.id %>" data-context>
   <%= content_tag :span do %>
     <%= link_to folder.name, items_path(folder: folder.id) %>
-    <div class="hidden-actions actions">
+    <div class="actions" data-context-target>
       <%= link_to t('open'), items_path(folder: folder.id), class: 'open', data: {method: :get} %>
       <%= link_to t('destroy'), folder, class: "destroy", data: { confirm: t('confirm.folder'), method: :delete, remote: true } %>
       <%- Rails.logger.debug "#{folder.name} shareable: #{can?(:share, folder)}" -%>
