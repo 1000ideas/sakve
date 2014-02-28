@@ -15,8 +15,8 @@ class ContextMenu
       .show()
 
   constructor: ->
-    $(document).on 'click', '[data-context-target] a', ->
-      console.log(this)
+    # $(document).on 'click', '[data-context-target] a', ->
+      # console.log(this)
 
     $(document).on 'contextmenu', '[data-context]', (event) =>
       event.preventDefault()
@@ -31,12 +31,15 @@ class ContextMenu
       return if $(event.target).closest('[data-context-button]').length > 0
       @close_all_context_menus()
 
+    $(window).on 'blur', =>
+      @close_all_context_menus()
+
     $(document).on 'click', 'a[data-context-button]', (event) =>
       event.preventDefault()
 
       menu = $(event.currentTarget)
         .siblings('[data-context-target]')
-      
+
       @close_all_context_menus(menu[0])
 
       menu

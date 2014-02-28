@@ -1,2 +1,1 @@
-var parent_group = $('.transfer-file-<%= @file.id %>').parent();
-$('.transfer-file-<%= @file.id %>').remove();
+$('.transfer-file[data-fid=<%= @file.id %>]').remove();

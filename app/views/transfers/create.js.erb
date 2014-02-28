@@ -3,19 +3,25 @@ var form = $('#new_transfer');
 var errors = $("<%= j render partial: 'l/partials/errors', object: @transfer.errors %>".trim());
 var error_explanation = form.find('#error_explanation');
 if (error_explanation.length == 0) {
-  form.prepend( errors )
+  errors
+    .hide()
+    .prependTo(form)
+    .slideDown();
 } else {
   error_explanation.replaceWith( errors );
 }
+$(form).foundation({alert: {animation: 'slideUp'}})
 <% else %>
-var url = $('#transfers-list').data('url');
-$('#transfers-list').load(url)
-var dialog_box = form.parent();
-dialog_box.dialog('close');
+
+sakve.reload_list('transfers');
+form
+  .parent()
+  .foundation('reveal', 'close')
 <%- @transfer = Transfer.new(user: current_user) -%>
-dialog_box.html("<%= j render partial: 'form' %>");
-$('.transfer-fileupload').each(function() {
-  Sakve.transfer_init(this);
-});
+default_value = form.find('#transfer_expires_at').data('default')
+form.find('#transfer_name, #transfer_recipients').val('');
+form.find('#transfer_group_token').val('<%= @transfer.group_token %>');
+form.find('#expires_at_slider').slider('value', default_value);
+$('#uploaded-files').text('');
 <% end %>
 

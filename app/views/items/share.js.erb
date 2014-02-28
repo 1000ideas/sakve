@@ -9,8 +9,3 @@ $('<div data-reveal>')
   .autocomplete(Sakve.collaborators_autocomplete_options)
   .data('ui-autocomplete')._renderItem = Sakve.collaborators_render_item;
 
-Sakve.templates = $.extend(Sakve.templates, {
-  collaborator_select: Mustache.compile( $('#collaborator_select').text().trim() ),
-  groups_share:  Mustache.compile( $('#group_share').text().trim() ),
-  users_share:  Mustache.compile( $('#user_share').text().trim() )
-});

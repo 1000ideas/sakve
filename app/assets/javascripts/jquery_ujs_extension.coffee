@@ -16,11 +16,16 @@
       event.preventDefault()
       $(html).foundation('reveal', 'close')
 
-    $('body').append(html)
-    $('#confirm-dialog').foundation()
-    $('#confirm-dialog').on 'closed',  ->
-      $(this).remove()
-    $('#confirm-dialog').foundation('reveal', 'open')
+    last_popup = $('[data-reveal]:visible')
+
+    html
+      .appendTo('body')
+      .foundation()
+      .on 'closed', ->
+        $(this).remove()
+        if last_popup.length > 0
+          last_popup.foundation('reveal', 'open')
+      .foundation('reveal', 'open')
 
   $.rails.allowAction = (link) ->
     return true if ! link.data('confirm') || link.data('confirmed') == true

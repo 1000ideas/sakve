@@ -5,7 +5,7 @@
   </section>
 </div>
 <div class="row collapse">
-  <ul class="columns small-12 transfers-list" data-url="<%= url_for((params || {}).merge(partial: true)) %>">
+  <ul id="transfers-list" class="file-list" data-url="<%= url_for((params || {}).merge(partial: true)) %>">
     <%= render @transfers %>
   </ul>
 </div>

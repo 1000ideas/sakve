@@ -1,5 +1,4 @@
 class User < ActiveRecord::Base
-
   @@showable_attributes = %w(name email)
   mattr_reader :showable_attributes
 
@@ -20,7 +19,7 @@ class User < ActiveRecord::Base
          :recoverable, :validatable
 
   attr_accessor :updated_by
-  attr_accessible :first_name, :last_name, :name, :email, 
+  attr_accessible :first_name, :last_name, :name, :email,
     :password, :password_confirmation, :remember_me, :group_ids,
     :reset_password_sent_at, :reset_password_token
 
@@ -41,7 +40,7 @@ class User < ActiveRecord::Base
     self.first_name, self.last_name = value.split(/\s+/, 2)
   end
 
-  def to_s 
+  def to_s
     "#{name} <#{email}>"
   end
 
@@ -68,7 +67,7 @@ class User < ActiveRecord::Base
 protected
 
   def create_private_folder
-    Folder.create!(user_id: self.id, global: false) 
+    Folder.create!(user_id: self.id, global: false)
   end
 
   def updated_by_admin?

@@ -10,7 +10,7 @@ class TransfersController < ApplicationController
 
     respond_to do |format|
       format.html do
-        if params[:partial]
+        if request.xhr?
           render @transfers
         else
           render
