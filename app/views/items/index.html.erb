@@ -1,7 +1,10 @@
 <% title t('.title') %>
+<% content_for(:buttons) do %>
+  <%= render 'partials/search' %>
+<% end %>
 
 <div class="row collapse">
-  <section id="left-menu" class="columns hide-for-small medium-4 large-4">
+  <section id="left-menu" class="columns hide-for-small medium-4 large-2">
     <ul>
       <li>
         <h3 class="<%= current_user.admin? ? "droppable" : "" %>" id="folder-<%= @global_folder.id %>"><%= link_to t('.public'), items_path %></h1>
@@ -27,7 +30,7 @@
     <% end %>
     </ul>
   </section>
-  <section id="files" class="columns small-12 medium-8 large-8">
+  <section id="files" class="columns small-12 medium-8 large-10 end">
     <div class="buttons text-right">
       <%= link_to t('.upload'), '#', class: :button, data: {:'reveal-id' => 'multiupload-files-modal'} if can? :create, @item  %>
       <%= link_to t('.new_folder'), '#', class: :button, data: {:'reveal-id' => 'new-folder-modal'} if can? :create, @folder %>

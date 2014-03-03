@@ -32,6 +32,7 @@
 // $include-xl-html-grid-classes: false;
 
 // $row-width: rem-calc(1000);
+$row-width: none;
 // $column-gutter: rem-calc(30);
 // $total-columns: 12;
 
@@ -51,8 +52,8 @@ $body-font-family: "Open Sans", "Helvetica", Helvetica, Arial, sans-serif;
 // $default-float: left;
 
 // We use these as default colors throughout
-// $primary-color: #008CBA;
-// $secondary-color: #e7e7e7;
+$primary-color: #42354a;
+$secondary-color: #fe4365;
 // $alert-color: #f04124;
 // $success-color: #43AC6A;
 // $warning-color: #f08a24;
