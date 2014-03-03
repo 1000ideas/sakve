@@ -7,7 +7,7 @@ class ContextMenu
 
   open_context_menu_for: (element, x, y) ->
     @close_all_context_menus()
-    menu = $(element).find('[data-context-target]')
+    menu = $(element).find('[data-context-target]').first()
 
     menu
       .addClass('from-mouse')
@@ -25,6 +25,7 @@ class ContextMenu
       offset = $(event.currentTarget).offset()
 
       @open_context_menu_for(event.currentTarget, $(document).scrollLeft() + event.clientX - offset.left,  $(document).scrollTop() + event.clientY - offset.top)
+      event.stopPropagation();
 
     $(document).on 'click', (event) =>
       # return if $(event.target).closest('[data-context-target]').length > 0

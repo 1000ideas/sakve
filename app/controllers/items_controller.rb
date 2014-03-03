@@ -13,8 +13,10 @@ class ItemsController < ApplicationController
     @item = Item.new(folder: @current_folder, user: current_user)
 
     if @current_folder
+      @subfolders = @current_folder.subfolders.scoped
       @items = Item.where(folder_id: @current_folder.try(:id))
     elsif params[:folder] == 'shared'
+      @subfolders = @shared_folders
       @items = Item.shared_for(current_user)
     end
 

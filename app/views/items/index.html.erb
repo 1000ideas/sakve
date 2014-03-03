@@ -19,7 +19,7 @@
     <% end %>
     <% if @shared_folders.any? || current_user.has_shared_items?  %>
       <li>
-        <h1><%= link_to t('.shared'), items_path(folder: :shared) %></h1>
+        <h3><%= link_to t('.shared'), items_path(folder: :shared) %></h3>
         <ul class="folders-list" id="user-folders">
           <%= render @shared_folders %>
         </ul>
@@ -27,12 +27,15 @@
     <% end %>
     </ul>
   </section>
-  <section id="files" class="columns small-12 medium-8 large-8  text-right">
-    <div class="buttons ">
+  <section id="files" class="columns small-12 medium-8 large-8">
+    <div class="buttons text-right">
       <%= link_to t('.upload'), '#', class: :button, data: {:'reveal-id' => 'multiupload-files-modal'} if can? :create, @item  %>
       <%= link_to t('.new_folder'), '#', class: :button, data: {:'reveal-id' => 'new-folder-modal'} if can? :create, @folder %>
     </div>
     <ul class="file-list" id="items-list" data-url="<%= url_for((params || {}).merge(partial: true)) %>">
+      <% @subfolders.each do |folder| %>
+        <%= render 'folders/list_folder', folder: folder %>
+      <% end %>
       <%= render @items %>
     </ul>
 

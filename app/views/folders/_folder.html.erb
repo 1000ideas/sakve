@@ -4,8 +4,7 @@
     <div class="actions" data-context-target>
       <%= link_to t('open'), items_path(folder: folder.id), class: 'open', data: {method: :get} %>
       <%= link_to t('destroy'), folder, class: "destroy", data: { confirm: t('confirm.folder'), method: :delete, remote: true } %>
-      <%- Rails.logger.debug "#{folder.name} shareable: #{can?(:share, folder)}" -%>
-      <%= link_to( t('share'), share_folder_path(folder), class: "share", data: { method: :put, remote: true }) if can?(:share, folder) %>
+      <%= link_to( t('share'), share_folder_path(folder), class: "share", data: {remote: true }) if can?(:share, folder) %>
     </div>
   <% end %>
   <%= content_tag :ul do %>

@@ -6,6 +6,7 @@ if ( $('#share-folder-modal').length === 0) {
     .appendTo('body')
     .foundation()
     .on('closed', function() { $(this).remove(); })
+    .on('click', 'a.close', function() { $(this).closest('[data-reveal]').foundation('reveal', 'close') })
     .foundation('reveal', 'open')
     .find('#search_collaborator')
     .autocomplete(sakve.defaults.collaborators_autocomplete)

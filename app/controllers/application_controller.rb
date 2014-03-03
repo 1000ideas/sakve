@@ -21,8 +21,8 @@ class ApplicationController < ActionController::Base
   layout 'application'
 
   def search
-    @folders = Folder.search(search_query)
-    @items = Item.search(search_query)
+    @folders = Folder.allowed_for(current_user).search(search_query)
+    @items = Item.allowed_for(current_user).search(search_query)
 
     respond_to do |format|
       format.html

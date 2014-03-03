@@ -19,16 +19,14 @@ class FoldersController < ApplicationController
     @folder = Folder.find(params[:id])
     authorize! :share, @folder
 
-    params[:with] ||= {}
+    if request.put?
+      params[:with] ||= {}
 
-    params[:with][:users].try(:each) do |user_id|
-      user = User.where(id: user_id).first
-      @folder.users << user if user && @folder.users.exclude?(user)
-    end
+      user_ids = params[:with][:users].try(:map, &:to_i)
+      @folder.users = User.where(id: user_ids)
 
-    params[:with][:groups].try(:each) do |group_id|
-      group = Group.where(id: group_id)
-      @folder.groups << group if group && @folder.groups.exclude?(group)
+      group_ids = params[:with][:groups].try(:map, &:to_i)
+      @folder.groups = Group.where(id: group_ids)
     end
 
     respond_to do |format|

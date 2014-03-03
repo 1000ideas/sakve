@@ -19,7 +19,7 @@
       <%= form_for(:search, url: search_path, method: :get) do |f| %>
         <fieldset class="row collapse">
           <div class="columns small-10">
-            <%= f.text_field :query %>
+            <%= f.text_field :query, value: params[:search].try(:[], :query) %>
           </div>
           <div class="columns small-2">
             <%= f.button t('.search'), class: [:button, :postfix] %>

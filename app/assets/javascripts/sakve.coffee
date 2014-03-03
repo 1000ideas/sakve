@@ -50,7 +50,7 @@ class Sakve
     console.profile('Setup');
     $(document).foundation();
 
-    for module in ['tags', 'multiupload', 'transfer', 'drag_drop']
+    for module in ['tags', 'multiupload', 'transfer', 'drag_drop', 'share']
       @["_init_#{module}"]()
 
     console.profileEnd()
@@ -141,6 +141,12 @@ class Sakve
             $(ui.draggable).fadeOut( 'slow' )
     true
 
+  _init_share: ->
+    $(document).on 'click', '#share_users .remove, #share_groups .remove', (event) ->
+      event.preventDefault()
+      $(event.target).closest('li').slideUp ->
+        $(this).remove()
+
   fileupload_with_dropzone: (element, options = {}) ->
     value = $(element).data('value')
     $(element).wrap $('<div>').addClass('fileupload-dropzone')
@@ -160,9 +166,11 @@ class Sakve
       select: ( event, ui ) ->
         debugger
         if $('#with_' + ui.item.type + '_' + ui.item.id).length == 0
+          remove_button = $('<a>').attr('href', '#').text(I18n.t('destroy')).addClass('remove')
           $('<li>')
             .append( sakve.views.share(ui.item.id, ui.item.type) )
             .append( ui.item.name )
+            .append( remove_button )
             .appendTo( $('#share_' + ui.item.type) )
         this.value = ''
         false

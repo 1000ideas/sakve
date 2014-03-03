@@ -1,5 +1,5 @@
 <li class="row item-<%= item.id %> <%= !item.shared_for?(current_user) ? ((current_user.admin? or !item.folder.global?) ? "draggable" : "") : "" %>" id="item-<%= item.id %>" data-context="true">
-  <div class="name columns small-6"><%= item.name %></div>
+  <div class="name columns small-6"><%= fa_icon 'file', text: item.name %></div>
   <div class="size columns small-2"><%= number_to_human_size item.object_file_size %></div>
   <div class="date columns small-3" title="<%= l item.created_at, format: :long %>">
     <%= l item.created_at, format: :short %>

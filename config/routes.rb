@@ -38,6 +38,7 @@ Sakve::Application.routes.draw do
       defaults: { style: :original }
 
     resources :folders, only: [:create, :destroy] do
+      get :share, on: :member
       put :share, on: :member
     end
 

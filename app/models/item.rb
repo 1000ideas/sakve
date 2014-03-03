@@ -9,9 +9,27 @@ class Item < ActiveRecord::Base
   has_many :users,  through: :shares, source: :collaborator, source_type: 'User'
   has_many :groups,  through: :shares, source: :collaborator, source_type: 'Group'
 
+  scope :shared_for_user, lambda {|user| includes(:users).where(shares: {collaborator_id: user.id})}
+  scope :shared_for_groups, lambda {|user| includes(:groups).where(shares: {collaborator_id: user.groups})}
+
   scope :shared_for, lambda { |user|
-    select("DISTINCT `#{table_name}`.*")
-      .joins(:shares).where('(`shares`.`collaborator_type` = ? AND `shares`.`collaborator_id` = ?) OR (`shares`.`collaborator_type` = ? AND `shares`.`collaborator_id` IN (?))', user.class.name, user.id, 'Group', user.group_ids || []).where('`user_id` != ?', user.id)
+    joins(:shares)
+      .group("`#{table_name}`.`id`")
+      .where(%{(`#{Share.table_name}`.`collaborator_type` = 'User'
+          AND `#{Share.table_name}`.`collaborator_id` = ?)
+        OR (`#{Share.table_name}`.`collaborator_type` = 'Group'
+          AND `#{Share.table_name}`.`collaborator_id` IN (#{user.groups.select("`#{user.groups.table_name}`.`id`").to_sql}))}.gsub($/, ''), user)
+      .where("`#{table_name}`.`user_id` != ?", user.id)
+  }
+
+  scope :allowed_for, lambda { |user|
+    includes(:folder)
+    .where(%{`#{table_name}`.user_id = :user
+      OR `#{Folder.table_name}`.`user_id` = :user
+      OR `#{Folder.table_name}`.`global`
+      OR `#{table_name}`.`id` IN (#{shared_for(user).select("`items`.`id`").to_sql})
+      OR `#{Folder.table_name}`.`id` IN (#{Folder.shared_for(user).select("`folders`.`id`").to_sql})}.gsub($/, ''),
+      user: user)
   }
 
   has_attached_file :object,

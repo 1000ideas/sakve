@@ -8,7 +8,7 @@ class User < ActiveRecord::Base
   has_many :folders, dependent: :destroy
   has_many :shares, as: :collaborator
   has_many :shared_items, through: :shares, source: :resource, source_type: 'Item'
-  has_many :shared_folders, through: :shares, source: :resource, source_type: 'Folder'
+  # has_many :shared_folders, through: :shares, source: :resource, source_type: 'Folder'
 
   scope :starts_with, lambda { |query|
     where('`first_name` like :q OR `last_name` LIKE :q OR `email` LIKE :q', q: "#{query}%")
@@ -31,6 +31,10 @@ class User < ActiveRecord::Base
   validates :password, :presence => true, :confirmation => true, :length => {:minimum => 5}, :on => :create
   validates :password, :allow_blank => true, :confirmation => true, :length => {:minimum => 5}, :on => :update
   validates :first_name, :last_name, presence: true
+
+  def shared_folders
+    Folder.shared_for_user(self) | Folder.shared_for_groups(self)
+  end
 
   def name
     "#{first_name} #{last_name}"
