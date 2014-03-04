@@ -60,14 +60,20 @@ class Folder < ActiveRecord::Base
   # Parametd +include_self+ określa czy pierwszym elementem na liscie jest
   # obiekt, czy rodzic
   def ancestors(include_self = false)
-    ancestors = []
-    ancestors << self if include_self
-    p = parent
-    until p.nil?
-      ancestors << p
-      p = p.parent
+    @_ancestors ||= begin
+      ancstr = []
+      p = parent
+      until p.nil?
+        ancstr << p
+        p = p.parent
+      end
+      ancstr
     end
-    ancestors
+    [(self if include_self), *@_ancestors].compact
+  end
+
+  def ancestor?(folder)
+    folder.try(:ancestors).try(:include?, self)
   end
 
   def has_subfolders?

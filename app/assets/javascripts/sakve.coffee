@@ -46,11 +46,10 @@ class Sakve
         .val(id)
 
   constructor: ->
-    console.profileEnd()
     console.profile('Setup');
     $(document).foundation();
 
-    for module in ['tags', 'multiupload', 'transfer', 'drag_drop', 'share']
+    for module in ['tags', 'multiupload', 'transfer', 'drag_drop', 'share', 'folders']
       @["_init_#{module}"]()
 
     console.profileEnd()
@@ -59,6 +58,12 @@ class Sakve
   reload_list: (name) ->
     items_url = $("##{name}-list").data('url');
     $("##{name}-list").load(items_url);
+
+  _init_folders: ->
+    $(document).on 'click', '.folders-tree a .fa-caret', (event) ->
+      event.preventDefault()
+      $(event.target).closest('li.folder').toggleClass('open')
+
 
   _init_tags: ->
     $('.tags-autocomplete').autocomplete(@defaults.tags_autocomplete)

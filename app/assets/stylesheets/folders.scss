@@ -1,0 +1,80 @@
+@import 'overrides';
+
+.folders-tree {
+  font-size: 1.1em;
+
+  > ul > li.folder {
+    display: block;
+    margin-bottom: 1em;
+  }
+
+  ul {
+    list-style:  none;
+    margin-left: 0;
+
+
+    >li {
+      > span {
+        display: block;
+        line-height: 1.8em;
+        cursor: pointer;
+
+        > a { display: block; }
+
+        &:hover {
+          background-color: #eee;
+        }
+      }
+    }
+  }
+
+  .folder {
+    display: none;
+    &.open {
+      display: block;
+      > ul > li.folder {
+        display: block;
+      }
+    }
+
+    .fa.fa-caret { width: 1em; }
+    &.not-empty > span > a > .fa.fa-caret:before { content: '\f0da'; }
+    &.not-empty > h3 > a > .fa.fa-caret:before { content: '\f0da'; }
+    &.open > span > a > .fa.fa-caret:before { content: '\f0d7'; }
+    &.open > h3 > a > .fa.fa-caret:before { content: '\f0d7'; }
+
+    @for $i from 1 through 12 {
+      &.level-#{$i} > span > a > .fa.fa-caret {
+        margin-left: $i*.8em;
+      }
+    }
+
+    h3, span {
+
+    }
+  }
+
+  h3 > a,
+  span > a {
+    color: #555;
+
+  }
+
+  li.current > h3 > a,
+  li.current > span > a {
+    color: $secondary-color;
+  }
+
+
+
+  h3 {
+    font-size: 1em;
+    text-transform: uppercase;
+    margin-bottom: 1em;
+  }
+
+
+}
+.row.collapse > .folders-tree.columns {
+    padding: 0 1em;
+  }

@@ -8,6 +8,7 @@
  *= require header
  *= require context.menu
  *= require items
+ *= require folders
  *= require users
  *= require footer
  */

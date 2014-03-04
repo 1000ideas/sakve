@@ -5,6 +5,18 @@ body > header {
   box-shadow: 0 1px 4px rgba(#181819, .2);
   margin-bottom: 1rem;
 
+  h1 {
+    height: 100%;
+    white-space: nowrap;
+
+    &:after {
+      content: '';
+      height: 100%;
+      display: inline-block;
+      vertical-align: middle;
+    }
+  }
+
   nav {
     > ul {
       list-style: none;
