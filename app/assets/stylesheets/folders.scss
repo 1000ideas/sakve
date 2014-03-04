@@ -58,6 +58,11 @@
   span > a {
     color: #555;
 
+    overflow: hidden;
+    white-space: nowrap;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+
   }
 
   li.current > h3 > a,

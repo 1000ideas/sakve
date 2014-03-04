@@ -2,8 +2,23 @@ ul.file-list {
   list-style: none;
 
   > li {
-    &:nth-child(odd) {
-      background: #f0f0f0;
+    background: #f2f2f2;
+    border-top: 1px solid #ddd;
+    &:last-child {
+      border-bottom: 1px solid #ddd;
+    }
+
+
+    > div {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 3em;
+      height: 3em;
+
+      &[data-context-target] {
+        height: auto;;
+      }
     }
 
     &.ui-draggable-dragging {
@@ -11,8 +26,8 @@ ul.file-list {
 
       > div {
         display: none;
-
         &.name {
+          min-width: 10em;
           display: block;
           white-space: nowrap;
         }
