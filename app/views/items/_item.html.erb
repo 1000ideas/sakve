@@ -1,9 +1,13 @@
 <li class="row item-<%= item.id %> <%= !item.shared_for?(current_user) ? ((current_user.admin? or !item.folder.global?) ? "draggable" : "") : "" %>" id="item-<%= item.id %>" data-context="true">
-  <div class="name columns small-6"><%= fa_icon 'file', text: item.name %></div>
+  <div class="name columns small-6">
+    <%= f.select_box :id, item %>
+    <%= fa_icon 'file', text: item.name %>
+  </div>
   <div class="size columns small-2"><%= number_to_human_size item.object_file_size %></div>
   <div class="date columns small-3" title="<%= l item.created_at, format: :long %>">
     <%= l item.created_at, format: :short %>
   </div>
+  <a href="" data-context-button><%= fa_icon('ellipsis-h') %></a>
   <div class="actions" data-context-target="true">
     <%= link_to t('show'), item, class: 'show', data: {remote: true} if can? :read, item %>
     <%= link_to t('edit'), edit_item_path(item), class: 'edit', data: {remote: true} if can? :edit, item %>

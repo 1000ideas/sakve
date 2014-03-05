@@ -5,6 +5,10 @@ class ContextMenu
       .hide()
       .removeClass('from-mouse')
 
+    $('[data-context-button].opened')
+      .removeClass('opened')
+
+
   open_context_menu_for: (element, x, y) ->
     @close_all_context_menus()
     menu = $(element).find('[data-context-target]').first()
@@ -43,10 +47,13 @@ class ContextMenu
 
       @close_all_context_menus(menu[0])
 
-      menu
+      open = menu
         .removeClass('from-mouse')
         .css(top: '', left: '')
         .toggle()
+        .is(':visible')
+
+      $(event.currentTarget).toggleClass('opened', open)
       false
 
 jQuery -> ( context_menu = new ContextMenu() )

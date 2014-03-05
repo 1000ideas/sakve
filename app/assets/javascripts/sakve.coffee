@@ -46,18 +46,33 @@ class Sakve
         .val(id)
 
   constructor: ->
-    console.profile('Setup');
+    # console.profile('Setup');
     $(document).foundation();
 
-    for module in ['tags', 'multiupload', 'transfer', 'drag_drop', 'share', 'folders']
+    for module in ['tags', 'multiupload', 'transfer', 'drag_drop', 'share', 'folders', 'selection']
       @["_init_#{module}"]()
 
-    console.profileEnd()
+    # console.profileEnd()
     true
 
   reload_list: (name) ->
     items_url = $("##{name}-list").data('url');
     $("##{name}-list").load(items_url);
+
+  selection_changed: ->
+    selected = $('.file-list input[type=checkbox]:checked')
+    $('.buttons-line').toggleClass('selected', selected.length > 0)
+
+    folders = selected.filter (idx) ->
+      this.name.match(/fid/i)
+    $('.buttons-line').toggleClass('folders-selected', folders.length > 0)
+
+
+  _init_selection: ->
+    $(document).on 'change', '.file-list input[type=checkbox]', (event) =>
+      checked = $(event.target).is(':checked')
+      $(event.target).closest('li').toggleClass('selected', checked)
+      @selection_changed()
 
   _init_folders: ->
     $(document).on 'click', '.folders-tree a .fa-caret', (event) ->
@@ -129,6 +144,8 @@ class Sakve
       containment: $(this).parent().parent().parent()
       helper: "clone"
       cancel: ".actions"
+      cursorAt: {top: -5, left: -5}
+      distance: 20
 
     $( "section#left-menu ul li h1.droppable, section#left-menu ul li ul li.droppable" ).droppable
       accept: 'ul.file-list li'

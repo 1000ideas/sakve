@@ -1,7 +1,9 @@
 [data-context] {
   position: relative;
+
   [data-context-target] {
     &.opened { display: block; }
+    z-index: 1;
 
     display: none;
     position: absolute;

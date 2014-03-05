@@ -1,4 +1,5 @@
 @import 'overrides';
+@import 'compass/css3/transition';
 
 body > header {
   background: #fff;
@@ -41,11 +42,52 @@ body > header {
       }
     }
   }
+  .buttons-line {
 
-  .search-form {
-    fieldset {
-      padding: 0;
-      border: 0;
+    .button, input {
+        // margin-bottom: 0;
+    }
+    .for-all { @include transition(margin 1s);  }
+    &.selected .for-all {
+      margin-top: -3.4625rem ;
+    }
+
+    margin-bottom: 1.25rem;
+    height: 2.3125rem;
+    overflow: hidden;
+  }
+
+}
+
+#search-file {
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+
+  input[type=text] {
+    padding-right: 2rem;
+  }
+
+  .search-button {
+    line-height: 2.3125rem;
+    height: 2.3125rem;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: transparent;
+    color: $primary-color;
+    padding: 0;
+
+    &:focus, &:hover {
+      outline: 0;
+      color: darken($primary-color, 10%);
+    }
+
+    .fa {
+      font-size: 1.2em;
+      padding-top: 0.5em;
+      margin-right: .5em;
+      margin-left: .5em;
     }
   }
 }

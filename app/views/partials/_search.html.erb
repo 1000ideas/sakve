@@ -1,9 +1,4 @@
-<%= form_for(:search, url: search_path, method: :get) do |f| %>
-  <div class="row collapse">
-    <div class="columns small-11">
-      <%= f.text_field :query, value: params[:search].try(:[], :query) %>
-    </div>
-    <div class="columns small-1">
-      <%= f.button fa_icon('search'), class: [:button, :postfix] %>
-    </div></fieldset>
+<%= form_for(:search, url: search_path, method: :get, html: {id: :'search-file'}) do |f| %>
+  <%= f.text_field :query, value: params[:search].try(:[], :query) %>
+  <%= f.button fa_icon('search'), class: [:'search-button'] %>
 <% end %>

@@ -1,15 +1,13 @@
 <% title t('.title') %>
 <% content_for(:buttons) do %>
-  <div class="row">
-    <div class="small-12 medium-12 large-6 columns buttons text-right">
-      <%= link_to t('.upload'), '#', class: [:button, :tiny], data: {:'reveal-id' => 'multiupload-files-modal'} if can? :create, @item  %>
-      <%= link_to t('.new_folder'), '#', class: [:button, :tiny], data: {:'reveal-id' => 'new-folder-modal'} if can? :create, @folder %>
-    </div>
-    <div class="hide-for-small hide-for-medium large-6 columns">
-      <%= render 'partials/search' %>
-    </div>
+  <div class="for-all">
+    <%= link_to fa_icon('cloud-upload', text: t('.upload')), '#', class: [:button, :tiny, :secondary], data: {:'reveal-id' => 'multiupload-files-modal'} if can? :create, @item  %>
+    <%= link_to fa_icon('folder-open', text: t('.new_folder')), '#', class: [:button, :tiny], data: {:'reveal-id' => 'new-folder-modal'} if can? :create, @folder %>
+    <%= render 'partials/search' %>
   </div>
-
+  <div class="for-selection">
+    <%= link_to "TEST", '#', class: [:button, :tiny] %>
+  </div>
 <% end %>
 
 <div class="row collapse">
@@ -36,7 +34,7 @@
       </li>
     <% end %>
     <% if @shared_folders.any? || current_user.has_shared_items?  %>
-      <li class="folder">
+      <li class="folder not-empty <%= 'open' if @current_folder.try(:shared_for?,current_user) %> <%= 'current' if @current_folder.nil? %>">
         <h3><%= link_to fa_icon('caret', text: t('.shared')), items_path(folder: :shared) %></h3>
         <ul class="folders-list" id="user-folders">
           <%= render @shared_folders %>
@@ -46,13 +44,14 @@
     </ul>
   </section>
   <section id="files" class="columns small-12 medium-8 large-10 end">
-
+    <%= form_for :selection do |f| %>
     <ul class="file-list" id="items-list" data-url="<%= url_for((params || {}).merge(partial: true)) %>">
       <% @subfolders.each do |folder| %>
-        <%= render 'folders/list_folder', folder: folder %>
+        <%= render 'folders/list_folder', folder: folder, f: f %>
       <% end %>
-      <%= render @items %>
+      <%= render @items, f: f %>
     </ul>
+    <% end %>
 
   </section>
 </div>
