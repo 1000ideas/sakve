@@ -1,9 +1,8 @@
 GIT
   remote: git://github.com/1000ideas/l.git
-  revision: f50170272117b472d0e75c143373e2fdaeb99e11
-  branch: tinymce-integration
+  revision: 3a5dfd8c9ce80b1816ab21211675f40fcd1ec6a1
   specs:
-    l (0.8.0)
+    l (0.8.1)
       better_errors
       binding_of_caller
       devise (~> 2.0.0)
@@ -81,6 +80,7 @@ GEM
     capybara-webkit (1.1.0)
       capybara (~> 2.0, >= 2.0.2)
       json
+    chunky_png (1.3.0)
     climate_control (0.0.3)
       activesupport (>= 3.0)
     cocaine (0.5.3)
@@ -93,6 +93,12 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.7.0)
+    compass (0.12.2)
+      chunky_png (~> 1.2)
+      fssm (>= 0.2.7)
+      sass (~> 3.1)
+    compass-rails (1.1.3)
+      compass (>= 0.12.2)
     debug_inspector (0.0.2)
     devise (2.0.6)
       bcrypt-ruby (~> 3.0)
@@ -106,6 +112,7 @@ GEM
     foundation-rails (5.1.1.0)
       railties (>= 3.1.0)
       sass (>= 3.2.0)
+    fssm (0.2.10)
     globalize3 (0.3.1)
       activemodel (>= 3.0.0)
       activerecord (>= 3.0.0)
@@ -209,6 +216,7 @@ DEPENDENCIES
   capybara
   capybara-webkit
   coffee-rails (~> 3.2.1)
+  compass-rails (~> 1.1.0)
   font-awesome-rails (~> 4.0.0)
   foundation-rails (~> 5.1.0)
   globalize3 (~> 0.3.0)

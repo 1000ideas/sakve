@@ -46,18 +46,78 @@ class Sakve
         .val(id)
 
   constructor: ->
-    console.profile('Setup');
+    # console.profile('Setup');
     $(document).foundation();
 
-    for module in ['tags', 'multiupload', 'transfer', 'drag_drop', 'share', 'folders']
+    for module in ['tags', 'multiupload', 'transfer', 'drag_drop', 'share', 'folders', 'selection']
       @["_init_#{module}"]()
 
-    console.profileEnd()
+    @last_selected = null
+
+    # console.profileEnd()
     true
 
   reload_list: (name) ->
     items_url = $("##{name}-list").data('url');
     $("##{name}-list").load(items_url);
+
+  selection_changed: (element) ->
+    @last_selected = element
+
+    selected = $('.file-list input[type=checkbox]:checked')
+    $('.buttons-line').toggleClass('selected', selected.length > 0)
+
+    folders = selected.filter (idx) ->
+      this.name.match(/fid/i)
+    $('.buttons-line').toggleClass('folders-selected', folders.length > 0)
+
+
+  _init_selection: ->
+    $(document).on 'change', '.file-list input[type=checkbox]', (event) =>
+      checked = $(event.target).is(':checked')
+      @selection_changed $(event.target).closest('li').toggleClass('selected', checked)
+      event.stopPropagation()
+
+    $(document).on 'click', '.file-list li', (event) =>
+      return if $(event.target).closest('label.custom-check-box').length > 0
+
+      input = $('input[type=checkbox]', event.target)
+      form = $(event.target).closest('form')
+      if event.shiftKey
+        if $(event.currentTarget).nextAll().filter(@last_selected).length > 0
+          $(event.currentTarget).nextUntil(@last_selected).each (idx, el) ->
+            $('input[type=checkbox]', el).prop('checked', true).change()
+        else if $(event.currentTarget).prevAll().filter(@last_selected).length > 0
+          $(event.currentTarget).prevUntil(@last_selected).each (idx, el) ->
+            $('input[type=checkbox]', el).prop('checked', true).change()
+        input.prop('checked', true).change()
+      else if event.ctrlKey
+        input.prop('checked', true).change()
+      else
+        form.find('input[type=checkbox]:checked').each (idx, el) ->
+          $(el).prop('checked', false).change()
+        input.prop('checked', true).change()
+
+    $('.file-list input[type=checkbox]:checked').each (idx, el) =>
+      $(el).closest('li').toggleClass('selected', true)
+      @selection_changed()
+
+    $(document).on 'before:context:ajax', '[data-context]', (event, jqXHR, settings, from_mouse) ->
+
+      input = $('input[type=checkbox]', event.target)
+      form = $(event.target).closest('form')
+      if from_mouse
+
+        unless input.prop('checked')
+          form.find('input[type=checkbox]:checked').each (idx, el) ->
+            $(el).prop('checked', false).change()
+          input.prop('checked', true).change()
+
+        settings.data += "&#{form.serialize()}"
+      else
+        param = "#{input.attr('name')}=#{input.val()}"
+        settings.data += "&#{encodeURI(param)}"
+      true
 
   _init_folders: ->
     $(document).on 'click', '.folders-tree a .fa-caret', (event) ->
@@ -129,6 +189,8 @@ class Sakve
       containment: $(this).parent().parent().parent()
       helper: "clone"
       cancel: ".actions"
+      cursorAt: {top: -5, left: -5}
+      distance: 20
 
     $( "section#left-menu ul li h1.droppable, section#left-menu ul li ul li.droppable" ).droppable
       accept: 'ul.file-list li'

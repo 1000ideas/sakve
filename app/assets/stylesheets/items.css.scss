@@ -1,11 +1,47 @@
+@import 'overrides';
+
 ul.file-list {
   list-style: none;
+  margin-left: 0;
 
   > li {
-    background: #f2f2f2;
+    position: relative;
+    background-color: #f2f2f2;
     border-top: 1px solid #ddd;
+
+    &.selected {
+      background-color: lighten($secondary-color, 28%);
+      label.custom-check-box {
+        i {
+          color: $secondary-color;
+          border-color: $secondary-color;
+        }
+      }
+    }
     &:last-child {
       border-bottom: 1px solid #ddd;
+    }
+
+
+
+
+    a[data-context-button] {
+      position: absolute;
+      display: block;
+      height: 1.8em;
+      line-height: 1.8em;
+      width: 1.8em;
+      text-align: center;
+      border: 1px solid #ddd;
+      background: #fff;
+      right: 0;
+      top: 50%;
+      margin: -.9em 1em 0 0;
+      &.opened {
+        border-bottom: 0;
+        box-shadow: 0 2px 0 -1px #fff;
+        z-index: 2;
+      }
     }
 
 
@@ -16,20 +52,41 @@ ul.file-list {
       line-height: 3em;
       height: 3em;
 
+      &.name {
+        label.custom-check-box {
+          margin-right: .8em;
+        }
+
+        i.fa {
+          margin-right: .8em;
+          font-size: 1.2em;
+          vertical-align: middle;
+        }
+      }
+
       &[data-context-target] {
-        height: auto;;
+        height: auto;
+        right: 1em;
+        top: 50%;
+        margin-top: .9em;
+
+        &.from-mouse {
+          margin-top: 0;
+        }
       }
     }
 
     &.ui-draggable-dragging {
       border:1px solid #ddd;
 
+      a[data-context-button] { display: none; }
       > div {
         display: none;
         &.name {
           min-width: 10em;
           display: block;
           white-space: nowrap;
+          > label { display: none; }
         }
       }
     }

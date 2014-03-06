@@ -18,7 +18,7 @@ end
 PaperclipProcessors::ItemProcessor.setup do |config|
   # FFMpeg executable path
   # config.ffmpeg_path = '/usr/bin/ffmpeg'
-  
+
   # FFProbe executable path
   # config.ffprobe_path = '/usr/bin/ffprobe'
 

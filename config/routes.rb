@@ -60,14 +60,18 @@ Sakve::Application.routes.draw do
 
     match 'collaborators(.:format)', to: 'application#collaborators', as: :collaborators
 
-    get :search, to: "application#search"
 
     resources :groups
     resources :users
-    match 'switch_lang/:lang', to: 'application#switch_lang', as:  :switch_lang, lang: locale_regex
+
     match 'change_folder', to: 'items#change_folder', via: :post
 
+    scope controller: :application do
+      get 'switch_lang/:lang', action: :switch_lang, as:  :switch_lang, lang: locale_regex
+      post :context
+      get :search
+    end
     root to: 'items#index'
   end
-  root to: 'items#index'
+  # root to: 'items#index'
 end

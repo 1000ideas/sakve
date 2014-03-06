@@ -1,1 +1,48 @@
+@import "compass/css3/opacity";
 
+label.custom-check-box {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+
+  input[type=checkbox] {
+    @include opacity(0);
+    width: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    &:checked + i:before {
+      content: '\f00c';
+    }
+  }
+
+  input[type=checkbox]:focus + i {
+    box-shadow: 1px 1px 1px #ddd;
+  }
+
+  i {
+    display: block;
+    border: 1px solid #ddd;
+    background: #fff;
+    width: 1.6em;
+    height: 1.6em;
+    text-align: center;
+
+    &:before {
+      position: relative;
+      left: -1px;
+      font-family: FontAwesome;
+      content: '';
+    }
+  }
+}
+
+
+.button {
+  &.tiny {
+    font-size: .8875rem;
+    padding-top: .525rem;
+    padding-bottom: .525rem;
+  }
+}

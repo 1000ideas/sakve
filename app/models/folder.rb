@@ -16,6 +16,7 @@ class Folder < ActiveRecord::Base
   validate :only_one_root, unless: :has_parent?
 
   before_save :ensure_global
+  alias_method :fid, :id
 
   scope :shared_for, lambda { |user|
     joins(:shares)
