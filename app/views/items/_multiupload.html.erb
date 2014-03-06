@@ -6,7 +6,7 @@
   <% end %>
 </ul>
 <section class="group">
-  <%= hidden_field_tag 'item[folder_id]', @current_folder.id %>
+  <%= hidden_field_tag 'item[folder_id]', @current_folder.try(:id) %>
   <%= file_field_tag('item[object]', multiple: true, class: 'fileupload', data: { value: t('.fileupload', default: 'Select files'), file_upload: true }) %>
 </section>
 <section class="group" id="upload-in-progress">
@@ -14,13 +14,4 @@
 </section>
 <% end %>
 
-<script id="upload_progress_template" type="text/mustache">
-  <div class="field file-progress">
-    <span class="name">{{name}}</span>
-    <div class="progress">
-      <div class="bar" style="width: 0%" ></div>
-    </div>
-    <span class="progress-value">0 %</span>
-  </div>
-</script>
 <% end %>

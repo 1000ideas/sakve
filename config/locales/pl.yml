@@ -1,8 +1,14 @@
 pl:
+  partials:
+    menu:
+      items: 'Foldery'
+      transfer: 'Prześlij plik'
+      groups: 'Grupy'
+      logout: 'Wyloguj się'
   transfer_mailer:
     after_create:
       subject: '[Sakve] Ktoś wysłał Ci plik'
-  newsletter: 
+  newsletter:
     name: "Newsletter"
     info: "Wpisz swój adres e-mail, aby otrzymywać nasz biuletyn elektroniczny."
     sign: "Zapisz się"
@@ -41,7 +47,7 @@ pl:
   meta:
     description: "Opis strony"
     keywords: "Słowa kluczowe"
-    title: "Sakve" 
+    title: "Sakve"
   create:
     success: "Pomyślnie utworzono."
     fail: "Nie udało się zapisać."
@@ -396,7 +402,7 @@ pl:
             url:
               blank: 'jest wymagane'
               taken: 'nie może powtarzać się wśród stron o tym samym rodzicu'
-            parent_id: 
+            parent_id:
               loop: 'jest potomkiem strony'
         news:
           attributes:

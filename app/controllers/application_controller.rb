@@ -18,7 +18,16 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   before_filter :set_locale
 
-  layout :layout_by_resource
+  layout 'application'
+
+  def search
+    @folders = Folder.allowed_for(current_user).search(search_query)
+    @items = Item.allowed_for(current_user).search(search_query)
+
+    respond_to do |format|
+      format.html
+    end
+  end
 
   def switch_lang
     I18n.locale = session[:locale] = params[:lang].to_sym
@@ -87,8 +96,9 @@ class ApplicationController < ActionController::Base
     new_user_session_path
   end
 
-  def layout_by_resource
-    devise_controller? ? 'login' : 'standard'
+  def search_query
+    params[:search][:query] if params[:search]
   end
+
 
 end

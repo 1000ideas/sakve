@@ -8,7 +8,8 @@
     <% @folder.users.each do |user| %>
     <li>
       <%= hidden_field_tag 'with[users][]', user.id, id: "with_users_#{user.id}" %>
-      <%= user %>
+      <%= user.name %>
+      <%= link_to t('destroy'), '#', class: :remove %>
     </li>
     <% end %>
   </ul>
@@ -17,22 +18,12 @@
     <% @folder.groups.each do |g| %>
     <li>
       <%= hidden_field_tag 'with[groups][]', g.id, id: "with_groups_#{g.id}"  %>
-      <%= g %>
+      <%= g.name %>
+      <%= link_to t('destroy'), '#', class: :remove %>
     </li>
     <% end %>
   </ul>
 
-  <%= button_tag t('.submit'), disable_with: t('.wait') %> 
+  <%= button_tag t('.submit'), disable_with: t('.wait') %>
+  <%= link_to t('.cancel'), '#', class: "button close" %>
 <% end %>
-
-<script type="text/mustache" id="collaborator_select">
-  <strong>{{type_name}}</strong> {{name}}
-</script>
-<script type="text/mustache" id="group_share">
-  <%= hidden_field_tag 'with[groups][]', '{{id}}', id: "with_groups_{{id}}" %>
-  {{name}}
-</script>
-<script type="text/mustache" id="user_share">
-  <%= hidden_field_tag 'with[users][]', '{{id}}', id: "with_users_{{id}}" %>
-  {{name}}
-</script>

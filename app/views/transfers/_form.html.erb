@@ -11,13 +11,13 @@
     </div>
     <div>
       <%= f.label :expires_at, t('.expires_in') %>
-      <%= f.text_field :expires_at, id: :amount, readonly: true %>
+      <%= f.text_field :expires_at, readonly: true, data: { default: 7 } %>
     </div>
-    <div id="slider"></div>
+    <div id="expires_at_slider"></div>
     <% if f.object.new_record? %>
     <div class="field">
       <%= f.hidden_field :group_token %>
-      <%= file_field_tag(:object, multiple: true, class: 'transfer-fileupload', data: { value: t('.fileupload', default: 'Select files'), file_upload: true }) %>
+      <%= file_field_tag(:object, multiple: true, class: 'transfer-fileupload', data: { value: t('.fileupload', default: 'Select files'), file_upload: true, url: files_path(format: :json) }) %>
     </div>
     <% end %>
   </div>
@@ -29,25 +29,4 @@
   <div class="actions">
     <%= f.button %>
   </div>
-<% end %>
-
-<% if @transfer.new_record? %>
-<script id="upload_progress_template" type="text/mustache">
-  <div class="field file-progress">
-    <span class="name">{{name}}</span>
-    <div class="progress">
-      <div class="bar" style="width: 0%" ></div>
-    </div>
-    <span class="progress-value">0 %</span>
-  </div>
-</script>
-
-<script id="uploaded_template" type="text/mustache">
-  <div class="field transfer-file-{{id}}">
-    <span class="name">{{name}}</span>
-    <a href="{{url}}" data-method="delete" data-confirm="<%= t('confirm.text') %>" data-remote="true">
-      <%= t('destroy') %>
-    </a>
-  </div>
-</script>
 <% end %>

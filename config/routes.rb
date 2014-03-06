@@ -1,9 +1,9 @@
 Sakve::Application.routes.draw do
-  
+
   locale_regex = %r{(#{I18n.available_locales.join('|')})}i
 
-  scope '(:locale)', locale: locale_regex do 
-    devise_for :users, 
+  scope '(:locale)', locale: locale_regex do
+    devise_for :users,
       path: "",
       path_names: {
         :sign_in => 'login',
@@ -14,36 +14,38 @@ Sakve::Application.routes.draw do
         :registration => 'account'
       }
 
-    match 'items(-:folder)(/:partial)(.:format)', 
+    get 'items(-:folder)(/:partial)(.:format)',
       partial: /true|false/,
       to: 'items#index',
       via: :get,
       as: :items,
       defaults: { partial: false }
 
-    match 'items(-:folder)(.:format)', 
+    post 'items(-:folder)(.:format)',
       to: 'items#create',
       via: :post,
       as: :items
 
     resources :items, except: [:index, :new, :create] do
+      get :multiupload, on: :collection
       put :share, on: :member
     end
 
-    match 'items/:id/download(/:style)/:name.:format', 
-      to: 'items#download', 
-      via: :get, 
+    match 'items/:id/download(/:style)/:name.:format',
+      to: 'items#download',
+      via: :get,
       as: :download_item,
       defaults: { style: :original }
 
-    resources :folders, only: [:create, :destroy] do 
+    resources :folders, only: [:create, :destroy] do
+      get :share, on: :member
       put :share, on: :member
     end
-    
+
     resources :tags, only: :index
 
-    match 'transfers/:token(.:format)', 
-      to: 'transfers#download', 
+    match 'transfers/:token(.:format)',
+      to: 'transfers#download',
       via: :get,
       as: :download_transfer,
       constraints: {
@@ -57,6 +59,8 @@ Sakve::Application.routes.draw do
     end
 
     match 'collaborators(.:format)', to: 'application#collaborators', as: :collaborators
+
+    get :search, to: "application#search"
 
     resources :groups
     resources :users

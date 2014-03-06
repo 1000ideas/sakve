@@ -1,0 +1,9 @@
+<%= form_for(:search, url: search_path, method: :get) do |f| %>
+  <div class="row collapse">
+    <div class="columns small-11">
+      <%= f.text_field :query, value: params[:search].try(:[], :query) %>
+    </div>
+    <div class="columns small-1">
+      <%= f.button fa_icon('search'), class: [:button, :postfix] %>
+    </div></fieldset>
+<% end %>

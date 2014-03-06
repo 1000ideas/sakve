@@ -1,10 +1,9 @@
-<%-
-  html = %{
-    <div id="edit-item-dialog" title="#{t('items.edit.title')}">
-    #{render 'form'}
-    </div>
-  }
--%>
-var context = Sakve.open_dialog('edit-item-dialog', '<%= t('.title') %>', '<%= j render('form') %>',  <%= {resizable: false, width: 600, height: 300}.to_json.html_safe %>);
-$('.tags-autocomplete', context).autocomplete(Sakve.tags_autocomplete_options);
-
+$('<div data-reveal>')
+  .addClass('reveal-modal small')
+  .html("<%= j render('form') %>")
+  .appendTo('body')
+  .foundation()
+  .on('closed', function() { $(this).remove(); })
+  .foundation('reveal', 'open')
+  .find('.tags-autocomplete')
+  .autocomplete(Sakve.tags_autocomplete_options);

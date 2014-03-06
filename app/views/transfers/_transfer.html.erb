@@ -1,13 +1,12 @@
-<li  class="<%= cycle('odd', 'even') %> transfer-file-<%= transfer.id %>">
-    <div><%= transfer.name %></div>
-    <ul>
-      <% transfer.recipients_list.each do |email| %>
-      <li><%= email %></li>
-      <% end %>
-    </ul>
-    <div><%= link_to transfer.token, download_transfer_path(token: transfer.token), target: '_blank' %></div>
-    <div title="<%= l transfer.expires_at, format: :long %>"><%= transfer.expiration_distance %></div>
-  <div class="options">
+<li class="row transfer-file-<%= transfer.id %>"  data-context="true">
+    <div class="name columns small-6"><%= transfer.name %></div>
+    <div class="recipients columns small-4">
+      <%= transfer.recipients_list.join(', ') %>
+    </div>
+    <div></div>
+    <div title="<%= l transfer.expires_at, format: :long %>" class="columns small-2"> <%= transfer.expiration_distance %></div>
+  <div class="actions" data-context-target="true">
+    <%= link_to t('download'), download_transfer_path(token: transfer.token), target: '_blank' %>
     <%= link_to t('destroy'), transfer, class: "destroy", title: t('destroy'), data: { confirm: t('confirm.text'), method: :delete, remote: true } %>
   </div>
 </li>

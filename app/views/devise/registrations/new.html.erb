@@ -1,38 +1,41 @@
 <% title [t('meta.title'), '::', t('.title') ] * ' ' %>
-<div id="registration-box" class="center-box">
-  <h2><%= t '.title' %></h2>
 
-  <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-    <%= render partial: 'l/partials/errors', object: resource.errors, locals: { class_name: :alert } %>
+<div class="row">
+  <div class="small-10 small-centered medium-8 large-6 columns">
+    <h2><%= t '.title' %></h2>
 
-    <div class="field">
-      <%= f.label :first_name %>
-      <%= f.text_field :first_name %>
-    </div>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+      <%= render partial: 'l/partials/errors', object: resource.errors, locals: { class_name: :alert } %>
 
-    <div class="field">
-      <%= f.label :last_name %>
-      <%= f.text_field :last_name %>
-    </div>
+      <div class="field">
+        <%= f.label :first_name %>
+        <%= f.text_field :first_name %>
+      </div>
 
-    <div class="field">
-      <%= f.label :email %>
-      <%= f.email_field :email %>
-    </div>
+      <div class="field">
+        <%= f.label :last_name %>
+        <%= f.text_field :last_name %>
+      </div>
 
-    <div class="field">
-      <%= f.label :password %>
-      <%= f.password_field :password %>
-    </div>
+      <div class="field">
+        <%= f.label :email %>
+        <%= f.email_field :email %>
+      </div>
 
-    <div class="field">
-      <%= f.label :password_confirmation %>
-      <%= f.password_field :password_confirmation %>
-    </div>
+      <div class="field">
+        <%= f.label :password %>
+        <%= f.password_field :password %>
+      </div>
+
+      <div class="field">
+        <%= f.label :password_confirmation %>
+        <%= f.password_field :password_confirmation %>
+      </div>
 
 
-    <%= f.button t('.submit') %>
-  <% end %>
+      <%= f.button t('.submit') %>
+    <% end %>
 
-  <%= render partial: "devise/shared/links" %>
+    <%= render partial: "devise/shared/links" %>
+  </div>
 </div>

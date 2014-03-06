@@ -1,7 +1,5 @@
 class TransfersController < ApplicationController
 
-  layout 'standard'
-
   # GET /transfers
   # GET /transfers.xml
   def index
@@ -9,10 +7,10 @@ class TransfersController < ApplicationController
     @transfer = Transfer.new(user: current_user)
 
     @transfers = Transfer.active.for_user(current_user)
-    
+
     respond_to do |format|
       format.html do
-        if params[:partial]
+        if request.xhr?
           render @transfers
         else
           render
@@ -28,7 +26,7 @@ class TransfersController < ApplicationController
       format.html { render layout: false }
       format.zip do
         head(:gone) and return if @transfer.expired?
-        send_file @transfer.object.path 
+        send_file @transfer.object.path
       end
     end
   end
@@ -57,7 +55,7 @@ class TransfersController < ApplicationController
       else
         format.html { render action: "new" }
       end
-      format.js 
+      format.js
     end
   end
 
@@ -86,8 +84,8 @@ class TransfersController < ApplicationController
     @transfer.destroy
 
     respond_to do |format|
-      format.html { redirect_to :back, notice: I18n.t('delete.success') } 
-      format.js 
+      format.html { redirect_to :back, notice: I18n.t('delete.success') }
+      format.js
     end
   end
 end

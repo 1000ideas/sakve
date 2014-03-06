@@ -1,53 +1,66 @@
-<% title t('items.index.title') %>
+<% title t('.title') %>
+<% content_for(:buttons) do %>
+  <div class="row">
+    <div class="small-12 medium-12 large-6 columns buttons text-right">
+      <%= link_to t('.upload'), '#', class: [:button, :tiny], data: {:'reveal-id' => 'multiupload-files-modal'} if can? :create, @item  %>
+      <%= link_to t('.new_folder'), '#', class: [:button, :tiny], data: {:'reveal-id' => 'new-folder-modal'} if can? :create, @folder %>
+    </div>
+    <div class="hide-for-small hide-for-medium large-6 columns">
+      <%= render 'partials/search' %>
+    </div>
+  </div>
 
-<section id="left-menu">
-  <ul>
-    <li>
-      <h1 class="<%= current_user.admin? ? "droppable" : "" %>" id="folder-<%= @global_folder.id %>"><%= link_to t('.public'), items_path %></h1>
-      <ul class="folders-list" id="root-folders">
-        <%= render @global_folder.subfolders %>
-      </ul>
-    </li>
-  <% if @user_folder %>
-    <li>
-      <h1 class="droppable" id="folder-<%= @user_folder.id %>"><%= link_to t('.private'), items_path(folder: :user) %></h1>
-      <ul class="folders-list" id="user-folders">
-        <%= render @user_folder.subfolders %>
-      </ul>
-    </li>
-  <% end %>
-  <% if @shared_folders.any? || current_user.has_shared_items?  %>
-    <li>
-      <h1><%= link_to t('.shared'), items_path(folder: :shared) %></h1>
-      <ul class="folders-list" id="user-folders">
-        <%= render @shared_folders %>
-      </ul>
-    </li>
-  <% end %>
-  </ul>
-</section>
-<section id="files">
-  <header class="buttons">
-    <%= link_to_function t('.upload'), 'Sakve.file_multiupload_open()', class: :button if can? :create, @item  %>
-    <%= link_to_function t('.new_folder'), 'Sakve.folder_creation_open()', class: :button if can? :create, @folder %>
-  </header>
-  <header class="bread">
-    <span><%= t('.breadcrumbs') %></span>
-    <ul class="breadcrumbs">
-      <% folders_breadcrumbs(@current_folder).each do |flink| %>
-        <li><%= flink %></li>
-      <% end %>
+<% end %>
+
+<div class="row collapse">
+  <section id="left-menu" class="columns hide-for-small medium-4 large-2 folders-tree">
+    <ul>
+      <li class="<%= folder_classes(@global_folder) %>">
+        <h3 class="<%= current_user.admin? ? "droppable" : "" %>" id="folder-<%= @global_folder.id %>">
+          <%= link_to items_path do %>
+            <%= fa_icon 'caret', text: t('.public') %>
+          <% end %>
+        </h3>
+        <ul class="folders-list" id="root-folders">
+          <%= render @global_folder.subfolders %>
+        </ul>
+      </li>
+    <% if @user_folder %>
+      <li class="<%= folder_classes(@user_folder) %>">
+        <h3 class="droppable" id="folder-<%= @user_folder.id %>">
+          <%= link_to fa_icon('caret', text: t('.private')), items_path(folder: :user) %>
+        </h3>
+        <ul class="folders-list" id="user-folders">
+          <%= render @user_folder.subfolders %>
+        </ul>
+      </li>
+    <% end %>
+    <% if @shared_folders.any? || current_user.has_shared_items?  %>
+      <li class="folder">
+        <h3><%= link_to fa_icon('caret', text: t('.shared')), items_path(folder: :shared) %></h3>
+        <ul class="folders-list" id="user-folders">
+          <%= render @shared_folders %>
+        </ul>
+      </li>
+    <% end %>
     </ul>
-  </header>
-  <ul class="file-list" id="items-list" data-url="<%= url_for((params || {}).merge(partial: true)) %>">
-    <%= render @items %>
-  </ul>
+  </section>
+  <section id="files" class="columns small-12 medium-8 large-10 end">
 
-  <div id="multiupload-files-dialog" title="<%= t('.upload') %>" class="dialog-box">
-    <%= render :partial => 'multiupload' %>
-  </div>
+    <ul class="file-list" id="items-list" data-url="<%= url_for((params || {}).merge(partial: true)) %>">
+      <% @subfolders.each do |folder| %>
+        <%= render 'folders/list_folder', folder: folder %>
+      <% end %>
+      <%= render @items %>
+    </ul>
 
-  <div id="new-folder-dialog" title="<%= t('.new_folder') %>" class="dialog-box">
-    <%= render partial: 'folders/form' %>
-  </div>
-</section>
+  </section>
+</div>
+
+<div id="multiupload-files-modal" title="<%= t('.upload') %>" data-reveal class="reveal-modal small">
+  <%= render :partial => 'multiupload' %>
+</div>
+
+<div id="new-folder-modal" title="<%= t('.new_folder') %>" data-reveal class="reveal-modal small">
+  <%= render partial: 'folders/form' %>
+</div>

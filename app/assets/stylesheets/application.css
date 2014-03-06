@@ -1,12 +1,16 @@
 /*
  *= require_self
+ *= require foundation_and_overrides
+ *= require font-awesome
  *= require jquery.ui.all
- *= require jquery.contextMenu
  *= require fileupload
  *= require defaults
  *= require header
  *= require context.menu
  *= require items
+ *= require folders
  *= require users
  *= require footer
  */
+
+@import url(http://fonts.googleapis.com/css?family=Oswald|Open+Sans:400,700&subset=latin,latin-ext);

@@ -3,13 +3,17 @@ var form = $('#new_folder');
 var errors = $("<%= j render partial: 'l/partials/errors', object: @folder.errors %>".trim());
 var error_explanation = $('#error_explanation', form);
 if (error_explanation.length == 0) {
-  form.prepend( errors )
+  errors
+    .hide()
+    .prependTo(form)
+    .slideDown();
 } else {
   error_explanation.replaceWith( errors );
 }
+$(form).foundation({alert: {animation: 'slideUp'}})
 <% else %>
 var dialog_box = form.parent();
-dialog_box.dialog('close');
+dialog_box.foundation('reveal', 'close');
 $('#error_explanation', form).remove();
 form.each(function() { this.reset(); });
 $('#root-folders').html("<%=j render @folders %>".trim());

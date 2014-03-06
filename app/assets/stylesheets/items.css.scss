@@ -1,109 +1,38 @@
-article.content {
-  display: table;
-  width: 100%;
-}
-
-article.content > section {
-  display: table-cell;
-  vertical-align: top;
-}
-
-section#left-menu {
-  width: 300px;
-  min-width: 300px;
-
-  ul {
-
-    .folders-list {
-
-      li {
-        padding: 10px 0;
-        font-size: 1.1em;
-      }
-    }
-  }
-}
-
-section#files > header {
-  height: 20px;
-  margin: 5px 0;
-  white-space: nowrap;
-}
-
-ul.breadcrumbs {
-  margin: 5px 0;
-  padding: 0;
-  height: 20px;
-  line-height: 20px;
-  list-style: none;
-  display: inline-block;
-}
-
-ul.breadcrumbs > li {
-  display: inline-block;
-}
-
-ul.breadcrumbs > li:after {
-  content: '>';
-  display: inline-block;
-  margin: 0 5px;
-}
-
-ul.breadcrumbs > li:last-child:after {
-  display: none;
-}
-
-
-
 ul.file-list {
   list-style: none;
-  padding: 0;
-  margin: 0;
-}
 
-ul.file-list li {
-  display: block;
-  padding: 1em;
-  background: #eee;
-  min-width: 800px;
-  cursor: pointer;
-}
+  > li {
+    background: #f2f2f2;
+    border-top: 1px solid #ddd;
+    &:last-child {
+      border-bottom: 1px solid #ddd;
+    }
 
-ul.file-list li.even {
-  background: #ddd;
-}
 
-ul.file-list li {
-  div.select { display: inline-block; width: 10%; }
-  div.name { display: inline-block; width: 50%; }
-  div.size { display: inline-block; width: 20%; text-align: center; }
-  div.date { display: inline-block; width: auto; text-align: center; }
-}
+    > div {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 3em;
+      height: 3em;
 
-ul.file-list .ui-selecting {
-  background: #333;
-  color: #fff;
-}
+      &[data-context-target] {
+        height: auto;;
+      }
+    }
 
-ul.file-list .ui-selecting.even {
-  background: #000;
-  color: #eee;
-}
+    &.ui-draggable-dragging {
+      border:1px solid #ddd;
 
-ul.file-list .ui-selected {
-  background: #666;
-  color: #eee;
-}
+      > div {
+        display: none;
+        &.name {
+          min-width: 10em;
+          display: block;
+          white-space: nowrap;
+        }
+      }
+    }
 
-ul.file-list .ui-selected.even {
-  background: #555;
-  color: #ddd;
-}
-
-#show-item-dialog {
-  text-align: center;
-
-  a.download {
-    display: block;
   }
 }

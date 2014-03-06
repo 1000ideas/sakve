@@ -1,47 +1,52 @@
 <% title [t('meta.title'), '::', t('.title') ] * ' ' %>
-<div id="registration-box" class="center-box">
-  <h2><%= t '.title' %></h2>
-  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+<div class="row">
+  <div class="small-6 small-centered columns">
 
-    <%= render partial: 'l/partials/errors', object: resource.errors, locals: { class_name: :alert } %>
+    <h2><%= t '.title' %></h2>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
 
-    <div class="field">
-      <%= f.label :first_name %>
-      <%= f.text_field :first_name %>
-    </div>
+      <%= render partial: 'l/partials/errors', object: resource.errors, locals: { class_name: :alert } %>
 
-    <div class="field">
-      <%= f.label :last_name %>
-      <%= f.text_field :last_name %>
-    </div>
+      <div class="field">
+        <%= f.label :first_name %>
+        <%= f.text_field :first_name %>
+      </div>
 
-    <div class="field">
-      <%= f.label :email %>
-      <%= f.email_field :email %>
-    </div>
+      <div class="field">
+        <%= f.label :last_name %>
+        <%= f.text_field :last_name %>
+      </div>
 
-    <div class="field">
-      <%= f.label :password, title: t('.leave_blank') %>
-      <%= f.password_field :password %>
-    </div>
+      <div class="field">
+        <%= f.label :email %>
+        <%= f.email_field :email %>
+      </div>
 
-    <div class="field">
-      <%= f.label :password_confirmation %>
-      <%= f.password_field :password_confirmation %>
-    </div>
+      <div class="field">
+        <%= f.label :password, title: t('.leave_blank') %>
+        <%= f.password_field :password %>
+      </div>
 
-    <div class="field">
-      <%= f.label :current_password, title: t('.current_password') %>
-      <%= f.password_field :current_password %>
-    </div>
+      <div class="field">
+        <%= f.label :password_confirmation %>
+        <%= f.password_field :password_confirmation %>
+      </div>
 
-    <%= f.button t('.submit') %>
-  <% end %>
+      <div class="field">
+        <%= f.label :current_password, title: t('.current_password') %>
+        <%= f.password_field :current_password %>
+      </div>
+
+      <%= f.button t('.submit') %>
+    <% end %>
+  </div>
 </div>
 
-<div id="cancel-account-box" class="center-box">
-  <h2><%= t '.cancel.title' %></h2>
+<div class="row">
+  <div class="small-6 small-centered columns">
+    <h2><%= t '.cancel.title' %></h2>
 
-  <p><%= t('.cancel.info') %></p>
-  <p><%= link_to t('.cancel.cancel'), registration_path(resource_name), confirm: t('.cancel.sure'), method: :delete %></p>
-
+    <p><%= t('.cancel.info') %></p>
+    <p><%= link_to t('.cancel.cancel'), registration_path(resource_name), confirm: t('.cancel.sure'), method: :delete %></p>
+  </div>
+</div>

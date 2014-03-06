@@ -1,5 +1,5 @@
 class TransferFilesController < ApplicationController
-  
+
   rescue_from ActiveRecord::RecordNotFound do
     head :not_found
   end
@@ -35,7 +35,4 @@ class TransferFilesController < ApplicationController
 
   private
 
-  def for_mustache(object)
-    view_context.transfer_file_for_mustache(object)
-  end
 end

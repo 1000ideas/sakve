@@ -1,5 +1,13 @@
 module ApplicationHelper
 
+  def folder_classes(folder)
+    class_name = [:folder]
+    class_name << :current if @current_folder == folder
+    class_name << :'not-empty' if folder.subfolders.any?
+    class_name << :open if folder.ancestor?(@current_folder)
+    class_name.join(' ')
+  end
+
   def file_upload_tag(name, options = {})
     options.merge!(
       multiple: true,

@@ -10,16 +10,23 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
-//= require jquery
-//= require jquery.ui.all
-//= require jquery.tinysort
 //= require i18n
 //= require i18n/translations
-//= require mustache
-//= require jquery-fileupload/basic
+//= require jquery
 //= require jquery_ujs
+//= require foundation/foundation
+//= require foundation/foundation.reveal
+//= require foundation/foundation.alert
+//= require foundation/foundation.equalizer
 //= require jquery_ujs_extension
-// require jquery.contextMenu
+//= require jquery.ui.draggable
+//= require jquery.ui.droppable
+//= require jquery.ui.autocomplete
+//= require jquery.ui.slider
+//= require jquery.tinysort
+//= require jquery-fileupload/basic
 //= require context.menu
 //= require sakve
+
+
 

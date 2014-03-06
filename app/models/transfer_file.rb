@@ -14,7 +14,9 @@ class TransferFile < ActiveRecord::Base
 
   validates :token, length: {is: 16}
   validates :user_id, presence: true
-  validates :object, attachment_presence: true
+  validates :object,
+    attachment_presence: true,
+    attachment_content_type: { content_type: /.*/i }
 
   # Returns tempfile containg zipped files marked with token
   def self.compress(token, debug = false)

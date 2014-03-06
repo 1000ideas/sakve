@@ -8,7 +8,7 @@ class Transfer < ActiveRecord::Base
 
   has_attached_file :object,
     path: ':partition/:class/:id/:filename'
-    
+
   attr_accessible :expires_at, :name, :object, :recipients, :token, :user_id, :user, :group_token
 
   attr_writer :group_token
@@ -21,7 +21,8 @@ class Transfer < ActiveRecord::Base
   validates :group_token, presence: true, length: {is: 16}
   validate :valid_recipients
   validates :files, length: {minimum: 1}, if: Proc.new { |a| a.token.blank? }
-  validates :object, attachment_presence: true
+  validates :object, attachment_presence: true,
+    attachment_content_type: { content_type: /.*/i }
 
   def group_token
     @group_token ||= last_user_group_token || SecureRandom.hex(8)

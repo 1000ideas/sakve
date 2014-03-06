@@ -1,5 +1,4 @@
 class User < ActiveRecord::Base
-
   @@showable_attributes = %w(name email)
   mattr_reader :showable_attributes
 
@@ -9,7 +8,7 @@ class User < ActiveRecord::Base
   has_many :folders, dependent: :destroy
   has_many :shares, as: :collaborator
   has_many :shared_items, through: :shares, source: :resource, source_type: 'Item'
-  has_many :shared_folders, through: :shares, source: :resource, source_type: 'Folder'
+  # has_many :shared_folders, through: :shares, source: :resource, source_type: 'Folder'
 
   scope :starts_with, lambda { |query|
     where('`first_name` like :q OR `last_name` LIKE :q OR `email` LIKE :q', q: "#{query}%")
@@ -20,7 +19,7 @@ class User < ActiveRecord::Base
          :recoverable, :validatable
 
   attr_accessor :updated_by
-  attr_accessible :first_name, :last_name, :name, :email, 
+  attr_accessible :first_name, :last_name, :name, :email,
     :password, :password_confirmation, :remember_me, :group_ids,
     :reset_password_sent_at, :reset_password_token
 
@@ -33,6 +32,10 @@ class User < ActiveRecord::Base
   validates :password, :allow_blank => true, :confirmation => true, :length => {:minimum => 5}, :on => :update
   validates :first_name, :last_name, presence: true
 
+  def shared_folders
+    Folder.shared_for_user(self) | Folder.shared_for_groups(self)
+  end
+
   def name
     "#{first_name} #{last_name}"
   end
@@ -41,7 +44,7 @@ class User < ActiveRecord::Base
     self.first_name, self.last_name = value.split(/\s+/, 2)
   end
 
-  def to_s 
+  def to_s
     "#{name} <#{email}>"
   end
 
@@ -68,7 +71,7 @@ class User < ActiveRecord::Base
 protected
 
   def create_private_folder
-    Folder.create!(user_id: self.id, global: false) 
+    Folder.create!(user_id: self.id, global: false)
   end
 
   def updated_by_admin?

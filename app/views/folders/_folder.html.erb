@@ -1,14 +1,14 @@
-<li class="<%= (current_user.admin? or !folder.global?) ? "droppable" : "" %>" id="folder-<%= folder.id %>">
+<% level ||= 1 %>
+<li class="<%= folder_classes(folder) %> level-<%= level %> <%= (current_user.admin? or !folder.global?) ? "droppable" : "" %>" id="folder-<%= folder.id %>" data-context>
   <%= content_tag :span do %>
-    <%= link_to folder.name, items_path(folder: folder.id) %>
-    <div class="hidden-actions actions">
+    <%= link_to fa_icon('caret', text: folder.name), items_path(folder: folder.id) %>
+    <div class="actions" data-context-target>
       <%= link_to t('open'), items_path(folder: folder.id), class: 'open', data: {method: :get} %>
       <%= link_to t('destroy'), folder, class: "destroy", data: { confirm: t('confirm.folder'), method: :delete, remote: true } %>
-      <%- Rails.logger.debug "#{folder.name} shareable: #{can?(:share, folder)}" -%>
-      <%= link_to( t('share'), share_folder_path(folder), class: "share", data: { method: :put, remote: true }) if can?(:share, folder) %>
+      <%= link_to( t('share'), share_folder_path(folder), class: "share", data: {remote: true }) if can?(:share, folder) %>
     </div>
   <% end %>
   <%= content_tag :ul do %>
-    <%= render folder.subfolders %>
+    <%= render folder.subfolders, level: (level+1) %>
   <% end if folder.has_subfolders? %>
 </li>

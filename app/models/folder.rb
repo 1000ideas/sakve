@@ -7,9 +7,6 @@ class Folder < ActiveRecord::Base
   has_many :users,  through: :shares, source: :collaborator, source_type: 'User'
   has_many :groups,  through: :shares, source: :collaborator, source_type: 'Group'
 
-  scope :shared_for, lambda { |user|
-    select("DISTINCT `#{table_name}`.*").joins(:shares).where('(`shares`.`collaborator_type` = ? AND `shares`.`collaborator_id` = ?) OR (`shares`.`collaborator_type` = ? AND `shares`.`collaborator_id` IN (?))', user.class.name, user.id, 'Group', user.group_ids || []).where('`user_id` != ?', user.id)
-  }
 
   attr_accessible :name, :parent_id, :user_id, :user, :parent, :global
 
@@ -19,6 +16,33 @@ class Folder < ActiveRecord::Base
   validate :only_one_root, unless: :has_parent?
 
   before_save :ensure_global
+
+  scope :shared_for, lambda { |user|
+    joins(:shares)
+      .group("`#{table_name}`.`id`")
+      .where(%{
+        (`#{Share.table_name}`.`collaborator_type` = 'User'
+          AND `#{Share.table_name}`.`collaborator_id` = ?)
+        OR (`#{Share.table_name}`.`collaborator_type` = 'Group'
+          AND `#{Share.table_name}`.`collaborator_id` IN (#{user.groups.select("`#{user.groups.table_name}`.`id`").to_sql}))
+      }.gsub($/, ''), user)
+      .where("`#{table_name}`.`user_id` != ?", user.id)
+  }
+
+  scope :allowed_for, lambda { |user|
+    where(%{`#{table_name}`.`user_id` = :user
+      OR `#{table_name}`.`global`
+      OR `#{table_name}`.`id` IN (#{shared_for(user).select("`folders`.`id`").to_sql})}.gsub($/, ''),
+      user: user)
+  }
+
+  def self.search(query)
+    words = query.query_tokenize
+    return [] if words.empty?
+    words.inject(self) do |result, w|
+      result.where("`#{table_name}`.`name` LIKE ?", "%#{w}%")
+    end
+  end
 
   def shared_for? user
     users.exists? (user) || user.groups.map {|g| groups.exists?(g) }.inject{|a,b| a || b }
@@ -32,22 +56,28 @@ class Folder < ActiveRecord::Base
     ! parent_id.nil?
   end
 
-  # Pobiera listę folderów nadrzędnych, od najbliższego do najdalszego. 
+  # Pobiera listę folderów nadrzędnych, od najbliższego do najdalszego.
   # Parametd +include_self+ określa czy pierwszym elementem na liscie jest
   # obiekt, czy rodzic
   def ancestors(include_self = false)
-    ancestors = []
-    ancestors << self if include_self
-    p = parent
-    until p.nil?
-      ancestors << p
-      p = p.parent
+    @_ancestors ||= begin
+      ancstr = []
+      p = parent
+      until p.nil?
+        ancstr << p
+        p = p.parent
+      end
+      ancstr
     end
-    ancestors
+    [(self if include_self), *@_ancestors].compact
+  end
+
+  def ancestor?(folder)
+    folder.try(:ancestors).try(:include?, self)
   end
 
   def has_subfolders?
-    subfolders.count > 0 
+    subfolders.count > 0
   end
 
   def self.global_root
@@ -89,7 +119,7 @@ protected
   def only_one_root
     root_folder = self.class.where(global: global, parent_id: nil)
     root_folder = root_folder.where(user_id: self.user_id) unless global?
-    if root_folder.count > 0 
+    if root_folder.count > 0
       errors.add(:parent_id, :blank)
     end
   end
