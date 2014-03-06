@@ -52,6 +52,8 @@ class Sakve
     for module in ['tags', 'multiupload', 'transfer', 'drag_drop', 'share', 'folders', 'selection']
       @["_init_#{module}"]()
 
+    @last_selected = null
+
     # console.profileEnd()
     true
 
@@ -59,7 +61,9 @@ class Sakve
     items_url = $("##{name}-list").data('url');
     $("##{name}-list").load(items_url);
 
-  selection_changed: ->
+  selection_changed: (element) ->
+    @last_selected = element
+
     selected = $('.file-list input[type=checkbox]:checked')
     $('.buttons-line').toggleClass('selected', selected.length > 0)
 
@@ -71,8 +75,49 @@ class Sakve
   _init_selection: ->
     $(document).on 'change', '.file-list input[type=checkbox]', (event) =>
       checked = $(event.target).is(':checked')
-      $(event.target).closest('li').toggleClass('selected', checked)
+      @selection_changed $(event.target).closest('li').toggleClass('selected', checked)
+      event.stopPropagation()
+
+    $(document).on 'click', '.file-list li', (event) =>
+      return if $(event.target).closest('label.custom-check-box').length > 0
+
+      input = $('input[type=checkbox]', event.target)
+      form = $(event.target).closest('form')
+      if event.shiftKey
+        if $(event.currentTarget).nextAll().filter(@last_selected).length > 0
+          $(event.currentTarget).nextUntil(@last_selected).each (idx, el) ->
+            $('input[type=checkbox]', el).prop('checked', true).change()
+        else if $(event.currentTarget).prevAll().filter(@last_selected).length > 0
+          $(event.currentTarget).prevUntil(@last_selected).each (idx, el) ->
+            $('input[type=checkbox]', el).prop('checked', true).change()
+        input.prop('checked', true).change()
+      else if event.ctrlKey
+        input.prop('checked', true).change()
+      else
+        form.find('input[type=checkbox]:checked').each (idx, el) ->
+          $(el).prop('checked', false).change()
+        input.prop('checked', true).change()
+
+    $('.file-list input[type=checkbox]:checked').each (idx, el) =>
+      $(el).closest('li').toggleClass('selected', true)
       @selection_changed()
+
+    $(document).on 'before:context:ajax', '[data-context]', (event, jqXHR, settings, from_mouse) ->
+
+      input = $('input[type=checkbox]', event.target)
+      form = $(event.target).closest('form')
+      if from_mouse
+
+        unless input.prop('checked')
+          form.find('input[type=checkbox]:checked').each (idx, el) ->
+            $(el).prop('checked', false).change()
+          input.prop('checked', true).change()
+
+        settings.data += "&#{form.serialize()}"
+      else
+        param = "#{input.attr('name')}=#{input.val()}"
+        settings.data += "&#{encodeURI(param)}"
+      true
 
   _init_folders: ->
     $(document).on 'click', '.folders-tree a .fa-caret', (event) ->

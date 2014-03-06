@@ -6,7 +6,13 @@
     <%= render 'partials/search' %>
   </div>
   <div class="for-selection">
-    <%= link_to "TEST", '#', class: [:button, :tiny] %>
+    <%= link_to fa_icon('cloud-download', text: t('application.context.download')) %>
+    <%= link_to fa_icon('link', text: t('application.context.share')) %>
+    <%= link_to fa_icon('picture-o', text: t('application.context.show')) %>
+    <%= link_to fa_icon('edit', text: t('application.context.rename')) %>
+    <%= link_to fa_icon('level-up', text: t('application.context.move')) %>
+    <%= link_to fa_icon('tag', text: t('application.context.tag')) %>
+    <%= link_to fa_icon('trash-o', text: t('application.context.remove')) %>
   </div>
 <% end %>
 

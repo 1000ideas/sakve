@@ -1,9 +1,8 @@
 GIT
   remote: git://github.com/1000ideas/l.git
-  revision: f50170272117b472d0e75c143373e2fdaeb99e11
-  branch: tinymce-integration
+  revision: 3a5dfd8c9ce80b1816ab21211675f40fcd1ec6a1
   specs:
-    l (0.8.0)
+    l (0.8.1)
       better_errors
       binding_of_caller
       devise (~> 2.0.0)
@@ -32,7 +31,6 @@ GIT
 
 GEM
   remote: https://rubygems.org/
-  remote: http://1000i.pl:8808/
   specs:
     actionmailer (3.2.16)
       actionpack (= 3.2.16)

@@ -20,6 +20,17 @@ class ApplicationController < ActionController::Base
 
   layout 'application'
 
+  def context
+    @folders = Folder.where( id: params[:selection].try(:[], :fids) )
+    @items = Item.where( id: params[:selection].try(:[], :ids) )
+
+    head :not_found and return unless request.xhr?
+
+    respond_to do |format|
+      format.html { render layout: false }
+    end
+  end
+
   def search
     @folders = Folder.allowed_for(current_user).search(search_query)
     @items = Item.allowed_for(current_user).search(search_query)

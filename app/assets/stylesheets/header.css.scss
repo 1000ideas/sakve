@@ -47,7 +47,7 @@ body > header {
     .button, input {
         // margin-bottom: 0;
     }
-    .for-all { @include transition(margin 1s);  }
+    .for-all { @include transition(margin .45s);  }
     &.selected .for-all {
       margin-top: -3.4625rem ;
     }

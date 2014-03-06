@@ -1,0 +1,10 @@
+pl:
+  application:
+    context:
+      download: Pobierz
+      share: Udostępnij
+      show: Pokaż
+      rename: Zmień nazwę
+      move: Przenieś
+      tag: Otaguj
+      remove: Usuń

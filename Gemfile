@@ -1,5 +1,4 @@
 source 'https://rubygems.org'
-source 'http://1000i.pl:8808'
 
 gem 'rails', '3.2.16'
 gem 'sqlite3'
@@ -27,7 +26,8 @@ end
 gem 'jquery-rails'
 gem 'i18n-js', github: "cblavier/i18n-js"
 
-gem 'l', github: "1000ideas/l", branch: "tinymce-integration"
+gem 'l', github: "1000ideas/l"
+# gem 'l', path: '../gems/l'
 gem "tinymce-rails", github: "1000ideas/tinymce-rails", branch: "rails_3_2"
 
 gem "cancan"

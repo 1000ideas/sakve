@@ -1,12 +1,12 @@
-<li class="row folder-<%= folder.id %>" id="folder-<%= folder.id %>" data-context="true">
+<li class="row folder-<%= folder.id %>" id="folder-<%= folder.id %>" data-context="true" data-context-ajax="<%= context_path %>">
   <div class="name columns small-11">
     <%= f.select_box :fid, folder %>
     <%= fa_icon 'folder-open', text: folder.name %>
   </div>
   <a href="" data-context-button><%= fa_icon('ellipsis-h') %></a>
-  <div class="actions" data-context-target="true">
+  <!--div class="actions" data-context-target="true">
     <%= link_to t('open'), items_path(folder: folder.id), class: 'open', data: {method: :get} %>
       <%= link_to t('destroy'), folder, class: "destroy", data: { confirm: t('confirm.folder'), method: :delete, remote: true } %>
       <%= link_to( t('share'), share_folder_path(folder), class: "share", data: { method: :put, remote: true }) if can?(:share, folder) %>
-  </div>
+  </div-->
 </li>
