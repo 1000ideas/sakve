@@ -1,6 +1,8 @@
+require 'zip'
+
 class Folder < ActiveRecord::Base
   belongs_to :user
-  belongs_to :parent, class_name: 'Folder'
+  belongs_to :parent, class_name: 'Folder', touch: true
   has_many :subfolders, class_name: 'Folder', foreign_key: :parent_id
   has_many :items, dependent: :destroy
   has_many :shares, as: :resource
@@ -45,8 +47,14 @@ class Folder < ActiveRecord::Base
     end
   end
 
+
+
   def shared_for? user
     users.exists? (user) || user.groups.map {|g| groups.exists?(g) }.inject{|a,b| a || b }
+  end
+
+  def allowed_for? user
+    global? || user == user || shared_for?(user)
   end
 
   def name_for_select
@@ -73,12 +81,23 @@ class Folder < ActiveRecord::Base
     [(self if include_self), *@_ancestors].compact
   end
 
+  def ancestors_until(_folder, include_self = false)
+    self.ancestors(include_self).take_while { |f| f != _folder }
+  end
+
   def ancestor?(folder)
     folder.try(:ancestors).try(:include?, self)
   end
 
   def has_subfolders?
     subfolders.count > 0
+  end
+
+  def each_descendant(&block)
+    block.call(self)
+    subfolders.each do |f|
+      f.each_descendant(&block)
+    end
   end
 
   def self.global_root
@@ -106,6 +125,29 @@ class Folder < ActiveRecord::Base
     prefix = level > 0 ? '-'*level : ''
     self_name = [ "#{prefix} #{name_for_select}", id ]
     [ self_name ] + subfolders.map{|f| f.for_select_with_children(level+1) }.flatten(1)
+  end
+
+  def zip_file
+    filepath = Rails.root.join('folder-zips', "folder-#{id}.zip")
+    FileUtils.mkdir_p(filepath.dirname)
+    if !File.exists?(filepath) or File.mtime(filepath) < updated_at
+      Zip::File.open(filepath, Zip::File::CREATE) do |zipfile|
+        each_descendant do |f|
+          path = f.ancestors_until(self, true).map(&:name).reverse.join('/')
+          unless path.blank?
+            zipfile.mkdir(path) unless find_entry(path)
+            Rails.logger.debug "[zip mkdir] #{path}"
+            path += '/'
+          end
+          f.items.each do |item|
+            Rails.logger.debug "[zip add] #{path}#{item.name_for_download}"
+            zipfile.add("#{path}#{item.name_for_download}", item.object.path) { true }
+          end
+        end
+        zipfile.close
+      end
+    end
+    File.open(filepath, 'rb')
   end
 
 protected

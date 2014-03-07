@@ -23,14 +23,7 @@ class ItemsController < ApplicationController
     @folder = Folder.new parent: @current_folder, user: current_user, global: @current_folder.try(:global)
 
     respond_to do |format|
-      format.html do
-        if params[:partial]
-          render @items
-        else
-          render
-        end
-      end
-      format.xml  { render xml: @items }
+      format.html { render layout: !request.xhr? }
     end
   end
 
@@ -157,6 +150,14 @@ class ItemsController < ApplicationController
       format.html { redirect_to :back, notice: I18n.t('delete.success') }
       format.js
     end
+  end
+
+  def bulk_edit
+
+  end
+
+  def bulk_update
+
   end
 
   protected

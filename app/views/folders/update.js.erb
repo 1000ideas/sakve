@@ -1,0 +1,5 @@
+<% if @folder.errors.any? %>
+<% else %>
+sakve.reload_list('items')
+$('#edit-folder-modal').foundation('reveal', 'close');
+<% end %>

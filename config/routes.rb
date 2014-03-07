@@ -14,12 +14,10 @@ Sakve::Application.routes.draw do
         :registration => 'account'
       }
 
-    get 'items(-:folder)(/:partial)(.:format)',
-      partial: /true|false/,
+    get 'items(-:folder)(.:format)',
       to: 'items#index',
       via: :get,
-      as: :items,
-      defaults: { partial: false }
+      as: :items
 
     post 'items(-:folder)(.:format)',
       to: 'items#create',
@@ -37,9 +35,14 @@ Sakve::Application.routes.draw do
       as: :download_item,
       defaults: { style: :original }
 
-    resources :folders, only: [:create, :destroy] do
-      get :share, on: :member
-      put :share, on: :member
+    resources :folders, only: [:create, :update, :destroy] do
+      member do
+        get :rename, action: :edit, subaction: :rename
+        get :move, action: :edit, subaction: :move
+        get :download
+        get :share
+        put :share
+      end
     end
 
     resources :tags, only: :index

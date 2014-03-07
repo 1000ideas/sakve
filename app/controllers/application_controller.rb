@@ -23,6 +23,9 @@ class ApplicationController < ActionController::Base
   def context
     @folders = Folder.where( id: params[:selection].try(:[], :fids) )
     @items = Item.where( id: params[:selection].try(:[], :ids) )
+    if (@folders.count + @items.count) == 1
+      @item = [*@folders, *@items].first
+    end
 
     head :not_found and return unless request.xhr?
 

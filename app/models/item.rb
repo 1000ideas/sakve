@@ -2,7 +2,7 @@ class Item < ActiveRecord::Base
   include Sakve::ItemTypes
 
   belongs_to :user
-  belongs_to :folder
+  belongs_to :folder, touch: true
   has_many :item_tags, include: :tag, dependent: :destroy
   has_many :tags, through: :item_tags
   has_many :shares, as: :resource

@@ -5,6 +5,7 @@ pl:
     default_name: 'Folder główny'
     form:
       root_folder: '<jako folder nadrzędny>'
+      processing: "Przetwarzanie..."
     share_form:
       search_collaborator: 'Wybierz komu chcesz udostepnić folder'
       submit: 'Zapisz'

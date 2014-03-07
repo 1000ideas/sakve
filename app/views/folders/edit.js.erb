@@ -1,0 +1,15 @@
+if ( $('#edit-folder-modal').length === 0) {
+  $('<div data-reveal>')
+    .addClass('reveal-modal small')
+    .attr('id', 'edit-folder-modal')
+    <% if params[:subaction] %>
+    .html('<%= j render("folders/edit/#{params[:subaction]}") %>')
+    <% else %>
+    .html('<%= j render("form") %>')
+    <% end %>
+    .appendTo('body')
+    .foundation()
+    .on('closed', function() { $(this).remove(); })
+    .on('click', 'a.close', function() { $(this).closest('[data-reveal]').foundation('reveal', 'close') })
+    .foundation('reveal', 'open')
+}

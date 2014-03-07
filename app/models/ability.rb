@@ -4,9 +4,9 @@ class Ability
   def initialize(user)
 
     unless user.blank?
-      
+
       if user.admin?
-        can :manage, User 
+        can :manage, User
         can :manage, Group
       else
         can :read, User
@@ -23,12 +23,16 @@ class Ability
 
       can [:update, :destroy], Item do |item|
         user.admin? || item.user_id == user.id
-      end 
+      end
 
       can :share, Item, user_id: user.id
 
-      can :create, Folder do |f|
+      can [:create, :update], Folder do |f|
         !f.parent_id.nil? && ((f.global? && user.admin?) || (! f.global? && f.parent.try(:user) == user && f.user == user))
+      end
+
+      can [:download], Folder do |f|
+        f.allowed_for?(user)
       end
 
       can :share, Folder do |f|

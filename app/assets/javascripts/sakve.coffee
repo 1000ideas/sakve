@@ -58,10 +58,16 @@ class Sakve
     true
 
   reload_list: (name) ->
-    items_url = $("##{name}-list").data('url');
-    $("##{name}-list").load(items_url);
+    # items_url = $("##{name}-list").data('url');
+    $.ajax(location.href)
+      .done (data) =>
+        $(data)
+          .find("##{name}-list")
+          .replaceAll("##{name}-list")
+        @selection_changed()
 
-  selection_changed: (element) ->
+
+  selection_changed: (element = null) ->
     @last_selected = element
 
     selected = $('.file-list input[type=checkbox]:checked')
