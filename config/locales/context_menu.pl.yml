@@ -26,3 +26,4 @@ pl:
       move: Przenieś
       tag: Otaguj
       remove: Usuń
+      sure: "Usunąć zaznaczone?"

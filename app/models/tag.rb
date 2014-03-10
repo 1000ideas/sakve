@@ -9,4 +9,10 @@ class Tag < ActiveRecord::Base
   def to_s
     name
   end
+
+  def self.from_list(list)
+    list.split(/,\s*/).map do |tag|
+      self.where(name: tag).first || self.create(name: tag)
+    end
+  end
 end

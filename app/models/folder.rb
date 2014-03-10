@@ -48,7 +48,37 @@ class Folder < ActiveRecord::Base
     end
   end
 
+  def self.subaction(selection)
+    ba = selection[:subaction]
+    raise ArgumentError, "Unknown subaction '#{ba}'" unless methods.grep(/bulk_#{ba}/).any?
+    ba
+  end
 
+  def self.bulk(selection)
+    self
+      .where(id: selection[:fids])
+      .send(:"bulk_#{subaction(selection)}", selection)
+  end
+
+  def self.bulk_tags(selection)
+    true #Folders have no tags
+  end
+
+  def self.bulk_move(selection)
+    output = true
+    transaction do
+      Rails.logger.debug "#{all.inspect}"
+      all.each do |f|
+        f.instance_variable_set("@readonly", false)
+        f.update_attributes(parent_id: selection[:folder_id])
+        if f.errors.any?
+          output = f.errors
+          raise ActiveRecord::Rollback
+        end
+      end
+    end if any?
+    output
+  end
 
   def shared_for? user
     users.exists? (user) || user.groups.map {|g| groups.exists?(g) }.inject{|a,b| a || b }

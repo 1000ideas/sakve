@@ -1,4 +1,8 @@
+require 'zip'
+
 class ItemsController < ApplicationController
+
+  helper_method :selection
 
   # GET /items
   # GET /items.xml
@@ -151,14 +155,96 @@ class ItemsController < ApplicationController
     end
   end
 
-  def bulk_edit
+  def bulk_download
+    @folders = Folder
+      .accessible_by(current_ability, :update)
+      .where( id: selection[:fids] )
+    @items = Item
+      .accessible_by(current_ability, :update)
+      .where( id: selection[:ids] )
 
+    tmp_name = (selection[:ids] + selection[:fids]).join('-')
+
+    filename = Dir::Tmpname.make_tmpname("selection-#{tmp_name}", ".zip")
+    @filepath = File.join(Dir::tmpdir, filename)
+    Zip::File.open(@filepath, Zip::File::CREATE) do |zipfile|
+      @folders.each do |folder|
+        folder.each_descendant do |f|
+          path = f.ancestors_until(folder.parent, true).map(&:name).reverse.join('/')
+          unless path.blank?
+            zipfile.mkdir(path) unless zipfile.find_entry(path)
+            Rails.logger.debug "[zip mkdir] #{path}"
+            path += '/'
+          end
+          f.items.each do |item|
+            Rails.logger.debug "[zip add] #{path}#{item.name_for_download}"
+            zipfile.add("#{path}#{item.name_for_download}", item.object.path) { true }
+          end
+        end
+      end
+      @items.each do |item|
+        Rails.logger.debug "[zip add] #{item.name_for_download}"
+        zipfile.add("#{item.name_for_download}", item.object.path) { true }
+      end
+    end
+
+    respond_to do |format|
+      format.zip
+    end
+  end
+
+  def bulk_edit
+    @folders = Folder
+      .accessible_by(current_ability, :update)
+      .where( id: selection[:fids] )
+    @items = Item
+      .accessible_by(current_ability, :update)
+      .where( id: selection[:ids] )
+
+
+    respond_to do |format|
+      format.js
+    end
   end
 
   def bulk_update
+    @folders = Folder
+      .accessible_by(current_ability, :update)
+
+    @items = Item
+      .accessible_by(current_ability, :update)
+
+    Folder.transaction do
+      if (@ferror = @folders.bulk(selection)) === true
+        @ierror = @items.bulk( selection )
+        raise ActiveRecord::Rollback unless @ierror === true
+      end
+    end
+
+    respond_to do |format|
+      format.js
+    end
+
 
   end
 
-  protected
+  def bulk_destroy
+    @folders = Folder
+      .accessible_by(current_ability, :update)
+      .where( id: selection[:fids] )
+      .destroy_all
+    @items = Item
+      .accessible_by(current_ability, :update)
+      .where( id: selection[:ids] )
+      .destroy_all
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  private
+
+
 
 end

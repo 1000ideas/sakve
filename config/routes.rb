@@ -25,7 +25,14 @@ Sakve::Application.routes.draw do
       as: :items
 
     resources :items, except: [:index, :new, :create] do
-      get :multiupload, on: :collection
+      collection do
+        get :bulk_move, action: :bulk_edit, subaction: :move
+        get :bulk_tags, action: :bulk_edit, subaction: :tags
+        get :bulk_download
+        put :bulk_update
+        delete :bulk, action: :bulk_destroy
+      end
+      # get :multiupload, on: :
       member do
         get :share
         put :share

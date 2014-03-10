@@ -114,5 +114,13 @@ class ApplicationController < ActionController::Base
     params[:search][:query] if params[:search]
   end
 
+  def selection
+    (params[:selection] || {}).tap do |selection|
+      selection[:ids] ||= []
+      selection[:fids] ||= []
+    end
+  end
+  helper_method :selection
+
 
 end

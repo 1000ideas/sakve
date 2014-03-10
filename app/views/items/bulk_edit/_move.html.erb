@@ -1,0 +1,16 @@
+<%= form_for(:selection, url: bulk_update_items_path, method: :put, html: {remote: true}) do |f| %>
+  <%= f.hidden_field :subaction, value: params[:subaction] %>
+  <% @folders.each do |folder| %>
+    <%= f.hidden_field :fids, value: folder.id, multiple: true  %>
+  <% end %>
+  <% @items.each do |item| %>
+    <%= f.hidden_field :ids, value: item.id, multiple: true  %>
+  <% end %>
+  <div class="field">
+    <%= f.label :folder_id %>
+    <%= f.select :folder_id, options_for_select(Folder.names_tree_for_user(current_user)) %>
+  </div>
+  <%= button_tag t('.submit') %>
+  <%= link_to t('.cancel'), '#', class: "button close" %>
+<% end %>
+
