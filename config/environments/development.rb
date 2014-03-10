@@ -1,7 +1,7 @@
 Sakve::Application.configure do
   config.action_mailer.raise_delivery_errors = true
 
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' } 
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
 
   config.action_mailer.delivery_method = :smtp
 
@@ -10,7 +10,7 @@ Sakve::Application.configure do
     :port                 => 587,
     :domain               => "1000i.pl",
     :user_name            => "test@1000i.pl",
-    :password             => "test",
+    :password             => "7IDmzEPn",
     :authentication       => "plain",
     :enable_starttls_auto => false
   }

@@ -1,3 +1,7 @@
-Pobierz plik:
+Użytkownik <%= @transfer.user.name %> przesyła Ci pliki.
 
-<%= link_to 'Pobierz', download_transfer_url(token: @transfer.token) %>
+Nazwa transferu: <%= @transfer.name %>
+
+Aby pobrać plik, kliknij poniższy link
+
+<%= download_transfer_url(token: @transfer.token) %>
