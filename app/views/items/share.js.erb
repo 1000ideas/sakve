@@ -1,11 +1,14 @@
-$('<div data-reveal>')
-  .addClass('reveal-modal small')
-  .html("<%= j render('share_form') %>")
-  .appendTo('body')
-  .foundation()
-  .on('closed', function() { $(this).remove(); })
-  .foundation('reveal', 'open')
-  .find('#search_collaborator')
-  .autocomplete(Sakve.collaborators_autocomplete_options)
-  .data('ui-autocomplete')._renderItem = Sakve.collaborators_render_item;
+if ( $('#share-item-modal').length === 0) {
+  $('<div data-reveal>')
+    .addClass('reveal-modal small')
+    .attr('id', 'share-item-modal')
+    .html("<%= j render('share_form') %>")
+    .appendTo('body')
+    .foundation()
+    .on('closed', function() { $(this).remove(); })
+    .foundation('reveal', 'open')
+    .find('#search_collaborator')
+    .autocomplete(sakve.defaults.collaborators_autocomplete)
+    .data('ui-autocomplete')._renderItem = sakve.views.collaborator_select;
+}
 

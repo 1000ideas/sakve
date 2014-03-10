@@ -14,9 +14,7 @@ class ContextMenu
         data: '_'
         type: 'POST'
         beforeSend: (jqXHR, settings) ->
-          rsp = $(element).trigger('before:context:ajax', [jqXHR, settings, from_mouse])
-          console.log(settings)
-          rsp
+          $(element).trigger('before:context:ajax', [jqXHR, settings, from_mouse])
         success: (data) ->
           $(data)
             .openContextMenu(x, y, from_mouse)
@@ -25,11 +23,6 @@ class ContextMenu
         .find('[data-context-target]')
         .clone()
         .openContextMenu(x, y, from_mouse)
-
-        # .first()
-        # .addClass('from-mouse')
-        # .css(top: y, left: x)
-        # .show()
 
   constructor: ->
     $.fn.openContextMenu = (x, y, from_mouse = true) ->

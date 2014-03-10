@@ -26,14 +26,19 @@ Sakve::Application.routes.draw do
 
     resources :items, except: [:index, :new, :create] do
       get :multiupload, on: :collection
-      put :share, on: :member
+      member do
+        get :share
+        put :share
+        get 'download(/:style)/:name(.:format)',
+          action: :download,
+          as: :download,
+          defaults: { style: :original }
+        get :rename, action: :edit, subaction: :rename
+        get :move, action: :edit, subaction: :move
+        get :tags, action: :edit, subaction: :tags
+      end
     end
 
-    match 'items/:id/download(/:style)/:name.:format',
-      to: 'items#download',
-      via: :get,
-      as: :download_item,
-      defaults: { style: :original }
 
     resources :folders, only: [:create, :update, :destroy] do
       member do

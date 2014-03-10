@@ -17,6 +17,7 @@ pl:
       move: Przenieś
       tag: Otaguj
       remove: Usuń
+      sure: "Usunąć %{name}?"
     context_bulk:
       download: Pobierz
       share: Udostępnij

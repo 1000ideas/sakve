@@ -122,16 +122,15 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
     authorize! :share, @item
 
-    params[:with] ||= {}
 
-    params[:with][:users].try(:each) do |user_id|
-      user = User.where(id: user_id).first
-      @item.users << user if user && @item.users.exclude?(user)
-    end
+    if request.put?
+      params[:with] ||= {}
 
-    params[:with][:groups].try(:each) do |group_id|
-      group = Group.where(id: group_id)
-      @item.groups << group if group && @item.groups.exclude?(group)
+      user_ids = params[:with][:users].try(:map, &:to_i)
+      @item.users = User.where(id: user_ids)
+
+      group_ids = params[:with][:groups].try(:map, &:to_i)
+      @item.groups = Group.where(id: group_ids)
     end
 
     respond_to do |format|

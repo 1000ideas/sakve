@@ -1,6 +1,5 @@
-var form = $('#edit_item_<%= @item.id %>');
+var form = $('#edit-item-modal');
 <%- if @item.errors.any? -%>
-debugger
 var errors = $('<%= j render(partial: 'l/partials/errors', object: @item.errors).strip.html_safe %>');
 var error_explanation = form.find('#error_explanation');
 if (error_explanation.length == 0) {
@@ -8,9 +7,7 @@ if (error_explanation.length == 0) {
 } else {
   error_explanation.replaceWith( errors );
 }
-<%- else -%>
-var url = $('#items-list').data('url');
-$('#items-list').load(url);
-var dialog_box = form.parent();
-dialog_box.dialog('close');
-<%- end -%>
+<% else %>
+sakve.reload_list('items')
+form.foundation('reveal', 'close');
+<% end %>

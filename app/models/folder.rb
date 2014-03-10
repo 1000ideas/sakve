@@ -16,6 +16,7 @@ class Folder < ActiveRecord::Base
   validates :name, uniqueness: {scope: [:parent_id, :user_id, :global], case_sensitive: false}, unless: :global?
   validates :name, uniqueness: {scope: [:parent_id, :global], case_sensitive: false}, if: :global?
   validate :only_one_root, unless: :has_parent?
+  validate :loop_in_hierarchy
 
   before_save :ensure_global
   alias_method :fid, :id
@@ -135,7 +136,7 @@ class Folder < ActiveRecord::Base
         each_descendant do |f|
           path = f.ancestors_until(self, true).map(&:name).reverse.join('/')
           unless path.blank?
-            zipfile.mkdir(path) unless find_entry(path)
+            zipfile.mkdir(path) unless zipfile.find_entry(path)
             Rails.logger.debug "[zip mkdir] #{path}"
             path += '/'
           end
@@ -151,6 +152,14 @@ class Folder < ActiveRecord::Base
   end
 
 protected
+
+  def loop_in_hierarchy
+    f = self
+    until f.parent.nil?
+      errors.add(:parent_id, :invalid) and return false if f.parent == self
+      f = f.parent
+    end
+  end
 
   def ensure_global
     if has_parent?

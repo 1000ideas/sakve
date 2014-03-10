@@ -8,7 +8,8 @@
     <% @item.users.each do |user| %>
     <li>
       <%= hidden_field_tag 'with[users][]', user.id, id: "with_users_#{user.id}" %>
-      <%= user %>
+      <%= user.name %>
+      <%= link_to t('destroy'), '#', class: :remove %>
     </li>
     <% end %>
   </ul>
@@ -17,7 +18,8 @@
     <% @item.groups.each do |g| %>
     <li>
       <%= hidden_field_tag 'with[groups][]', g.id, id: "with_groups_#{g.id}"  %>
-      <%= g %>
+      <%= g.name %>
+      <%= link_to t('destroy'), '#', class: :remove %>
     </li>
     <% end %>
   </ul>

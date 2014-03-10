@@ -5,26 +5,18 @@ class TagsController < ApplicationController
   # GET /tags
   # GET /tags.xml
   def index
-    authorize! :menage, :all
-    @tags = Tag
+    authorize! :read, Tag
 
-    unless filter(:name).blank?
-      @tags = @tags.
-        where("`name` LIKE ?", "%#{filter(:name)}%")
-    end
+    @tags = Tag.order('`items_count` DESC')
 
     unless params[:q].blank?
       @tags = @tags.
-        where('`name` like ?', "#{params[:q]}%").
-        order('`items_count` DESC')
+        where('`name` like ?', "#{params[:q]}%")
     end
-    
-    @tags = @tags.order(sort_order) if sort_results?
-    
-    @tags = @tags.all.paginate page: params[:page]
+
+    @tags = @tags.paginate page: params[:page]
 
     respond_to do |format|
-      format.html # index.html.erb
       format.json  { render json: @tags.map(&:name) }
     end
   end
@@ -101,7 +93,7 @@ class TagsController < ApplicationController
     @tag.destroy
 
     respond_to do |format|
-      format.html { redirect_to :back, notice: I18n.t('delete.success') } 
+      format.html { redirect_to :back, notice: I18n.t('delete.success') }
       format.xml  { head :ok }
     end
   end

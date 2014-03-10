@@ -48,6 +48,8 @@ class Ability
 
       can [:read, :create], Transfer
       can [:update, :destroy], Transfer, user_id: user.id
+
+      can :read, Tag
     end
 
   end
