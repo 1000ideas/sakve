@@ -16,6 +16,7 @@ gem 'coffee-rails', '~> 3.2.1'
 gem 'compass-rails', '~> 1.1.0'
 gem 'foundation-rails', '~> 5.1.0'
 gem 'font-awesome-rails', '~> 4.0.0'
+gem 'therubyracer'
 
 group :test do
   gem 'capybara'
