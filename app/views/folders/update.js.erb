@@ -1,6 +1,6 @@
-var form = $('#edit-item-modal');
-<%- if @item.errors.any? -%>
-var errors = $('<%= j render(partial: 'l/partials/errors', object: @item.errors).strip.html_safe %>');
+var form = $('#edit-folder-modal');
+<% if @folder.errors.any? %>
+var errors = $('<%= j render(partial: 'l/partials/errors', object: @folder.errors).strip.html_safe %>');
 var error_explanation = form.find('#error_explanation');
 if (error_explanation.length == 0) {
   form.prepend( errors )
@@ -9,5 +9,6 @@ if (error_explanation.length == 0) {
 }
 <% else %>
 sakve.reload_list('items')
+sakve.reload_list('folders')
 form.foundation('reveal', 'close');
 <% end %>

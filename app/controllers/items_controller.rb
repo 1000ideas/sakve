@@ -1,4 +1,8 @@
+require 'zip'
+
 class ItemsController < ApplicationController
+
+  helper_method :selection
 
   # GET /items
   # GET /items.xml
@@ -23,14 +27,7 @@ class ItemsController < ApplicationController
     @folder = Folder.new parent: @current_folder, user: current_user, global: @current_folder.try(:global)
 
     respond_to do |format|
-      format.html do
-        if params[:partial]
-          render @items
-        else
-          render
-        end
-      end
-      format.xml  { render xml: @items }
+      format.html { render layout: !request.xhr? }
     end
   end
 
@@ -129,16 +126,15 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
     authorize! :share, @item
 
-    params[:with] ||= {}
 
-    params[:with][:users].try(:each) do |user_id|
-      user = User.where(id: user_id).first
-      @item.users << user if user && @item.users.exclude?(user)
-    end
+    if request.put?
+      params[:with] ||= {}
 
-    params[:with][:groups].try(:each) do |group_id|
-      group = Group.where(id: group_id)
-      @item.groups << group if group && @item.groups.exclude?(group)
+      user_ids = params[:with][:users].try(:map, &:to_i)
+      @item.users = User.where(id: user_ids)
+
+      group_ids = params[:with][:groups].try(:map, &:to_i)
+      @item.groups = Group.where(id: group_ids)
     end
 
     respond_to do |format|
@@ -159,6 +155,96 @@ class ItemsController < ApplicationController
     end
   end
 
-  protected
+  def bulk_download
+    @folders = Folder
+      .accessible_by(current_ability, :update)
+      .where( id: selection[:fids] )
+    @items = Item
+      .accessible_by(current_ability, :update)
+      .where( id: selection[:ids] )
+
+    tmp_name = (selection[:ids] + selection[:fids]).join('-')
+
+    filename = Dir::Tmpname.make_tmpname("selection-#{tmp_name}", ".zip")
+    @filepath = File.join(Dir::tmpdir, filename)
+    Zip::File.open(@filepath, Zip::File::CREATE) do |zipfile|
+      @folders.each do |folder|
+        folder.each_descendant do |f|
+          path = f.ancestors_until(folder.parent, true).map(&:name).reverse.join('/')
+          unless path.blank?
+            zipfile.mkdir(path) unless zipfile.find_entry(path)
+            Rails.logger.debug "[zip mkdir] #{path}"
+            path += '/'
+          end
+          f.items.each do |item|
+            Rails.logger.debug "[zip add] #{path}#{item.name_for_download}"
+            zipfile.add("#{path}#{item.name_for_download}", item.object.path) { true }
+          end
+        end
+      end
+      @items.each do |item|
+        Rails.logger.debug "[zip add] #{item.name_for_download}"
+        zipfile.add("#{item.name_for_download}", item.object.path) { true }
+      end
+    end
+
+    respond_to do |format|
+      format.zip
+    end
+  end
+
+  def bulk_edit
+    @folders = Folder
+      .accessible_by(current_ability, :update)
+      .where( id: selection[:fids] )
+    @items = Item
+      .accessible_by(current_ability, :update)
+      .where( id: selection[:ids] )
+
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def bulk_update
+    @folders = Folder
+      .accessible_by(current_ability, :update)
+
+    @items = Item
+      .accessible_by(current_ability, :update)
+
+    Folder.transaction do
+      if (@ferror = @folders.bulk(selection)) === true
+        @ierror = @items.bulk( selection )
+        raise ActiveRecord::Rollback unless @ierror === true
+      end
+    end
+
+    respond_to do |format|
+      format.js
+    end
+
+
+  end
+
+  def bulk_destroy
+    @folders = Folder
+      .accessible_by(current_ability, :update)
+      .where( id: selection[:fids] )
+      .destroy_all
+    @items = Item
+      .accessible_by(current_ability, :update)
+      .where( id: selection[:ids] )
+      .destroy_all
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  private
+
+
 
 end

@@ -1,19 +1,23 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Download File :: <%= @transfer.name %></title>
-  </head>
-  <body>
-    <div>
-      <h1>Pobieranie pliku: <%= @transfer.name %></h1>
-      <% if @transfer.expired? %>
-        <p>Plik nie jest już dostepny</p>
-      <% else %>
-        <p title="<%= l @transfer.expires_at, format: :long %>">Plik jest jeszcze dostępny przez: <%= @transfer.expiration_distance %></p>
-        <p><%= link_to 'Pobierz', download_transfer_path(token: @transfer.token, format: :zip) %></p>
+<div class="row">
+  <div class="columns small-10 small-centered medium-8 large-6">
+    <h1>Pobieranie pliku: <%= @transfer.name %></h1>
+    <% if @transfer.expired? %>
+      <p>Plik nie jest już dostepny</p>
+    <% else %>
+      <p>Zawartość</p>
+      <ul>
+      <% @transfer.content.each do |name| %>
+      <li><%= name %></li>
       <% end %>
-    </div>
-  </body>
-</html>
-
+      </ul>
+      <p title="<%= l @transfer.expires_at, format: :long %>">Plik jest jeszcze dostępny przez: <%= @transfer.expiration_distance %></p>
+      <div class="text-center">
+      <%= link_to fa_icon('cloud-download', text: t('.download')), download_transfer_path(token: @transfer.token, format: :zip), class: [:button] %>
+      <% if current_user %>
+      <%= link_to fa_icon('folder-open', text: t('.save')), save_transfer_path(@transfer, format: :js), class: [:button], data: {remote: true} %>
+      <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
 

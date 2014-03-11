@@ -1,13 +1,12 @@
-if ( $('#edit-item-modal').length === 0) {
+if ( $('#bulk-edit-modal').length === 0) {
   $('<div data-reveal>')
     .addClass('reveal-modal small')
-    .attr('id', 'edit-item-modal')
+    .attr('id', 'bulk-edit-modal')
     <% if params[:subaction] %>
-    .html('<%= j render("items/edit/#{params[:subaction]}") %>')
+    .html('<%= j render("items/bulk_edit/#{params[:subaction]}") %>')
     <% else %>
-    .html('<%= j render("form") %>')
+    .html('<%= j render("bulk_form") %>')
     <% end %>
-
     .appendTo('body')
     .foundation()
     .on('closed', function() { $(this).remove(); })

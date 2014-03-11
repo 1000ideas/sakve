@@ -14,12 +14,10 @@ Sakve::Application.routes.draw do
         :registration => 'account'
       }
 
-    get 'items(-:folder)(/:partial)(.:format)',
-      partial: /true|false/,
+    get 'items(-:folder)(.:format)',
       to: 'items#index',
       via: :get,
-      as: :items,
-      defaults: { partial: false }
+      as: :items
 
     post 'items(-:folder)(.:format)',
       to: 'items#create',
@@ -27,19 +25,35 @@ Sakve::Application.routes.draw do
       as: :items
 
     resources :items, except: [:index, :new, :create] do
-      get :multiupload, on: :collection
-      put :share, on: :member
+      collection do
+        get :bulk_move, action: :bulk_edit, subaction: :move
+        get :bulk_tags, action: :bulk_edit, subaction: :tags
+        get :bulk_download
+        put :bulk_update
+        delete :bulk, action: :bulk_destroy
+      end
+      member do
+        get :share
+        put :share
+        get 'download(/:style)/:name(.:format)',
+          action: :download,
+          as: :download,
+          defaults: { style: :original }
+        get :rename, action: :edit, subaction: :rename
+        get :move, action: :edit, subaction: :move
+        get :tags, action: :edit, subaction: :tags
+      end
     end
 
-    match 'items/:id/download(/:style)/:name.:format',
-      to: 'items#download',
-      via: :get,
-      as: :download_item,
-      defaults: { style: :original }
 
-    resources :folders, only: [:create, :destroy] do
-      get :share, on: :member
-      put :share, on: :member
+    resources :folders, only: [:create, :update, :destroy] do
+      member do
+        get :rename, action: :edit, subaction: :rename
+        get :move, action: :edit, subaction: :move
+        get :download
+        get :share
+        put :share
+      end
     end
 
     resources :tags, only: :index
@@ -55,6 +69,10 @@ Sakve::Application.routes.draw do
     resources :transfers, except: [:show, :new] do
       collection do
         resources :files, controller: :transfer_files, only: [:create, :destroy]
+      end
+      member do
+        get :save
+        post :save
       end
     end
 

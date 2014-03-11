@@ -58,10 +58,16 @@ class Sakve
     true
 
   reload_list: (name) ->
-    items_url = $("##{name}-list").data('url');
-    $("##{name}-list").load(items_url);
+    # items_url = $("##{name}-list").data('url');
+    $.ajax(location.href)
+      .done (data) =>
+        $(data)
+          .find("##{name}-list")
+          .replaceAll("##{name}-list")
+        @selection_changed()
 
-  selection_changed: (element) ->
+
+  selection_changed: (element = null) ->
     @last_selected = element
 
     selected = $('.file-list input[type=checkbox]:checked')
@@ -102,12 +108,10 @@ class Sakve
       $(el).closest('li').toggleClass('selected', true)
       @selection_changed()
 
-    $(document).on 'before:context:ajax', '[data-context]', (event, jqXHR, settings, from_mouse) ->
-
+    $(document).on 'before:context:ajax', '#items-list [data-context]', (event, jqXHR, settings, from_mouse) ->
       input = $('input[type=checkbox]', event.target)
       form = $(event.target).closest('form')
       if from_mouse
-
         unless input.prop('checked')
           form.find('input[type=checkbox]:checked').each (idx, el) ->
             $(el).prop('checked', false).change()
@@ -124,6 +128,10 @@ class Sakve
       event.preventDefault()
       $(event.target).closest('li.folder').toggleClass('open')
 
+    $(document).on 'before:context:ajax', '#folders-list [data-context]', (event, jqXHR, settings, from_mouse) ->
+      param = "selection[fids][]=#{$(event.target).data('fid')}"
+      settings.data += "&#{encodeURI(param)}"
+      true
 
   _init_tags: ->
     $('.tags-autocomplete').autocomplete(@defaults.tags_autocomplete)
@@ -231,7 +239,6 @@ class Sakve
       source: (request, response) ->
         $.getJSON "/collaborators.json", q: request.term, response
       select: ( event, ui ) ->
-        debugger
         if $('#with_' + ui.item.type + '_' + ui.item.id).length == 0
           remove_button = $('<a>').attr('href', '#').text(I18n.t('destroy')).addClass('remove')
           $('<li>')

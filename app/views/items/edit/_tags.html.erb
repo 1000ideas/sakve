@@ -1,0 +1,9 @@
+<%= form_for(@item, html: {data: {remote: true}}) do |f| %>
+  <div class="field">
+    <%= f.label :tags %>
+    <%= f.text_field :tags, class: 'tags-autocomplete' %>
+  </div>
+
+  <%= button_tag t('.submit') %>
+  <%= link_to t('.cancel'), '#', class: "button close" %>
+<% end %>

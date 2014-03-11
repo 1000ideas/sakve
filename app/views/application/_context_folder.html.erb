@@ -1,0 +1,9 @@
+<li><%= link_to fa_icon('folder-open', text: t('.open')), items_path(folder: folder.id) %></li>
+<li><%= link_to fa_icon('cloud-download', text: t('.download')), download_folder_path(folder, format: :zip) %></li>
+<% if can? :share, folder %>
+<li><%= link_to fa_icon('link', text: t('.share')), share_folder_path(folder), remote: true %></li>
+<% end %>
+<li><%= link_to fa_icon('edit', text: t('.rename')), rename_folder_path(folder), data: {remote: true} %></li>
+<li><%= link_to fa_icon('level-up', text: t('.move')), move_folder_path(folder), data: {remote: true} %></li>
+<!-- # <li><%= link_to fa_icon('tag', text: t('.tag')) %></li> -->
+<li><%= link_to fa_icon('trash-o', text: t('.remove')), folder_path(folder), data: {remote: true,  method: :delete, confirm: t(".sure", name: folder.name) } %></li>

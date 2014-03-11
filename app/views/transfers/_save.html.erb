@@ -1,0 +1,9 @@
+<%= form_tag(save_transfer_path(@transfer, format: :js), data: {remote: true}) do |f| %>
+  <div class="field">
+    <%= label_tag :folder_id %>
+    <%= select_tag :folder_id, options_for_select(Folder.names_tree_for_user(current_user)) %>
+  </div>
+  <%= button_tag t('.submit'), data: {disable_with: t('.wait')} %>
+  <%= link_to t('.cancel'), '#', class: "button close" %>
+<% end %>
+

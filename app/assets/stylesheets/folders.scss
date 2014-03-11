@@ -31,7 +31,7 @@
   .folder {
     display: none;
     &.open {
-      display: block;
+      // display: block;
       > ul > li.folder {
         display: block;
       }

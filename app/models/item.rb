@@ -2,7 +2,7 @@ class Item < ActiveRecord::Base
   include Sakve::ItemTypes
 
   belongs_to :user
-  belongs_to :folder
+  belongs_to :folder, touch: true
   has_many :item_tags, include: :tag, dependent: :destroy
   has_many :tags, through: :item_tags
   has_many :shares, as: :resource
@@ -40,7 +40,8 @@ class Item < ActiveRecord::Base
 
   before_save :fix_mime_type, :save_tags, :default_name
 
-  attr_accessible :name, :object, :type, :user_id, :user, :tags, :folder_id, :folder
+  attr_accessible :name, :object, :type, :user_id, :user, :tags, :folder_id, :folder,
+    :object_file_name
 
   validates :object,
     attachment_presence: true,
@@ -48,6 +49,36 @@ class Item < ActiveRecord::Base
 
   validates :folder_id, presence: true
   validates :name, uniqueness: { scope: :folder_id, case_sensitive: false }
+
+  def self.subaction(selection)
+    ba = selection[:subaction]
+    raise ArgumentError, "Unknown subaction '#{ba}'" unless methods.grep(/bulk_#{ba}/).any?
+    ba
+  end
+
+  def self.bulk(selection)
+    self
+      .where(id: selection[:ids])
+      .send(:"bulk_#{subaction(selection)}", selection)
+  end
+
+  def self.bulk_move(selection)
+    self.update_all(folder_id: selection[:folder_id])
+    true
+  end
+
+  def self.bulk_tags(selection)
+    output = true
+
+    self.transaction do
+      all.each do |item|
+        item.instance_variable_set("@readonly", false)
+        item.tags_list << (Tag.from_list(selection[:tags]) - item.tags_list)
+      end
+    end
+    output
+  end
+
 
   def public?
     self.folder.global?

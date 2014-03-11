@@ -1,0 +1,21 @@
+var form = $('#bulk-edit-modal');
+<%- if @ferror != true -%>
+var errors = $('<%= j render(partial: 'l/partials/errors', object: @ferror).strip.html_safe %>');
+var error_explanation = form.find('#error_explanation');
+if (error_explanation.length == 0) {
+  form.prepend( errors )
+} else {
+  error_explanation.replaceWith( errors );
+}
+<%- elsif @ierror != true -%>
+var errors = $('<%= j render(partial: 'l/partials/errors', object: @ierror).strip.html_safe %>');
+var error_explanation = form.find('#error_explanation');
+if (error_explanation.length == 0) {
+  form.prepend( errors )
+} else {
+  error_explanation.replaceWith( errors );
+}
+<% else %>
+sakve.reload_list('items')
+form.foundation('reveal', 'close');
+<% end %>

@@ -1,9 +1,8 @@
 <ul class="actions">
-  <li><%= link_to fa_icon('cloud-download', text: t('.download')) %></li>
-  <li><%= link_to fa_icon('link', text: t('.share')) %></li>
-  <li><%= link_to fa_icon('picture-o', text: t('.show')) %></li>
-  <li><%= link_to fa_icon('edit', text: t('.rename')) %></li>
-  <li><%= link_to fa_icon('level-up', text: t('.move')) %></li>
-  <li><%= link_to fa_icon('tag', text: t('.tag')) %></li>
-  <li><%= link_to fa_icon('trash-o', text: t('.remove')) %></li>
+  <% if @item %>
+    <% name = @item.class.name.downcase %>
+    <%= render "context_#{name}", :"#{name}" => @item %>
+  <% else %>
+    <%= render "context_bulk" %>
+  <% end %>
 </ul>

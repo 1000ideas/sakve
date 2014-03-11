@@ -36,6 +36,7 @@ rerun.txt
 pickle-email-*.html
 .project
 uploads/*
+folder-zips/*
 
 ###Ruby###
 

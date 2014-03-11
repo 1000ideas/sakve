@@ -1,18 +1,15 @@
-if ( $('#edit-item-modal').length === 0) {
+if ( $('#edit-folder-modal').length === 0) {
   $('<div data-reveal>')
     .addClass('reveal-modal small')
-    .attr('id', 'edit-item-modal')
+    .attr('id', 'edit-folder-modal')
     <% if params[:subaction] %>
-    .html('<%= j render("items/edit/#{params[:subaction]}") %>')
+    .html('<%= j render("folders/edit/#{params[:subaction]}") %>')
     <% else %>
     .html('<%= j render("form") %>')
     <% end %>
-
     .appendTo('body')
     .foundation()
     .on('closed', function() { $(this).remove(); })
     .on('click', 'a.close', function() { $(this).closest('[data-reveal]').foundation('reveal', 'close') })
     .foundation('reveal', 'open')
-    .find('.tags-autocomplete')
-    .autocomplete(sakve.defaults.tags_autocomplete)
 }

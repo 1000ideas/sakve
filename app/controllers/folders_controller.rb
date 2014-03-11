@@ -2,8 +2,8 @@ class FoldersController < ApplicationController
   def create
     @folder = Folder.new(params[:folder])
     @folder.user = current_user
-
     authorize! :create, @folder
+
 
     if @folder.save
       @folders = Folder.global_root.try(:subfolders) || []
@@ -12,6 +12,39 @@ class FoldersController < ApplicationController
 
     respond_to do |format|
       format.js
+    end
+  end
+
+  def edit
+    @folder = Folder.find(params[:id])
+    authorize! :update, @folder
+
+    respond_to do |format|
+      format.html do
+        if params[:subaction]
+          render partial: "folders/edit/#{params[:subaction]}"
+        end
+      end
+      format.js
+    end
+  end
+
+  def update
+    @folder = Folder.find(params[:id])
+    authorize! :update, @folder
+
+    @folder.update_attributes(params[:folder])
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def download
+    @folder = Folder.find(params[:id])
+    authorize! :download, @folder
+
+    respond_to do |format|
+      format.zip
     end
   end
 

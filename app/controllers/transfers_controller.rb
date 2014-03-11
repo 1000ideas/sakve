@@ -23,11 +23,26 @@ class TransfersController < ApplicationController
     @transfer = Transfer.find_by_token(params[:token])
 
     respond_to do |format|
-      format.html { render layout: false }
+      format.html
       format.zip do
         head(:gone) and return if @transfer.expired?
         send_file @transfer.object.path
       end
+    end
+  end
+
+  def save
+    @transfer = Transfer.find(params[:id])
+    authorize! :read, @transfer
+
+    if request.post?
+      @folder = Folder.find(params[:folder_id])
+      authorize! :update, @folder
+      @success = @folder.save_transfer(@transfer, current_user)
+    end
+
+    respond_to do |format|
+      format.js
     end
   end
 

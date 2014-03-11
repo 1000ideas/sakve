@@ -1,0 +1,9 @@
+<%= form_for(@item, html: {data: {remote: true}}) do |f| %>
+  <div class="field">
+    <%= f.label :folder_id %>
+    <%= f.select :folder_id, options_for_select(Folder.names_tree_for_user(current_user), f.object.folder_id) %>
+  </div>
+
+  <%= button_tag t('.submit') %>
+  <%= link_to t('.cancel'), '#', class: "button close" %>
+<% end %>

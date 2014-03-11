@@ -1,6 +1,15 @@
 pl:
   application:
-    context:
+    context_folder:
+      download: Pobierz
+      share: Udostępnij
+      open: Otwórz
+      rename: Zmień nazwę
+      move: Przenieś
+      tag: Otaguj
+      remove: Usuń
+      sure: "Usunąć trwale folder %{name}?"
+    context_item:
       download: Pobierz
       share: Udostępnij
       show: Pokaż
@@ -8,3 +17,13 @@ pl:
       move: Przenieś
       tag: Otaguj
       remove: Usuń
+      sure: "Usunąć %{name}?"
+    context_bulk:
+      download: Pobierz
+      share: Udostępnij
+      show: Pokaż
+      rename: Zmień nazwę
+      move: Przenieś
+      tag: Otaguj
+      remove: Usuń
+      sure: "Usunąć zaznaczone?"

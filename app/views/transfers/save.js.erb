@@ -1,0 +1,15 @@
+<% if request.post? and @success %>
+sakve.reload_list('transfers');
+$('#save-transfer-modal').foundation('reveal', 'close');
+<% elsif request.post? and !@success %>
+<% else %>
+$('<div data-reveal>')
+  .addClass('reveal-modal small')
+  .attr('id', 'save-transfer-modal')
+  .html('<%= j render("save") %>')
+  .appendTo('body')
+  .foundation()
+  .on('closed', function() { $(this).remove(); })
+  .on('click', 'a.close', function() { $(this).closest('[data-reveal]').foundation('reveal', 'close') })
+  .foundation('reveal', 'open')
+<% end %>
