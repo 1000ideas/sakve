@@ -9,11 +9,23 @@ pl:
     new:
       title: Dodawanie Transfer
     index:
-      title: transfers
+      title: Przesyłanie pliku
       new_transfer: 'Prześlij pliki'
       infinite: 'zawsze'
     edit:
       title: Edycja Transfer
+    download:
+      download: "Zapisz na urządzeniu"
+      save: "Zapisz w folderach Sakve"
+    save:
+      submit: "Zapisz"
+      cancel: "Anuluj"
+      wait: "Przetwarzanie..."
+    transfer:
+      download: "Pobierz"
+      save: "Zapisz w katalogu Sakve"
+      destroy: "Usuń"
+      sure: "Usunąć?"
   menu:
     transfers: Transfers
   activerecord:

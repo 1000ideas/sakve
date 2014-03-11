@@ -1,6 +1,9 @@
+require 'zip'
+
 class Transfer < ActiveRecord::Base
 
   belongs_to :user
+  has_many :folders
   scope :expired, lambda { where('`expires_at` < ?', DateTime.now) }
   scope :active, lambda { where('`expires_at` >= ?', DateTime.now) }
   scope :for_user, lambda { |user| user.admin? ? where(true) : where(user_id: user.id) }
@@ -32,6 +35,18 @@ class Transfer < ActiveRecord::Base
     @group_token = value
     compress_files
     group_token
+  end
+
+  def saved_by_user(user)
+    folders.where(user_id: user.id).first
+  end
+
+  def content
+    Zip::File.open(object.path) do |f|
+      f.entries.map do |entry|
+        entry.name
+      end
+    end
   end
 
   def files

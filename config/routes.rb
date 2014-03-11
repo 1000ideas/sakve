@@ -32,7 +32,6 @@ Sakve::Application.routes.draw do
         put :bulk_update
         delete :bulk, action: :bulk_destroy
       end
-      # get :multiupload, on: :
       member do
         get :share
         put :share
@@ -70,6 +69,10 @@ Sakve::Application.routes.draw do
     resources :transfers, except: [:show, :new] do
       collection do
         resources :files, controller: :transfer_files, only: [:create, :destroy]
+      end
+      member do
+        get :save
+        post :save
       end
     end
 

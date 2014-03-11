@@ -40,7 +40,8 @@ class Item < ActiveRecord::Base
 
   before_save :fix_mime_type, :save_tags, :default_name
 
-  attr_accessible :name, :object, :type, :user_id, :user, :tags, :folder_id, :folder
+  attr_accessible :name, :object, :type, :user_id, :user, :tags, :folder_id, :folder,
+    :object_file_name
 
   validates :object,
     attachment_presence: true,

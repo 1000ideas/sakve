@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130402131439) do
+ActiveRecord::Schema.define(:version => 20140311115050) do
 
   create_table "attachments", :force => true do |t|
     t.string   "upload_file_name"
@@ -26,18 +26,21 @@ ActiveRecord::Schema.define(:version => 20130402131439) do
     t.string   "name"
     t.integer  "parent_id"
     t.integer  "user_id"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
-    t.boolean  "global",     :default => false, :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
+    t.boolean  "global",      :default => false, :null => false
+    t.integer  "transfer_id"
   end
 
+  add_index "folders", ["transfer_id"], :name => "index_folders_on_transfer_id"
+
   create_table "group_translations", :force => true do |t|
-    t.integer  "group_id",    :null => false
-    t.string   "locale",      :null => false
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "group_id"
+    t.string   "locale"
     t.string   "title"
     t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   add_index "group_translations", ["group_id"], :name => "index_group_translations_on_group_id"

@@ -2,7 +2,9 @@ require 'zip'
 
 class Folder < ActiveRecord::Base
   belongs_to :user
+  belongs_to :transfer, conditions: ['`expires_at` >= ?', DateTime.now]
   belongs_to :parent, class_name: 'Folder', touch: true
+
   has_many :subfolders, class_name: 'Folder', foreign_key: :parent_id
   has_many :items, dependent: :destroy
   has_many :shares, as: :resource
@@ -10,7 +12,8 @@ class Folder < ActiveRecord::Base
   has_many :groups,  through: :shares, source: :collaborator, source_type: 'Group'
 
 
-  attr_accessible :name, :parent_id, :user_id, :user, :parent, :global
+  attr_accessible :name, :parent_id, :user_id, :user, :parent, :global,
+    :transfer_id
 
   validates :name, presence: true, if: :has_parent?
   validates :name, uniqueness: {scope: [:parent_id, :user_id, :global], case_sensitive: false}, unless: :global?
@@ -80,6 +83,26 @@ class Folder < ActiveRecord::Base
     output
   end
 
+  def save_transfer(transfer, user)
+    transaction do
+      Zip::File.open(transfer.object.path) do |zf|
+        tfolder = self.subfolders.create! name: get_child_name(transfer.name),
+          user: user,
+          transfer_id: transfer.id
+        zf.each do |file|
+          Rails.logger.debug file.inspect
+          file.get_input_stream do |io|
+            item = Item.create! object: StringIO.new(io.read),
+              object_file_name: file.name,
+              folder: tfolder,
+              user: user
+          end
+        end
+      end
+    end
+    true
+  end
+
   def shared_for? user
     users.exists? (user) || user.groups.map {|g| groups.exists?(g) }.inject{|a,b| a || b }
   end
@@ -87,6 +110,7 @@ class Folder < ActiveRecord::Base
   def allowed_for? user
     global? || user == user || shared_for?(user)
   end
+
 
   def name_for_select
     name || (global? ? I18n.t('folders.global_root_folder') : I18n.t('folders.user_root_folder'))
@@ -182,6 +206,18 @@ class Folder < ActiveRecord::Base
   end
 
 protected
+
+  def get_child_name(name)
+    parts = name.split('.')
+    ext = parts.pop if parts.size > 1
+    orig = parts.join('.')
+    it = 1
+    while self.subfolders.any? {|f| f.name == name }
+      name = ["#{orig}.#{it}", ext].compact.join('.')
+      it += 1
+    end
+    name
+  end
 
   def loop_in_hierarchy
     f = self

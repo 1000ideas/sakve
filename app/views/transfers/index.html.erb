@@ -1,14 +1,15 @@
-<% title t('transfers.index.title') %>
-<div class="row collapse">
-  <section class="columns small-12 text-right">
-    <%= link_to t('.new_transfer'), '#', data: {:'reveal-id' => 'transfer-files-modal'}, class: :button %>
-  </section>
-</div>
+<% title t('.title') %>
+
+<% content_for(:buttons) do %>
+  <%= link_to t('.new_transfer'), '#', data: {:'reveal-id' => 'transfer-files-modal'}, class: [:button, :tiny] %>
+<% end %>
+
 <div class="row collapse">
   <ul id="transfers-list" class="file-list" data-url="<%= url_for((params || {}).merge(partial: true)) %>">
     <%= render @transfers %>
   </ul>
 </div>
+
 <div id="transfer-files-modal" class="reveal-modal small" data-reveal>
   <%= render partial: 'form' %>
 </div>
