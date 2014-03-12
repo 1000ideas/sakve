@@ -15,8 +15,8 @@ pl:
     edit:
       title: Edycja Transfer
     download:
-      download: "Zapisz na urządzeniu"
-      save: "Zapisz w folderach Sakve"
+      download: "Zapisz plik"
+      save: "Zapisz w Sakve"
     save:
       submit: "Zapisz"
       cancel: "Anuluj"
