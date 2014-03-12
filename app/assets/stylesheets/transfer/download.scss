@@ -1,0 +1,85 @@
+@import 'overrides';
+
+body {
+  color: $primary-color;
+
+  h1, h2, h3, h4, h5, h6, p {
+    color: $primary-color;
+    small {
+      color: $primary-color;
+    }
+  }
+
+  background-size: cover;
+  @for $i from 1 through 7 {
+    &.cover-#{$i} { background: image-url('transfer/cover-#{$i}.jpg') no-repeat center;}
+  }
+
+  .row.download {
+    > .columns {
+      position: relative;
+      max-width: em-calc(1024/3);
+      padding-top: 1px;
+      background: #fff;
+
+      padding-left: 2.5em;
+      padding-right: 2.5em;
+      padding-bottom: 1em;
+
+      .logo {
+        position: absolute;
+        margin-top: 2em;
+        right: 100%;
+        display: block;
+        width: 12em;
+
+        @media #{$small-only} {
+          position: static;
+        }
+
+      }
+    }
+  }
+
+  h1 {
+    margin: 1.6em 0 1em 0;
+    font-size: 2rem;
+
+    small {
+      font-size: .9rem;
+      display: block;
+      text-transform: uppercase;
+      line-height: 1em;
+      margin-bottom: .5em;
+    }
+  }
+
+  h3 {
+    font-size: .9rem;
+    text-transform:  uppercase;
+    margin-bottom: 1em;
+  }
+
+  ul {
+    list-style: none;
+    margin-left: 0;
+    font-size: .9rem;
+    margin-bottom: 2em;
+
+    li {
+      margin-bottom: .5em;
+    }
+  }
+
+  .buttons {
+    margin-top: 2em;
+
+    a {
+      font-size: 1.5em;
+
+      .fa {
+        margin-right: .2em;
+      }
+    }
+  }
+}

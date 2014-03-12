@@ -24,7 +24,7 @@ pl:
       upload: 'Dodaj pliki'
       new_folder: 'Utwórz folder'
       public: 'Pliki publiczne'
-      private: 'Prywatne pliki użytkownika'
+      private: 'Pliki prywatne'
       shared: 'Współdzielone pliki'
       breadcrumbs: 'Gdzie ja jestem?'
     multiupload:

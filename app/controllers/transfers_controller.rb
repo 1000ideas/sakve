@@ -23,7 +23,7 @@ class TransfersController < ApplicationController
     @transfer = Transfer.find_by_token(params[:token])
 
     respond_to do |format|
-      format.html
+      format.html { render layout: 'download' }
       format.zip do
         head(:gone) and return if @transfer.expired?
         send_file @transfer.object.path
