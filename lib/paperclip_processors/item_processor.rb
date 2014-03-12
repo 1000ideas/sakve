@@ -3,7 +3,7 @@ module PaperclipProcessors
     # FFMpeg executable path
     mattr_accessor :ffmpeg_path
     @@ffmpeg_path = '/usr/bin/ffmpeg'
-    
+
     # FFProbe executable path
     mattr_accessor :ffprobe_path
     @@ffprobe_path = '/usr/bin/ffprobe'
@@ -35,13 +35,13 @@ module PaperclipProcessors
           nh = (self.height / ( self.width / dst.width.to_f )).to_i
           offset = (dst.height - nh)
           [ VideoGeometry.new(dst.width, nh),
-            VideoGeometry.new(dst.width, dst.height), 
+            VideoGeometry.new(dst.width, dst.height),
             VideoGeometry.new(0, offset) ]
         else
           nw = (self.width / ( self.height / dst.height.to_f )).to_i
           offset = (dst.width - nw)
           [ VideoGeometry.new(nw, dst.height),
-            VideoGeometry.new(dst.width, dst.height), 
+            VideoGeometry.new(dst.width, dst.height),
             VideoGeometry.new(offset, 0) ]
         end
       end
@@ -62,6 +62,9 @@ module PaperclipProcessors
       @attachment = attachment
 
       @current_format = File.extname(@file.path)
+      if @current_format.blank? and @attachment.respond_to?(:original_filename)
+        @current_format = File.extname(@attachment.original_filename)
+      end
       @basename = File.basename(@file.path, @current_format)
     end
 
@@ -74,7 +77,8 @@ module PaperclipProcessors
     end
 
     def jodconvert(params = '', options = {})
-      Paperclip.run("#{@@java_path} -jar #{@@jod_path}", params, options, log_command: true)
+      # self.class.ensure_office_is_running!
+      Paperclip.run("#{@@java_path} -jar #{@@jod_path}", "#{params} 2>&1", options, log_command: true)
     end
 
     def make
@@ -95,9 +99,9 @@ module PaperclipProcessors
 
     def process_video
       dst = Tempfile.new([@basename, ".#{@format}"])
-      
+
       if format == :png
-        img = Tempfile.new(["#{@basename}_preview", ".#{@format}"]) 
+        img = Tempfile.new(["#{@basename}_preview", ".#{@format}"])
 
         ffmpeg('-y -itsoffset -4 -i :src -vcodec mjpeg -vframes 1 -an -f rawvideo :img',
                src: File.expand_path(@file.path),
@@ -110,12 +114,12 @@ module PaperclipProcessors
         command << '-crop' << "'#{crop}'" if crop
         command << ':dst'
 
-        convert(command.join(' '), 
+        convert(command.join(' '),
                 src: File.expand_path(img.path),
                 dst: File.expand_path(dst.path) )
 
       elsif [:mp4, :flv].include? format
-        ffmpeg(video_transformation_command(format), 
+        ffmpeg(video_transformation_command(format),
                src: File.expand_path(@file.path),
                dst: File.expand_path(dst.path) )
       end
@@ -142,7 +146,10 @@ module PaperclipProcessors
         Rails.logger.debug @file.path
         Rails.logger.debug File.exists? @file.path
         pdf = Tempfile.new([@basename, '.pdf'])
-        jodconvert(':src :dst', src: File.expand_path(@file.path), dst: File.expand_path(pdf.path))
+        jodconvert('-i :format :src :dst',
+          format: @current_format.gsub('.', ''),
+          src: File.expand_path(@file.path),
+          dst: File.expand_path(pdf.path))
 
         current_geometry = Paperclip::Geometry.from_file(pdf)
         scale, crop = current_geometry.transformation_to(@geometry, @crop)
@@ -156,12 +163,15 @@ module PaperclipProcessors
         command << '-crop' << "'#{crop}'" if crop
         command << ':dst'
 
-        convert(command.join(' '), 
+        convert(command.join(' '),
                 src: "#{File.expand_path(pdf.path)}[0]",
                 dst: File.expand_path(dst.path) )
 
       elsif format == :pdf
-        jodconvert(':src :dst', src: File.expand_path(@file.path), dst: File.expand_path(dst.path))
+        jodconvert('-i :format :src :dst',
+          format: @current_format.gsub('.', ''),
+          src: File.expand_path(@file.path),
+          dst: File.expand_path(dst.path))
       end
 
       dst
@@ -180,7 +190,7 @@ module PaperclipProcessors
       command << '-crop' << "'#{crop}'" if crop
       command << ':dst'
 
-      convert(command.join(' '), 
+      convert(command.join(' '),
               src: File.expand_path(@file.path),
               dst: File.expand_path(dst.path) )
       dst
@@ -201,7 +211,7 @@ module PaperclipProcessors
       command << '-crop' << "'#{crop}'" if crop
       command << ':dst'
 
-      convert(command.join(' '), 
+      convert(command.join(' '),
               src: "#{File.expand_path(@file.path)}[0]",
               dst: File.expand_path(dst.path) )
       dst
@@ -212,7 +222,7 @@ module PaperclipProcessors
 
       icon = @attachment.instance.icon_name
       icon_path = Rails.root.join('lib', 'assets', 'file_icons', "#{icon}.png")
-    
+
       hpos = icon == :archive ? -32 : -27
       vpos = icon == :archive ? 24 : -36
 
@@ -227,11 +237,13 @@ module PaperclipProcessors
       #command << '-crop' << "'#{crop}'" if crop
       command << ':dst'
 
-      convert(command.join(' '), 
+      convert(command.join(' '),
               src: File.expand_path(icon_path),
-              text: @current_format, 
+              text: @current_format,
               dst: File.expand_path(dst.path) )
       dst
     end
+
+
   end
 end
