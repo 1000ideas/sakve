@@ -1,5 +1,14 @@
 module ApplicationHelper
 
+  def logo_tag
+    content_tag(:div, class: :logo) do
+      [
+        link_to( image_tag('1000i-logo.svg'), 'http://1000i.pl', target: '_blank' ),
+        link_to( image_tag('sakve-logo.svg'), root_path )
+      ].join.html_safe
+    end
+  end
+
   def folder_classes(folder)
     class_name = [:folder]
     class_name << :current if @current_folder == folder
