@@ -49,7 +49,7 @@ class Sakve
     # console.profile('Setup');
     $(document).foundation();
 
-    for module in ['tags', 'multiupload', 'transfer', 'drag_drop', 'share', 'folders', 'selection']
+    for module in ['tags', 'multiupload', 'transfer', 'drag_drop', 'share', 'folders', 'selection', 'body_cover']
       @["_init_#{module}"]()
 
     @last_selected = null
@@ -77,6 +77,19 @@ class Sakve
       this.name.match(/fid/i)
     $('.buttons-line').toggleClass('folders-selected', folders.length > 0)
 
+
+  _init_body_cover: ->
+    path = $('[data-cover]').data('cover')
+    if path?
+      img = new Image()
+      img.onload = (event) ->
+        $('[data-cover]')
+          .css('background-image', "url('#{path}')")
+          .addClass('loaded')
+      img.onerror = (event) ->
+        $('[data-cover]')
+          .addClass('loaded')
+      img.src = path
 
   _init_selection: ->
     $(document).on 'change', '.file-list input[type=checkbox]', (event) =>

@@ -10,7 +10,8 @@
     <%= javascript_include_tag "vendor/modernizr" %>
     <%= csrf_meta_tags %>
   </head>
-  <body class="cover-<%= (1..7).to_a.shuffle.first %>">
+  <body>
+    <div class="cover" data-cover="<%= image_path("transfer/cover-#{(1..7).to_a.shuffle.first}.jpg") %>"></div>
     <%= yield %>
     <%= javascript_include_tag "application" %>
   </body>
