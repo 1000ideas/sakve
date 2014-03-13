@@ -5,9 +5,33 @@
 <% end %>
 
 <div class="row collapse">
-  <ul id="transfers-list" class="file-list" data-url="<%= url_for((params || {}).merge(partial: true)) %>">
+  <section class="quick-transfer columns hide-for-small medium-4 large-2">
+    <h3><%= t('.quick-transfer') %></h3>
+    <%= form_for(@transfer, remote: true, format: :js, html: {id: :'quick-transfer-form'}) do |f| %>
+      <%= hidden_field_tag :form_id, 'quick-transfer-form' %>
+      <%= render partial: 'l/partials/errors', object: @transfer.errors %>
+      <% if f.object.new_record? %>
+      <div class="field">
+        <%= f.hidden_field :group_token %>
+        <%= file_field_tag(:object, multiple: true, class: 'transfer-fileupload', data: { value: t('.fileupload', default: 'Select files'), file_upload: true, url: files_path(format: :json) }) %>
+      </div>
+      <% end %>
+      <% if f.object.new_record? %>
+      <div class="uploaded-files">
+        <%= render f.object.files %>
+      </div>
+      <% end %>
+      <div class="actions">
+        <%= f.button %>
+      </div>
+    <% end %>
+
+  </section>
+  <section class="small-12 medium-8 large-10 columns">
+  <ul id="transfers-list" class="file-list">
     <%= render @transfers %>
   </ul>
+  </section>
 </div>
 
 <div id="transfer-files-modal" class="reveal-modal small" data-reveal>

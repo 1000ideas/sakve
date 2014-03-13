@@ -1,4 +1,4 @@
-class TransferMailer < ActionMailer::Base
+nclass TransferMailer < ActionMailer::Base
   default from: "transfer@sakve.pl"
 
   def after_create(transfer)

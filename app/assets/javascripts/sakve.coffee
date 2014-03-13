@@ -156,8 +156,8 @@ class Sakve
       }
 
   _init_transfer: ->
-    default_value = $( "#transfer_expires_at" ).data('default')
-    $( "#expires_at_slider" )
+    default_value = $( "#transfer_expires_in" ).data('default')
+    $( "#expires_in_slider" )
       .slider
         value: default_value
         min: 1
@@ -172,7 +172,7 @@ class Sakve
       @fileupload_with_dropzone el, {
         url: $(el).data('url')
         add: (event, data) =>
-          group = $(event.target.form).children('.group').first()
+          group = $(event.target.form).children('.uploaded-files').first()
           file = data.files[0]
           data.context = @views
             .progressbar( file.name )
@@ -182,8 +182,9 @@ class Sakve
         progress: @defaults.on_progress
         done: (event, data) =>
           result = data.result
-          uploaded = @views.uploaded(result.id, result.name, data.jqXHR.getResponseHeader('Location'))
-          $('#uploaded-files').append( uploaded )
+          uploaded = @views
+            .uploaded(result.id, result.name, data.jqXHR.getResponseHeader('Location'))
+            .appendTo $(event.target.form).children('.uploaded-files')
           data.context.remove()
           $("input[type=submit], button", data.form).prop('disabled', false)
         error: (event, data) ->
