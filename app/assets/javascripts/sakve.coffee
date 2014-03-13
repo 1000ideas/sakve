@@ -49,7 +49,9 @@ class Sakve
     # console.profile('Setup');
     $(document).foundation();
 
-    for module in ['tags', 'multiupload', 'transfer', 'drag_drop', 'share', 'folders', 'selection', 'body_cover']
+    for module in ['tags', 'multiupload', 'transfer',
+      'drag_drop', 'share', 'folders', 'selection', 'body_cover',
+      'clipboard']
       @["_init_#{module}"]()
 
     @last_selected = null
@@ -77,6 +79,11 @@ class Sakve
       this.name.match(/fid/i)
     $('.buttons-line').toggleClass('folders-selected', folders.length > 0)
 
+  _init_clipboard: ->
+    ZeroClipboard.config
+      swfPath: $('meta[name="zeroclipboard"]').attr('content')
+      moviePath: $('meta[name="zeroclipboard"]').attr('content')
+      debug: true
 
   _init_body_cover: ->
     path = $('[data-cover]').data('cover')
@@ -120,6 +127,14 @@ class Sakve
     $('.file-list input[type=checkbox]:checked').each (idx, el) =>
       $(el).closest('li').toggleClass('selected', true)
       @selection_changed()
+
+    $(document).on 'context:open', '[data-context-holder]', (event) ->
+      event.target.clipboard = new ZeroClipboard $('[data-clipboard-text]', event.target)
+      event.target.clipboard.on 'complete', (client, args) ->
+        window.context_menu.close_all_context_menus()
+    $(document).on 'context:close', '[data-context-holder]', (event) ->
+      if event.target.clipboard?
+        event.target.clipboard.destroy()
 
     $(document).on 'before:context:ajax', '#items-list [data-context]', (event, jqXHR, settings, from_mouse) ->
       input = $('input[type=checkbox]', event.target)

@@ -1,5 +1,6 @@
 class ContextMenu
   close_all_context_menus: ->
+    $('[data-context-holder]').trigger('context:close')
     $('[data-context-holder]').remove()
     $('[data-context-button].opened')
       .removeClass('opened')
@@ -35,6 +36,7 @@ class ContextMenu
         .toggleClass('from-button', !from_mouse)
         .css(top: y, left: x)
         .show()
+        .trigger('context:open')
 
     $(document).on 'contextmenu', '[data-context]', (event) =>
       event.preventDefault()
@@ -64,4 +66,4 @@ class ContextMenu
         button.addClass('opened')
       false
 
-jQuery -> ( context_menu = new ContextMenu() )
+jQuery -> ( window.context_menu = new ContextMenu() )

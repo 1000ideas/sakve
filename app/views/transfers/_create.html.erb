@@ -1,0 +1,9 @@
+<h2>Utworzono transfer</h2>
+<div class="row collapse">
+  <div class="columns small-10">
+    <%= text_field_tag 'clipboard-text', download_transfer_url(token: @transfer.token) %>
+  </div>
+  <div class="columns small-2">
+    <%= link_to 'Copy', '#', class: 'button tiny copy-to-clipboard', data: {clipboard_target: 'clipboard-text'} %>
+  </div>
+</div>

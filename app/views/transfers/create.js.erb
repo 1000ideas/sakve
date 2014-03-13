@@ -20,6 +20,23 @@ form
   .parent()
   .foundation('reveal', 'close')
 <% end %>
+modal = $('<div data-reveal>')
+  .addClass('reveal-modal small')
+  .attr('id', 'transfer-created-modal')
+  .html('<%= j render("create") %>')
+  .appendTo('body')
+  .foundation()
+  .on('closed', function() {
+    if (this.clipboard != null) {
+      this.clipboard.destroy();
+    }
+    $(this).remove();
+   })
+  .foundation('reveal', 'open')
+
+
+modal.prop('clipboard', ZeroClipboard( modal.find('.copy-to-clipboard') ));
+
 <%- @transfer = Transfer.new(user: current_user) -%>
 var default_value = form.find('#transfer_expires_at').data('default')
 form.find('#transfer_name, #transfer_recipients').val('');
