@@ -23,6 +23,7 @@ pl:
       wait: "Przetwarzanie..."
     transfer:
       download: "Pobierz"
+      clipboard: "Kopiuj do schowka"
       save: "Zapisz w katalogu Sakve"
       destroy: "Usuń"
       sure: "Usunąć?"

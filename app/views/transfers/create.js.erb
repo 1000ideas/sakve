@@ -1,4 +1,5 @@
-var form = $('#new_transfer');
+var form = $('#<%= params[:form_id] %>');
+
 <% if @transfer.errors.any? %>
 var errors = $("<%= j render partial: 'l/partials/errors', object: @transfer.errors %>".trim());
 var error_explanation = form.find('#error_explanation');
@@ -14,14 +15,33 @@ $(form).foundation({alert: {animation: 'slideUp'}})
 <% else %>
 
 sakve.reload_list('transfers');
+<% if /modal/ === params[:form_id] %>
 form
   .parent()
   .foundation('reveal', 'close')
+<% end %>
+modal = $('<div data-reveal>')
+  .addClass('reveal-modal small')
+  .attr('id', 'transfer-created-modal')
+  .html('<%= j render("create") %>')
+  .appendTo('body')
+  .foundation()
+  .on('closed', function() {
+    if (this.clipboard != null) {
+      this.clipboard.destroy();
+    }
+    $(this).remove();
+   })
+  .foundation('reveal', 'open')
+
+
+modal.prop('clipboard', ZeroClipboard( modal.find('.copy-to-clipboard') ));
+
 <%- @transfer = Transfer.new(user: current_user) -%>
-default_value = form.find('#transfer_expires_at').data('default')
+var default_value = form.find('#transfer_expires_at').data('default')
 form.find('#transfer_name, #transfer_recipients').val('');
 form.find('#transfer_group_token').val('<%= @transfer.group_token %>');
-form.find('#expires_at_slider').slider('value', default_value);
-$('#uploaded-files').text('');
+form.find('#expires_in_slider').slider('value', default_value);
+form.find('.uploaded-files').text('');
 <% end %>
 

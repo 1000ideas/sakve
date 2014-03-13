@@ -11,7 +11,7 @@ class TransfersController < ApplicationController
     respond_to do |format|
       format.html do
         if request.xhr?
-          render @transfers
+          render layout: false
         else
           render
         end
@@ -57,11 +57,11 @@ class TransfersController < ApplicationController
   def create
     authorize! :create, Transfer
     @transfer = Transfer.new(params[:transfer])
-    if params[:transfer][:expires_at] == "\u{221e}"
-      @transfer.expires_at = DateTime.now + 25.years
-    else
-      @transfer.expires_at = DateTime.now + params[:transfer][:expires_at].to_i.days
-    end
+    # if params[:transfer][:expires_at] == "\u{221e}"
+    #   @transfer.expires_at = DateTime.now + 25.years
+    # else
+    #   @transfer.expires_at = DateTime.now + params[:transfer][:expires_at].to_i.days
+    # end
     @transfer.user = current_user
 
     respond_to do |format|

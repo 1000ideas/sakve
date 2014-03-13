@@ -49,7 +49,9 @@ class Sakve
     # console.profile('Setup');
     $(document).foundation();
 
-    for module in ['tags', 'multiupload', 'transfer', 'drag_drop', 'share', 'folders', 'selection']
+    for module in ['tags', 'multiupload', 'transfer',
+      'drag_drop', 'share', 'folders', 'selection', 'body_cover',
+      'clipboard']
       @["_init_#{module}"]()
 
     @last_selected = null
@@ -77,6 +79,24 @@ class Sakve
       this.name.match(/fid/i)
     $('.buttons-line').toggleClass('folders-selected', folders.length > 0)
 
+  _init_clipboard: ->
+    ZeroClipboard.config
+      swfPath: $('meta[name="zeroclipboard"]').attr('content')
+      moviePath: $('meta[name="zeroclipboard"]').attr('content')
+      debug: true
+
+  _init_body_cover: ->
+    path = $('[data-cover]').data('cover')
+    if path?
+      img = new Image()
+      img.onload = (event) ->
+        $('[data-cover]')
+          .css('background-image', "url('#{path}')")
+          .addClass('loaded')
+      img.onerror = (event) ->
+        $('[data-cover]')
+          .addClass('loaded')
+      img.src = path
 
   _init_selection: ->
     $(document).on 'change', '.file-list input[type=checkbox]', (event) =>
@@ -107,6 +127,14 @@ class Sakve
     $('.file-list input[type=checkbox]:checked').each (idx, el) =>
       $(el).closest('li').toggleClass('selected', true)
       @selection_changed()
+
+    $(document).on 'context:open', '[data-context-holder]', (event) ->
+      event.target.clipboard = new ZeroClipboard $('[data-clipboard-text]', event.target)
+      event.target.clipboard.on 'complete', (client, args) ->
+        window.context_menu.close_all_context_menus()
+    $(document).on 'context:close', '[data-context-holder]', (event) ->
+      if event.target.clipboard?
+        event.target.clipboard.destroy()
 
     $(document).on 'before:context:ajax', '#items-list [data-context]', (event, jqXHR, settings, from_mouse) ->
       input = $('input[type=checkbox]', event.target)
@@ -156,8 +184,8 @@ class Sakve
       }
 
   _init_transfer: ->
-    default_value = $( "#transfer_expires_at" ).data('default')
-    $( "#expires_at_slider" )
+    default_value = $( "#transfer_expires_in" ).data('default')
+    $( "#expires_in_slider" )
       .slider
         value: default_value
         min: 1
@@ -172,7 +200,7 @@ class Sakve
       @fileupload_with_dropzone el, {
         url: $(el).data('url')
         add: (event, data) =>
-          group = $(event.target.form).children('.group').first()
+          group = $(event.target.form).children('.uploaded-files').first()
           file = data.files[0]
           data.context = @views
             .progressbar( file.name )
@@ -182,8 +210,9 @@ class Sakve
         progress: @defaults.on_progress
         done: (event, data) =>
           result = data.result
-          uploaded = @views.uploaded(result.id, result.name, data.jqXHR.getResponseHeader('Location'))
-          $('#uploaded-files').append( uploaded )
+          uploaded = @views
+            .uploaded(result.id, result.name, data.jqXHR.getResponseHeader('Location'))
+            .appendTo $(event.target.form).children('.uploaded-files')
           data.context.remove()
           $("input[type=submit], button", data.form).prop('disabled', false)
         error: (event, data) ->

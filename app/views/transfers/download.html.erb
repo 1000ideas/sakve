@@ -11,7 +11,9 @@
       <li><%= name %></li>
       <% end %>
       </ul>
+      <% unless @transfer.forever? %>
       <h3 title="<%= l @transfer.expires_at, format: :long %>">Plik jest jeszcze dostępny przez: <%= @transfer.expiration_distance %></h3>
+      <% end %>
       <div class="buttons">
       <%= link_to fa_icon('cloud-download', text: t('.download')), download_transfer_path(token: @transfer.token, format: :zip), class: [:button, :secondary, :expand] %>
       <% if current_user %>
@@ -21,4 +23,3 @@
     <% end %>
   </div>
 </div>
-
