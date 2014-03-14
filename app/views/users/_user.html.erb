@@ -1,0 +1,13 @@
+<li class="row" data-uid="<%= user.id %>" data-context>
+  <div class="name columns small-6">
+    <%= fa_icon 'user', text: user.name %>
+  </div>
+  <div class="groups columns small-6">
+    <%= user.groups.join(', ') %>
+  </div>
+  <a href="" data-context-button><%= fa_icon('ellipsis-h') %></a>
+  <ul class="actions" data-context-target>
+    <li><%= link_to fa_icon('edit', text: t('.edit')), edit_user_path(user, format: :js), data: {remote: true} %></li>
+    <li><%= link_to fa_icon('trash-o', text: t('.destroy')), user_path(user, format: :js), data: {remote: true, confirm: t('.confirm', name: user.name), method: :delete } %></li>
+  </ul>
+</li>

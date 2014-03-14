@@ -4,6 +4,6 @@
     <%= f.text_field :name %>
   </div>
 
-  <%= button_tag t('.submit') %>
-  <%= link_to t('.cancel'), '#', class: "button close" %>
-<% end %>
+  <%= button_tag t('.submit'), class: [:button, :tiny, :secondary] %>
+  <%= link_to t('.cancel'), '#', class: [:button, :tiny], data: {reveal_close: true} %>
+  <% end %>

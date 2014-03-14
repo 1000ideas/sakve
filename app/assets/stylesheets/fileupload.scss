@@ -1,4 +1,5 @@
 @import 'overrides';
+$include-html-button-classes: false;
 @import 'foundation/components/buttons';
 
 input[type=file].fileupload {

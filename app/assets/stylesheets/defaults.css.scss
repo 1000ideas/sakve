@@ -1,4 +1,40 @@
+@import "overrides";
 @import "compass/css3/opacity";
+
+$include-html-button-classes: false;
+@import "foundation/components/buttons";
+
+
+label.selectable-checkbox {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+
+  input[type=checkbox] {
+    @include opacity(0);
+    width: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    &:checked + span {
+      @include button($bg: $primary-color, $padding: .5rem);
+    }
+  }
+
+  span {
+    @include button($bg: #fff, $radius: 1em, $padding: .5rem);
+  }
+
+  input[type=checkbox]:focus + span {
+    box-shadow: 0 0 10px -1px #ddd;
+  }
+
+  span:hover {
+    background-color: lighten($primary-color, 5%);
+    color: #fff;
+  }
+}
 
 div.logo {
   display: inline-block;

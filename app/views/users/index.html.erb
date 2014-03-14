@@ -1,21 +1,13 @@
-<% title t('users.index.title') %>
-
-<p id="notice"><%= notice %></p>
-
-<ul class="users-list">
-  <li class="header">
-    <div>Nazwa użytkownika</div>
-    <div>Grupy</div>
-  </li>
-  <% @users.each do |user| %>
-    <li class="<%= cycle('odd', 'even') %>" data-context="true">
-      <div><%= user.email %></div>
-      <div><%= user.groups.map(&:title).join(', ') %></div>
-      <div class="actions" data-context-target="true">
-        <%= link_to t('show'), user, class: "show", title: t('show'), target: '_blank' %>
-        <%= link_to t('edit'), edit_user_path(user), class: "edit", title: t('edit') %>
-        <%= link_to t('destroy'), user, class: "destroy", title: t('destroy'), data: {confirm: t('confirm'), method: :delete } %>
-      </div>
-    </li>
-  <% end %>
-</ul>
+<% title t('.title') %>
+<% content_for(:buttons) do %>
+  <%= link_to fa_icon('user', text: t('.new')), new_user_path(format: :js), data: {remote: true}, class: [:button, :tiny, :secondary] %>
+<% end %>
+<div class="row collapse">
+  <section class="columns small-12">
+    <ul class="file-list" id="users-list">
+      <% @users.each do |user| %>
+        <%= render(user) %>
+      <% end %>
+    </ul>
+  </section>
+</div>

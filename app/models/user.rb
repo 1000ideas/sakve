@@ -55,7 +55,7 @@ class User < ActiveRecord::Base
   end
 
   def belongs_to_group? name
-    groups.where(name: name).exists?
+    groups.any? {|g| g.name === name }
   end
 
   def admin?
