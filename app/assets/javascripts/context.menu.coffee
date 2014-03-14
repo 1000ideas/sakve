@@ -1,7 +1,9 @@
 class ContextMenu
   close_all_context_menus: ->
-    $('[data-context-holder]').trigger('context:close')
-    $('[data-context-holder]').remove()
+    $('[data-context-holder]')
+      .trigger('context:close')
+      .remove()
+
     $('[data-context-button].opened')
       .removeClass('opened')
     true
@@ -46,7 +48,9 @@ class ContextMenu
       event.stopPropagation();
 
     $(document).on 'click', (event) =>
-      # return if $(event.target).closest('[data-context-button]').length > 0
+      @close_all_context_menus()
+
+    $(document).on 'click', '[data-context-holder] a', (event) =>
       @close_all_context_menus()
 
     $(window).on 'blur', =>

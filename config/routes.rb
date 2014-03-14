@@ -79,8 +79,13 @@ Sakve::Application.routes.draw do
     match 'collaborators(.:format)', to: 'application#collaborators', as: :collaborators
 
 
-    resources :groups
-    resources :users
+    # resources :groups
+    resources :users do
+      member do
+        put :ban, ban: true
+        put :unban, action: :ban, ban: false
+      end
+    end
 
     match 'change_folder', to: 'items#change_folder', via: :post
 

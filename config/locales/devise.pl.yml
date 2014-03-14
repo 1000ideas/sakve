@@ -6,6 +6,7 @@ pl:
       not_locked: "nie było zablokowane"
   devise:
     failure:
+      banned: "Konto jest zablokowane. Skontaktuj się z administratorem."
       unauthenticated: 'Musisz być zalogowany.'
       unconfirmed: 'Musisz potwierdzić konto.'
       locked: 'Twoje konto jest zablokowane.'

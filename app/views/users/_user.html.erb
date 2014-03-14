@@ -1,13 +1,21 @@
 <li class="row" data-uid="<%= user.id %>" data-context>
   <div class="name columns small-6">
-    <%= fa_icon 'user', text: user.name %>
+    <% if user.banned? %>
+      <%= fa_icon 'ban fw', text: user.name %>
+    <% else %>
+      <%= fa_icon 'user fw', text: user.name %>
+    <% end %>
   </div>
   <div class="groups columns small-6">
     <%= user.groups.join(', ') %>
   </div>
   <a href="" data-context-button><%= fa_icon('ellipsis-h') %></a>
   <ul class="actions" data-context-target>
-    <li><%= link_to fa_icon('edit', text: t('.edit')), edit_user_path(user, format: :js), data: {remote: true} %></li>
-    <li><%= link_to fa_icon('trash-o', text: t('.destroy')), user_path(user, format: :js), data: {remote: true, confirm: t('.confirm', name: user.name), method: :delete } %></li>
+    <li><%= link_to fa_icon('fw edit', text: t('.edit')), edit_user_path(user, format: :js), data: {remote: true} %></li>
+    <%# if can?(:update, @user) %>
+    <li><%= link_to fa_icon('fw ban', text: t(".ban.#{!user.banned?}")), {id: user, action: :ban, ban: !user.banned?}, data: {method: :put, remote: :true} %></li>
+    <%# end %>
+    <li><%= link_to fa_icon('fw trash-o', text: t('.destroy')), user_path(user, format: :js), data: {remote: true, confirm: t('.confirm', name: user.name), method: :delete } %></li>
+
   </ul>
 </li>

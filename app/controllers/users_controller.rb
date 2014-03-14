@@ -40,6 +40,17 @@ class UsersController < ApplicationController
     @user.update_attributes(params[:user])
   end
 
+  def ban
+    @user = User.find(params[:id])
+    authorize! :update, @user
+    @user.updated_by = current_user
+    if params[:ban] === true
+      @user.ban!
+    else
+      @user.unban!
+    end
+  end
+
   def destroy
     @user = User.find(params[:id])
     authorize! :destroy, @user
