@@ -1,10 +1,15 @@
-class UsersController < L::Admin::UsersController
+class UsersController < ApplicationController
 
-  layout 'standard'
+  respond_to :html, only: :index
+  respond_to :js, except: [:index]
+
+  layout 'application'
 
   def index
     authorize! :read, User
-    @users = User.all.paginate :page => params[:page], :per_page => params[:per_page]||10
+    @users = User
+      .paginate params.slice(:page, :per_page).reverse_merge(page: 1)
+
   end
 
   def show
@@ -25,33 +30,23 @@ class UsersController < L::Admin::UsersController
   def create
     @user = User.new(params[:user])
     authorize! :create, @user
-    if @user.save
-      redirect_to users_path, notice: I18n.t('create.success')
-    else
-      render :action => :new
-    end
+    @user.save
   end
 
   def update
     @user = User.find(params[:id])
     authorize! :update, @user
-    
     @user.updated_by = current_user
-
-    if @user.update_attributes(params[:user])
-      redirect_to users_path, notice: I18n.t('update.success')
-    else
-      render :action => :edit
-    end
+    @user.update_attributes(params[:user])
   end
 
   def destroy
     @user = User.find(params[:id])
     authorize! :destroy, @user
     @user.destroy
+
     respond_to do |format|
       format.html { redirect_to :back, notice: t('delete.success') }
-      format.js
     end
   end
 

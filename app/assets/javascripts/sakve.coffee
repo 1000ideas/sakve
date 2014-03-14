@@ -68,6 +68,19 @@ class Sakve
           .replaceAll("##{name}-list")
         @selection_changed()
 
+  modal: (id, content, options = {}) ->
+    on_close  = options.closed ? (-> $(this).remove())
+
+    $('<div data-reveal>')
+      .addClass("reveal-modal #{options.size ? 'small'}")
+      .attr('id', id)
+      .html(content)
+      .appendTo('body')
+      .foundation()
+      .on('closed', on_close )
+      .on('click', '[data-reveal-close]', (-> $(this).closest('[data-reveal]').foundation('reveal', 'close') ) )
+      .foundation('reveal', 'open')
+
 
   selection_changed: (element = null) ->
     @last_selected = element

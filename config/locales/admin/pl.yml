@@ -28,16 +28,23 @@ pl:
     submenu:
       index: Lista Użytkowników
       new: Dodaj użytkownika
+    user:
+      edit: "Edytuj"
+      destroy: "Usuń"
+      confirm: "Usunąć użytkownika %{name}?"
     index:
       title: Użytkownicy
-      email: Email
-      role: Role
+      new: "Dodaj nowego użytkownika"
     new:
       title: Dodawanie użytkownika
     edit:
       title: Edycja użytkownika
-    show:
-      title: Szczegóły użytkownika
+    form:
+      create: "Utwórz"
+      cancel: "Anuluj"
+      title:
+        new: "Nowy użytkownik"
+        edit: "Edycja użytkownika"
   submenu:
     new: Dodaj
   pages:

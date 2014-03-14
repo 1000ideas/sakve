@@ -4,6 +4,7 @@ pl:
       items: 'Foldery'
       transfer: 'Prześlij plik'
       groups: 'Grupy'
+      users: 'Użytkownicy'
       logout: 'Wyloguj się'
   transfer_mailer:
     after_create:
@@ -360,6 +361,7 @@ pl:
         password_confirmation: "Powtórz hasło"
         set_role: "Wybierz uprawnienia"
         role : Uprawnienia
+        groups: "Grupy"
       l/news:
         content: Treść
         title: Tytuł

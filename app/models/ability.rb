@@ -8,6 +8,7 @@ class Ability
       if user.admin?
         can :manage, User
         can :manage, Group
+        can :create, Item, folder: {global: true}
         can [:update, :destroy], Item
         can [:create, :update, :destroy], Folder
       else
@@ -15,33 +16,23 @@ class Ability
         can :read, Group
       end
 
-      can :create, Item do |item|
-        (item.folder.try(:global) && user.admin?) || (item.folder.try(:user) == user && item.user == user)
-      end
-
+      can :create, Item, folder: {user_id: user.id}, user_id: user.id
+      can :read, Item, folder: {global: true }
+      can :read, Item, user_id: user.id
       can :read, Item do |item|
-        user.admin? || item.public? || item.user == user || item.shared_for?(user)
+        item.shared_for?(user)
       end
-
       can [:update, :destroy], Item, user_id: user.id
-
       can :share, Item, user_id: user.id
 
       can [:create, :update], Folder, parent_id: nil, global: true
       can [:create, :update], Folder, global: false, parent: {user_id: user.id}, user_id: user.id
-
-
+      can :share, Folder, global: false, user_id: user.id
+      can :destroy, Folder, user_id: user.id
       can [:download], Folder do |f|
         f.allowed_for?(user)
       end
 
-      can :share, Folder do |f|
-        !f.global? && f.user == user
-      end
-
-      can :destroy, Folder do |f|
-        user.admin? || f.user_id == user.id
-      end
 
       can :create, TransferFile
       can :destroy, TransferFile, user_id: user.id

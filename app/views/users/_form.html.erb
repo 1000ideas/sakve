@@ -1,4 +1,5 @@
-<%= form_for(@user) do |f| %>
+<%= form_for(@user, remote: true) do |f| %>
+  <h3><%= t(".title.#{f.object.new_record? ? 'new' : 'edit'}") %></h3>
   <%= render partial: 'l/partials/errors', object: @user.errors %>
   <div class="group">
     <div class="field">
@@ -9,7 +10,6 @@
       <%= f.label :email %>
       <%= f.text_field :email %>
     </div>
-    <% if @user == current_user %>
     <div class="field">
       <%= f.label :password %>
       <%= f.password_field :password %>
@@ -18,13 +18,20 @@
       <%= f.label :password_confirmation %>
       <%= f.password_field :password_confirmation %>
     </div>
-    <% end %>
     <div class="field">
-      <%= f.label :group_ids %>
-      <%= f.collection_select :group_ids, Group.sorted_with_translation, :id, :title, {}, {multiple: true} %>
+      <%= f.label :groups %>
+      <% Group.sorted_with_translation.each do |group| %>
+        <%= f.label :"group_ids_#{group.id}", class: 'selectable-checkbox' do %>
+          <%= f.check_box :group_ids, {multiple: true, checked: f.object.belongs_to_group?(group.name)}, group.id, nil  %>
+          <span><%= group.title %></span>
+        <% end %>
+
+      <% end %>
+      <%# f.collection_select :group_ids, Group.sorted_with_translation, :id, :title, {}, {multiple: true} %>
     </div>
   </div>
   <div class="actions">
-    <%= f.button %>
+    <%= f.button nil, class: [:button, :tiny, :secondary] %>
+    <%= link_to t('.cancel'), '#', data: { reveal_close: true }, class: [:button, :tiny] %>
   </div>
 <% end %>
