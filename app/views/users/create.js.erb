@@ -1,4 +1,6 @@
 <% if @user.errors.any? %>
+sakve.show_errors('#new-user',
+  "<%= j render('l/partials/errors', errors: @user.errors) %>");
 <% else %>
 $('#new-user').foundation('reveal', 'close')
 <% end %>
