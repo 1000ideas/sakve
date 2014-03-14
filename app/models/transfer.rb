@@ -13,7 +13,7 @@ class Transfer < ActiveRecord::Base
     path: ':partition/:class/:id/:filename'
 
   attr_writer :expires_in, :group_token
-  attr_accessible :expires_is, :name, :object,
+  attr_accessible :expires_in, :name, :object,
     :recipients, :token, :user_id, :user, :group_token
 
 

@@ -1,13 +1,7 @@
-var form = $('#edit-item-modal');
 <%- if @item.errors.any? -%>
-var errors = $('<%= j render(partial: 'l/partials/errors', object: @item.errors).strip.html_safe %>');
-var error_explanation = form.find('#error_explanation');
-if (error_explanation.length == 0) {
-  form.prepend( errors )
-} else {
-  error_explanation.replaceWith( errors );
-}
+sakve.show_errors('#edit-item-modal',
+  "<%= j render('l/partials/errors', errors: @item.errors) %>");
 <% else %>
-sakve.reload_list('items')
-form.foundation('reveal', 'close');
+sakve.reload_list('items');
+$('#edit-item-modal').foundation('reveal', 'close');
 <% end %>

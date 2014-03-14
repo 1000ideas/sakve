@@ -6,6 +6,7 @@ pl:
     form:
       fileupload: Dodaj pliki
       expires_in: "Wygaśnie za (dni)"
+      processing: "Przetwarzanie..."
     new:
       title: Dodawanie Transfer
     index:

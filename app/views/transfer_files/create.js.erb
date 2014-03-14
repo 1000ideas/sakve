@@ -1,6 +1,4 @@
-<% if @file.errors.any? %>
-
-<% else %>
+<% if @file.errors.empty? %>
  $('#transfer-files-modal').foundation('reveal', 'close');
 <% end %>
 

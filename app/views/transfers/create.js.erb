@@ -1,41 +1,24 @@
 var form = $('#<%= params[:form_id] %>');
 
 <% if @transfer.errors.any? %>
-var errors = $("<%= j render partial: 'l/partials/errors', object: @transfer.errors %>".trim());
-var error_explanation = form.find('#error_explanation');
-if (error_explanation.length == 0) {
-  errors
-    .hide()
-    .prependTo(form)
-    .slideDown();
-} else {
-  error_explanation.replaceWith( errors );
-}
-$(form).foundation({alert: {animation: 'slideUp'}})
+sakve.show_errors('#new-folder-modal',
+  "<%= j render('l/partials/errors', errors: @transfer.errors) %>");
 <% else %>
-
 sakve.reload_list('transfers');
+
 <% if /modal/ === params[:form_id] %>
-form
-  .parent()
-  .foundation('reveal', 'close')
+$('transfer-files-modal').foundation('reveal', 'close')
 <% end %>
-modal = $('<div data-reveal>')
-  .addClass('reveal-modal small')
-  .attr('id', 'transfer-created-modal')
-  .html('<%= j render("create") %>')
-  .appendTo('body')
-  .foundation()
-  .on('closed', function() {
+modal = sakve.modal('transfer-created-modal', '<%= j render("create") %>', {
+  closed: function () {
     if (this.clipboard != null) {
       this.clipboard.destroy();
     }
-    $(this).remove();
-   })
-  .foundation('reveal', 'open')
-
-
-modal.prop('clipboard', ZeroClipboard( modal.find('.copy-to-clipboard') ));
+  },
+  opened: function() {
+    this.clipboard = ZeroClipboard( $('.copy-to-clipboard', this) );
+  }
+});
 
 <%- @transfer = Transfer.new(user: current_user) -%>
 var default_value = form.find('#transfer_expires_at').data('default')

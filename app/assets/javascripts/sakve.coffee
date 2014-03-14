@@ -56,6 +56,11 @@ class Sakve
 
     @last_selected = null
 
+    $(document).on 'click', '[data-reveal-close]', (event) ->
+      $(this)
+        .closest('[data-reveal]')
+        .foundation('reveal', 'close')
+
     # console.profileEnd()
     true
 
@@ -80,8 +85,8 @@ class Sakve
       .html(content)
       .appendTo('body')
       .foundation()
+      .on('opened', options.opened ? -> )
       .on('closed', on_close )
-      .on('click', '[data-reveal-close]', (-> $(this).closest('[data-reveal]').foundation('reveal', 'close') ) )
       .foundation('reveal', 'open')
 
   show_errors: (selector, content) ->

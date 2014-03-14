@@ -11,6 +11,7 @@
     </div>
   </div>
   <div class="actions">
-    <%= f.button nil, data: {disable_with: t('.processing')} %>
+    <%= f.button nil, data: {disable_with: t('.processing')}, class: [:button, :tiny, :secondary] %>
+    <%= link_to t('.cancel'), '#', class: [:button, :tiny], data: {reveal_close: true} %>
   </div>
 <% end %>
