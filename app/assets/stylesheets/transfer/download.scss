@@ -30,11 +30,6 @@ body {
 
   }
 
-
-  // @for $i from 1 through 7 {
-  //   &.cover-#{$i} { background: image-url('transfer/cover-#{$i}.jpg') no-repeat center;}
-  // }
-
   .row.download {
     > .columns {
       position: relative;
@@ -52,6 +47,7 @@ body {
         right: 100%;
         display: block;
         width: 12em;
+        margin-right: 2em;
 
         @media #{$small-only} {
           position: static;

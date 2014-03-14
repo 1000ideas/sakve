@@ -1,5 +1,12 @@
 @import "compass/css3/opacity";
 
+div.logo {
+  display: inline-block;
+  vertical-align: middle;
+  white-space: nowrap;
+  max-width: 174px;
+}
+
 label.custom-check-box {
   display: inline-block;
   position: relative;
