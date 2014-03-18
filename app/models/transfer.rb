@@ -1,5 +1,3 @@
-require 'zip'
-
 class Transfer < ActiveRecord::Base
 
   belongs_to :user
@@ -53,7 +51,7 @@ class Transfer < ActiveRecord::Base
   def content
     Zip::File.open(object.path) do |f|
       f.entries.map do |entry|
-        entry.name
+        entry.name.force_encoding('utf-8')
       end
     end
   end

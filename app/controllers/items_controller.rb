@@ -1,5 +1,3 @@
-require 'zip'
-
 class ItemsController < ApplicationController
 
   helper_method :selection

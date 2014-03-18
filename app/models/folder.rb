@@ -1,5 +1,3 @@
-require 'zip'
-
 class Folder < ActiveRecord::Base
   belongs_to :user
   belongs_to :transfer, conditions: ['`expires_at` >= ?', DateTime.now]
@@ -93,7 +91,7 @@ class Folder < ActiveRecord::Base
           Rails.logger.debug file.inspect
           file.get_input_stream do |io|
             item = Item.create! object: StringIO.new(io.read),
-              object_file_name: file.name,
+              object_file_name: file.name.force_encoding('utf-8'),
               folder: tfolder,
               user: user
           end
