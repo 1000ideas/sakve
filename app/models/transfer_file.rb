@@ -1,14 +1,10 @@
 class TransferFile < ActiveRecord::Base
-  #Path to zip executable
-  mattr_accessor :zip_path
-  @@zip_path = '/usr/bin/zip'
-
   belongs_to :user
 
   attr_accessible :object, :token, :user_id, :user
 
   has_attached_file :object,
-    path: ':partition/:class/:token/:id_:filename'
+    path: ':partition/:class/:token/:id/:filename'
 
   before_create :init_token
 
@@ -20,15 +16,24 @@ class TransferFile < ActiveRecord::Base
 
   # Returns tempfile containg zipped files marked with token
   def self.compress(token, debug = false)
-    file = Tempfile.new([token, '.zip'])
-    files = self.where(token: token).map do |file|
-      file.object.path.try(:shellescape)
-    end.compact
+    filename = Dir::Tmpname.make_tmpname("transfer-#{token}", ".zip")
+    filepath = File.join(Dir::tmpdir, filename)
 
-    command = "#{self.zip_path} -D -9 -j - #{files.join(' ')} > #{file.path.shellescape}"
-    Rails.logger.debug "[compress] Command: #{command}" if debug
-    system(command)
-    file
+    Zip::File.open(filepath, Zip::File::CREATE) do |zipfile|
+      self.where(token: token).map do |file|
+        name = file.name
+        ext = File.extname(name)
+        basename = File.basename(name, ext)
+        it = 1
+        while zipfile.find_entry(name)
+          name = "#{basename}.#{it}#{ext}"
+          it += 1
+        end
+        zipfile.add(name, file.object.path) { true }
+      end
+    end
+
+    File.open(filepath)
   end
 
   alias_attribute :name, :object_file_name

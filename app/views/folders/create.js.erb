@@ -1,21 +1,11 @@
-var form = $('#new_folder');
 <% if @folder.errors.any? %>
-var errors = $("<%= j render partial: 'l/partials/errors', object: @folder.errors %>".trim());
-var error_explanation = $('#error_explanation', form);
-if (error_explanation.length == 0) {
-  errors
-    .hide()
-    .prependTo(form)
-    .slideDown();
-} else {
-  error_explanation.replaceWith( errors );
-}
-$(form).foundation({alert: {animation: 'slideUp'}})
+sakve.show_errors('#new-folder-modal',
+  "<%= j render('l/partials/errors', errors: @folder.errors) %>");
 <% else %>
-var dialog_box = form.parent();
-dialog_box.foundation('reveal', 'close');
-$('#error_explanation', form).remove();
-form.each(function() { this.reset(); });
-sakve.reload_list('items')
-sakve.reload_list('folders')
+sakve.reload_list('items');
+sakve.reload_list('folders');
+
+$('#new-folder-modal').foundation('reveal', 'close');
+$('#new-folder-modal form').each(function() { this.reset(); });
+$('#new-folder-modal [data-alert]').remove();
 <% end %>

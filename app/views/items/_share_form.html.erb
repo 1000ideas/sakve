@@ -24,5 +24,6 @@
     <% end %>
   </ul>
 
-  <%= button_tag t('.submit'), disable_with: t('.wait') %>
+  <%= button_tag t('.submit'), disable_with: t('.wait'), class: [:button, :tiny, :secondary] %>
+  <%= link_to t('.cancel'), '#', class: "button tiny", data: {reveal_close: true} %>
 <% end %>

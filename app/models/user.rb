@@ -68,6 +68,32 @@ class User < ActiveRecord::Base
     end
   end
 
+  def active_for_authentication?
+    super && !banned?
+  end
+
+  def inactive_message
+    if banned?
+      :banned
+    else
+      super
+    end
+  end
+
+  def ban!
+    self.banned_at = DateTime.now
+    self.save
+  end
+
+  def unban!
+    self.banned_at = nil
+    self.save
+  end
+
+  def banned?
+    self.banned_at.present?
+  end
+
 protected
 
   def create_private_folder

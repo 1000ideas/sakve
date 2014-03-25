@@ -1,5 +1,3 @@
-require 'zip'
-
 class Transfer < ActiveRecord::Base
 
   belongs_to :user
@@ -13,7 +11,7 @@ class Transfer < ActiveRecord::Base
     path: ':partition/:class/:id/:filename'
 
   attr_writer :expires_in, :group_token
-  attr_accessible :expires_is, :name, :object,
+  attr_accessible :expires_in, :name, :object,
     :recipients, :token, :user_id, :user, :group_token
 
 
@@ -53,7 +51,7 @@ class Transfer < ActiveRecord::Base
   def content
     Zip::File.open(object.path) do |f|
       f.entries.map do |entry|
-        entry.name
+        entry.name.force_encoding('utf-8')
       end
     end
   end

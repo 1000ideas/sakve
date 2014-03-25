@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140311115050) do
+ActiveRecord::Schema.define(:version => 20140314134825) do
 
   create_table "attachments", :force => true do |t|
     t.string   "upload_file_name"
@@ -35,12 +35,12 @@ ActiveRecord::Schema.define(:version => 20140311115050) do
   add_index "folders", ["transfer_id"], :name => "index_folders_on_transfer_id"
 
   create_table "group_translations", :force => true do |t|
-    t.integer  "group_id",    :null => false
-    t.string   "locale",      :null => false
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.integer  "group_id"
+    t.string   "locale"
     t.string   "title"
     t.string   "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   add_index "group_translations", ["group_id"], :name => "index_group_translations_on_group_id"
@@ -142,6 +142,7 @@ ActiveRecord::Schema.define(:version => 20140311115050) do
     t.string   "last_name"
     t.datetime "reset_password_sent_at"
     t.string   "reset_password_token"
+    t.datetime "banned_at"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

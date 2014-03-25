@@ -1,17 +1,13 @@
 if ( $('#bulk-edit-modal').length === 0) {
-  $('<div data-reveal>')
-    .addClass('reveal-modal small')
-    .attr('id', 'bulk-edit-modal')
-    <% if params[:subaction] %>
-    .html('<%= j render("items/bulk_edit/#{params[:subaction]}") %>')
-    <% else %>
-    .html('<%= j render("bulk_form") %>')
-    <% end %>
-    .appendTo('body')
-    .foundation()
-    .on('closed', function() { $(this).remove(); })
-    .on('click', 'a.close', function() { $(this).closest('[data-reveal]').foundation('reveal', 'close') })
-    .foundation('reveal', 'open')
+<% if params[:subaction] %>
+var modal = sakve.modal('edit-bulk-modal',
+    '<%= j render("items/bulk_edit/#{params[:subaction]}") %>');
+<% else %>
+var modal = sakve.modal('edit-bulk-modal',
+    '<%= j render("form") %>');
+<% end %>
+
+modal
     .find('.tags-autocomplete')
     .autocomplete(sakve.defaults.tags_autocomplete)
 }

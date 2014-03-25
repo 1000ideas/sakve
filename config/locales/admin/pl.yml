@@ -32,6 +32,9 @@ pl:
       edit: "Edytuj"
       destroy: "Usuń"
       confirm: "Usunąć użytkownika %{name}?"
+      ban:
+        'true': "Zbanuj"
+        'false': "Zdejmij bana"
     index:
       title: Użytkownicy
       new: "Dodaj nowego użytkownika"

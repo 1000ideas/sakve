@@ -4,7 +4,6 @@ class Ability
   def initialize(user)
 
     unless user.blank?
-
       if user.admin?
         can :manage, User
         can :manage, Group
