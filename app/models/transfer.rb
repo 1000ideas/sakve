@@ -25,8 +25,8 @@ class Transfer < ActiveRecord::Base
   validates :group_token, presence: true, length: {is: 16}
   validate :valid_recipients
   validates :files, length: {minimum: 1}, if: Proc.new { |a| a.token.blank? }
-  validates :object, attachment_presence: true,
-    attachment_content_type: { content_type: /.*/i }
+  validates :object, attachment_presence: true, on: :create, if: proc {|a| a.files.any? }
+  validates :object, attachment_content_type: { content_type: /.*/i }
 
   def expires_in
     if expires_at.present?
@@ -111,7 +111,7 @@ class Transfer < ActiveRecord::Base
   end
 
   def compress_files
-    if group_token && ! self.object?
+    if group_token && !self.object? && files.any?
       self.object = TransferFile.compress(group_token)
       self.object.instance_write :file_name,  file_name_from_title
       @delete_files = true
