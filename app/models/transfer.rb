@@ -25,8 +25,8 @@ class Transfer < ActiveRecord::Base
   validates :group_token, presence: true, length: {is: 16}
   validate :valid_recipients
   validates :files, length: {minimum: 1}, if: Proc.new { |a| a.token.blank? }
-  validates :object, attachment_presence: true,
-    attachment_content_type: { content_type: /.*/i }
+  validates :object, attachment_presence: true, on: :create, if: proc {|a| a.files.any? }
+  validates :object, attachment_content_type: { content_type: /.*/i }
 
   def expires_in
     if expires_at.present?
@@ -49,11 +49,19 @@ class Transfer < ActiveRecord::Base
   end
 
   def content
-    Zip::File.open(object.path) do |f|
-      f.entries.map do |entry|
-        entry.name.force_encoding('utf-8')
+    if zip?
+      Zip::File.open(object.path) do |f|
+        f.entries.map do |entry|
+          entry.name.force_encoding('utf-8')
+        end
       end
+    else
+      [object_file_name]
     end
+  end
+
+  def zip?
+    !!object.content_type.match(%r{application/zip})
   end
 
   def files
@@ -111,9 +119,11 @@ class Transfer < ActiveRecord::Base
   end
 
   def compress_files
-    if group_token && ! self.object?
+    if group_token && !self.object? && files.any?
       self.object = TransferFile.compress(group_token)
-      self.object.instance_write :file_name,  file_name_from_title
+      if self.object_file_name.empty?
+        self.object.instance_write :file_name,  file_name_from_title
+      end
       @delete_files = true
     end
   end
@@ -134,12 +144,16 @@ class Transfer < ActiveRecord::Base
 
   def setup_exires_at
     if expires_in.to_i > 0
-      expires_at = DateTime.now + expires_in.to_i.days
+      self.expires_at = DateTime.now + expires_in.to_i.days
+    elsif expires_in.nil?
+      self.expires_at = DateTime.now + 7.days
     end
   end
 
   def set_default_name
-    if name.blank?
+    if name.blank? and !zip?
+      self.name = File.basename(object_file_name, '.*').titleize
+    elsif name.blank?
       t = (token || group_token).first(5)
       self.name = "Quicktransfer #{t}"
     end

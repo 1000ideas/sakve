@@ -1,7 +1,7 @@
 var form = $('#<%= params[:form_id] %>');
 
 <% if @transfer.errors.any? %>
-sakve.show_errors('#new-folder-modal',
+sakve.show_errors(form,
   "<%= j render('l/partials/errors', errors: @transfer.errors) %>");
 <% else %>
 sakve.reload_list('transfers');
@@ -26,5 +26,8 @@ form.find('#transfer_name, #transfer_recipients').val('');
 form.find('#transfer_group_token').val('<%= @transfer.group_token %>');
 form.find('#expires_in_slider').slider('value', default_value);
 form.find('.uploaded-files').text('');
+form.find('.alert-box').slideUp(function() {
+  $(this).remove();
+});
 <% end %>
 

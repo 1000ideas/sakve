@@ -16,6 +16,9 @@ class TransferFile < ActiveRecord::Base
 
   # Returns tempfile containg zipped files marked with token
   def self.compress(token, debug = false)
+    if self.where(token: token).one? and !(single_file = self.where(token: token).first).psd?
+      return single_file.object
+    end
     filename = Dir::Tmpname.make_tmpname("transfer-#{token}", ".zip")
     filepath = File.join(Dir::tmpdir, filename)
 
@@ -38,8 +41,8 @@ class TransferFile < ActiveRecord::Base
 
   alias_attribute :name, :object_file_name
 
-  def self.setup
-    yield self
+  def psd?
+    !!object.content_type.match(%r{(photoshop|psd)$})
   end
 
   private

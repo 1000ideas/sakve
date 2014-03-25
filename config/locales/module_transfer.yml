@@ -10,6 +10,8 @@ pl:
     new:
       title: Dodawanie Transfer
     index:
+      fileupload: Dodaj pliki
+      processing: "Przetwarzanie..."
       title: Przesyłanie pliku
       new_transfer: 'Prześlij pliki'
       infinite: 'zawsze'
