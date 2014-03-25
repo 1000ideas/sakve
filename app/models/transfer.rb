@@ -49,11 +49,19 @@ class Transfer < ActiveRecord::Base
   end
 
   def content
-    Zip::File.open(object.path) do |f|
-      f.entries.map do |entry|
-        entry.name.force_encoding('utf-8')
+    if zip?
+      Zip::File.open(object.path) do |f|
+        f.entries.map do |entry|
+          entry.name.force_encoding('utf-8')
+        end
       end
+    else
+      [object_file_name]
     end
+  end
+
+  def zip?
+    !!object.content_type.match(%r{application/zip})
   end
 
   def files
@@ -113,7 +121,9 @@ class Transfer < ActiveRecord::Base
   def compress_files
     if group_token && !self.object? && files.any?
       self.object = TransferFile.compress(group_token)
-      self.object.instance_write :file_name,  file_name_from_title
+      if self.object_file_name.empty?
+        self.object.instance_write :file_name,  file_name_from_title
+      end
       @delete_files = true
     end
   end
@@ -141,7 +151,9 @@ class Transfer < ActiveRecord::Base
   end
 
   def set_default_name
-    if name.blank?
+    if name.blank? and !zip?
+      self.name = File.basename(object_file_name, '.*').titleize
+    elsif name.blank?
       t = (token || group_token).first(5)
       self.name = "Quicktransfer #{t}"
     end
