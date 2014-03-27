@@ -1,8 +1,14 @@
+require 'sidekiq/web'
+
 Sakve::Application.routes.draw do
 
   locale_regex = %r{(#{I18n.available_locales.join('|')})}i
 
   scope '(:locale)', locale: locale_regex do
+    authenticate :user do
+      mount Sidekiq::Web => '/sidekiq'
+    end
+
     devise_for :users,
       path: "",
       path_names: {

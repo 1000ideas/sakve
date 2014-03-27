@@ -79,7 +79,9 @@ class ItemsController < ApplicationController
   # POST /items
   # POST /items.xml
   def create
-    @item = Item.new(params[:item])
+    @item = Item.new
+    @item.prevent_processing!
+    @item.attributes = params[:item]
     @item.user = current_user
 
     authorize! :create, @item

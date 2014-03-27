@@ -39,6 +39,7 @@ class Item < ActiveRecord::Base
     url: '/:class/:id/download/:style/:name.:extension'
 
   before_save :fix_mime_type, :save_tags, :default_name
+  after_commit :async_reprocess!
 
   attr_accessible :name, :object, :type, :user_id, :user, :tags, :folder_id, :folder,
     :object_file_name
@@ -79,9 +80,17 @@ class Item < ActiveRecord::Base
     output
   end
 
+  def async_reprocess!
+    ItemProcessWorker.perform_async(self.id)
+  end
+
 
   def public?
     self.folder.global?
+  end
+
+  def prevent_processing!
+    self.object.post_processing = false
   end
 
   def shared_for? user

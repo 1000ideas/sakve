@@ -1,0 +1,5 @@
+---
+:verbose: true
+:daemon: true
+:logfile: ./log/sidekiq.log
+:pidfile: ./tmp/pids/sidekiq.pid
