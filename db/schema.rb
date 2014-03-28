@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140314134825) do
+ActiveRecord::Schema.define(:version => 20140328120452) do
 
   create_table "attachments", :force => true do |t|
     t.string   "upload_file_name"
@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(:version => 20140314134825) do
     t.datetime "updated_at",                     :null => false
     t.boolean  "global",      :default => false, :null => false
     t.integer  "transfer_id"
+    t.boolean  "processing",  :default => false
   end
 
   add_index "folders", ["transfer_id"], :name => "index_folders_on_transfer_id"
@@ -72,9 +73,10 @@ ActiveRecord::Schema.define(:version => 20140314134825) do
     t.integer  "object_file_size"
     t.datetime "object_updated_at"
     t.integer  "user_id"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
     t.integer  "folder_id"
+    t.string   "convert_status",      :default => "unprocessed"
   end
 
   create_table "shares", :force => true do |t|

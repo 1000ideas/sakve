@@ -1,5 +1,5 @@
 <li><%= link_to fa_icon('folder-open', text: t('.open')), items_path(folder: folder.id) %></li>
-<li><%= link_to fa_icon('cloud-download', text: t('.download')), download_folder_path(folder, format: :zip) %></li>
+<li><%= link_to fa_icon('cloud-download', text: t('.download')), download_folder_path(folder, format: :js), data: {remote: true} %></li>
 <% if can? :share, folder %>
 <li><%= link_to fa_icon('link', text: t('.share')), share_folder_path(folder), remote: true %></li>
 <% end %>

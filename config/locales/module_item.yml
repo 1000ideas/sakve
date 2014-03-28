@@ -35,6 +35,7 @@ pl:
     show:
       title: "Zasób: %{name}"
       download: "Pobierz oryginalny plik"
+      processing: 'Element jest aktualnie przetwarzany'
     share_form:
       search_collaborator: 'Wybierz komu chcesz udostepnić plik'
       submit: 'Zapisz'

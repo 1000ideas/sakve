@@ -4,7 +4,7 @@ development:
   username: root
   password: root
   encoding: utf8
-  pool: 5
+  pool: 30
   timeout: 5000
 
 # Warning: The database defined as "test" will be erased and
@@ -22,5 +22,5 @@ production:
   username: root
   password: root
   encoding: utf8
-  pool: 5
+  pool: 25
   timeout: 5000

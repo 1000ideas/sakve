@@ -1,0 +1,5 @@
+<% if folder.zip_file.present? %>
+  <%= link_to "Pobierz folder", download_folder_path(folder, format: :zip), class: [:button, :tiny] %>
+<% else %>
+  <p>Trwa przetwarzanie proszę czekać...</p>
+<% end %>

@@ -14,8 +14,8 @@ class Folder < ActiveRecord::Base
     :transfer_id
 
   validates :name, presence: true, if: :has_parent?
-  validates :name, uniqueness: {scope: [:parent_id, :user_id, :global], case_sensitive: false}, unless: :global?
-  validates :name, uniqueness: {scope: [:parent_id, :global], case_sensitive: false}, if: :global?
+  # validates :name, uniqueness: {scope: [:parent_id, :user_id, :global], case_sensitive: false}, unless: :global?
+  # validates :name, uniqueness: {scope: [:parent_id, :global], case_sensitive: false}, if: :global?
   validate :only_one_root, unless: :has_parent?
   validate :loop_in_hierarchy
 
@@ -181,29 +181,50 @@ class Folder < ActiveRecord::Base
   end
 
   def zip_file
-    filepath = Rails.root.join('folder-zips', "folder-#{id}.zip")
-    FileUtils.mkdir_p(filepath.dirname)
-    if !File.exists?(filepath) or File.mtime(filepath) < updated_at
-      Zip::File.open(filepath, Zip::File::CREATE) do |zipfile|
-        each_descendant do |f|
-          path = f.ancestors_until(self, true).map(&:name).reverse.join('/')
-          unless path.blank?
-            zipfile.mkdir(path) unless zipfile.find_entry(path)
-            Rails.logger.debug "[zip mkdir] #{path}"
-            path += '/'
-          end
-          f.items.each do |item|
-            Rails.logger.debug "[zip add] #{path}#{item.name_for_download}"
-            zipfile.add("#{path}#{item.name_for_download}", item.object.path) { true }
-          end
-        end
-        zipfile.close
-      end
+    if valid_zip_file? and !processing?
+      File.open(zip_file_path, 'rb')
     end
-    File.open(filepath, 'rb')
+  end
+
+  def async_recreate_zip_file
+    unless valid_zip_file? or processing?
+      FolderArchiveWorker.perform_async(self.id)
+    end
   end
 
 protected
+
+  def zip_file_path
+    @zip_file_name ||= Rails.root.join('folder-zips', "folder-#{id}.zip")
+  end
+
+  def valid_zip_file?
+    File.exists?(zip_file_path) and File.mtime(zip_file_path) >= updated_at
+  end
+
+  def recreate_zip_file
+    FileUtils.mkdir_p(zip_file_path.dirname)
+
+    if File.exists?(zip_file_path)
+      FileUtils.rm_f(zip_file_path)
+    end
+
+    Zip::File.open(zip_file_path, Zip::File::CREATE) do |zipfile|
+      each_descendant do |f|
+        path = f.ancestors_until(self, true).map(&:name).reverse.join('/')
+        unless path.blank?
+          zipfile.mkdir(path) unless zipfile.find_entry(path)
+          Rails.logger.debug "[zip mkdir] #{path}"
+          path += '/'
+        end
+        f.items.each do |item|
+          Rails.logger.debug "[zip add] #{path}#{item.name_for_download}"
+          zipfile.add("#{path}#{item.name_for_download}", item.object.path) { true }
+        end
+      end
+      zipfile.close
+    end
+  end
 
   def get_child_name(name)
     parts = name.split('.')
