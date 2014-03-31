@@ -74,7 +74,7 @@ class Sakve
         @selection_changed()
 
   modal: (id, content, options = {}) ->
-    on_close = (event)->
+    on_close = (event) ->
       return unless $(event.target).is('[data-reveal]')
       options.closed.call(event.target) if options.closed?
       $(this).remove()
@@ -86,6 +86,8 @@ class Sakve
       .appendTo('body')
       .foundation()
       .on('opened', options.opened ? -> )
+      .on('open', options.open ? -> )
+      .on('close', options.close ? -> )
       .on('closed', on_close )
       .foundation('reveal', 'open')
 

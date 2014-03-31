@@ -3,5 +3,5 @@ headers['Content-Transfer-Encoding'] = 'binary'
 response.sending_file = true
 response.cache_control[:public] ||= false
 
-File.open(@filepath, 'rb').read
+@selection.file
 

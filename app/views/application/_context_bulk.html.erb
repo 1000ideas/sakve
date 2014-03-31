@@ -1,4 +1,4 @@
-<li><%= link_to fa_icon('cloud-download', text: t('.download')), bulk_download_items_path(selection: selection, format: :zip) %></li>
+<li><%= link_to fa_icon('cloud-download', text: t('.download')), bulk_download_items_path(selection: selection, format: :js), data: {remote: true} %></li>
 <!-- <li><%= link_to fa_icon('link', text: t('.share')) %></li> -->
 <!-- <li><%= link_to fa_icon('edit', text: t('.rename')) %></li> -->
 <li><%= link_to fa_icon('level-up', text: t('.move')), bulk_move_items_path(selection: selection, format: :js), data: {remote: true} %></li>

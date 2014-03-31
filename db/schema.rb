@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140328120452) do
+ActiveRecord::Schema.define(:version => 20140331075610) do
 
   create_table "attachments", :force => true do |t|
     t.string   "upload_file_name"
@@ -78,6 +78,18 @@ ActiveRecord::Schema.define(:version => 20140328120452) do
     t.integer  "folder_id"
     t.string   "convert_status",      :default => "unprocessed"
   end
+
+  create_table "selection_downloads", :id => false, :force => true do |t|
+    t.string   "id",         :limit => 32
+    t.integer  "user_id"
+    t.text     "ids"
+    t.text     "fids"
+    t.boolean  "done",                     :default => false
+    t.datetime "created_at",                                  :null => false
+    t.datetime "updated_at",                                  :null => false
+  end
+
+  add_index "selection_downloads", ["id"], :name => "index_selection_downloads_on_id"
 
   create_table "shares", :force => true do |t|
     t.integer  "collaborator_id"

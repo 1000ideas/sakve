@@ -49,7 +49,7 @@ class TransferFile < ActiveRecord::Base
 
   def init_token
     if token.blank?
-      ntoken = SecureRandom.hex(8) until self.class.where(token: ntoken) == 0
+      ntoken = SecureRandom.hex(8) until self.class.where(token: ntoken).zero?
       self.update_attributes(token: ntoken)
     end
   end

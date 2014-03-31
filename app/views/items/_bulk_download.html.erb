@@ -1,0 +1,5 @@
+<% if selection.done? %>
+  <%= link_to "Pobierz", bulk_download_items_path(token: selection.id, format: :zip), class: [:button, :tiny] %>
+<% else %>
+  <p>Trwa przetwarzanie proszę czekać...</p>
+<% end %>
