@@ -25,6 +25,12 @@ class ApplicationController < ActionController::Base
     @items = Item.where( id: params[:selection].try(:[], :ids) )
     if (@folders.count + @items.count) == 1
       @item = [*@folders, *@items].first
+    else
+      @can_destroy = @folders.accessible_by(current_ability, :destroy).any? ||
+        @items.accessible_by(current_ability, :destroy).any?
+
+      @can_update = @folders.accessible_by(current_ability, :update).any? ||
+        @items.accessible_by(current_ability, :update).any?
     end
 
     head :not_found and return unless request.xhr?

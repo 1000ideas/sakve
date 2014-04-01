@@ -3,7 +3,11 @@
 <% if can? :share, folder %>
 <li><%= link_to fa_icon('link', text: t('.share')), share_folder_path(folder), remote: true %></li>
 <% end %>
+<% if can? :update, folder  %>
 <li><%= link_to fa_icon('edit', text: t('.rename')), rename_folder_path(folder), data: {remote: true} %></li>
 <li><%= link_to fa_icon('level-up', text: t('.move')), move_folder_path(folder), data: {remote: true} %></li>
+<% end %>
 <!-- # <li><%= link_to fa_icon('tag', text: t('.tag')) %></li> -->
+<% if can? :destroy, folder  %>
 <li><%= link_to fa_icon('trash-o', text: t('.remove')), folder_path(folder), data: {remote: true,  method: :delete, confirm: t(".sure", name: folder.name) } %></li>
+<% end %>
