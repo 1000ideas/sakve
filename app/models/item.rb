@@ -138,6 +138,10 @@ class Item < ActiveRecord::Base
 
   end
 
+  def extension
+    File.extname(object_file_name).gsub('.', '')
+  end
+
   def name_for_download(extension = nil, increment = nil)
     extension = File.extname(object.original_filename).gsub(/^\./, '') if extension.nil?
     "#{name.parameterize}#{".#{increment}" unless increment.nil?}.#{extension}"
