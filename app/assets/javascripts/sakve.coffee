@@ -146,6 +146,8 @@ class Sakve
 
     $(document).on 'click', '.file-list li', (event) =>
       return if $(event.target).closest('label.custom-check-box').length > 0
+      event.preventDefault()
+      event.stopPropagation()
 
       input = $('input[type=checkbox]', event.target)
       form = $(event.target).closest('form')
@@ -158,11 +160,15 @@ class Sakve
             $('input[type=checkbox]', el).prop('checked', true).change()
         input.prop('checked', true).change()
       else if event.ctrlKey
-        input.prop('checked', true).change()
+        input.prop('checked', !input.prop('checked')).change()
       else
-        form.find('input[type=checkbox]:checked').each (idx, el) ->
-          $(el).prop('checked', false).change()
-        input.prop('checked', true).change()
+        checked_count = form.find('input[type=checkbox]:checked').length
+        if checked_count >= 1 and !input.prop('checked') or checked_count > 1 and input.prop('checked')
+          form.find('input[type=checkbox]:checked').each (idx, el) ->
+            $(el).prop('checked', false).change()
+          input.prop('checked', true).change()
+        else
+          input.prop('checked', !input.prop('checked')).change()
 
     $('.file-list input[type=checkbox]:checked').each (idx, el) =>
       $(el).closest('li').toggleClass('selected', true)
