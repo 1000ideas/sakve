@@ -134,6 +134,11 @@ class Sakve
       img.src = path
 
   _init_selection: ->
+    ## Duble click on folder
+    $(document).on 'dblclick', '.file-list li.folder[data-url]', (event) =>
+      event.preventDefault()
+      window.location.href = $(event.currentTarget).data('url')
+
     $(document).on 'change', '.file-list input[type=checkbox]', (event) =>
       checked = $(event.target).is(':checked')
       @selection_changed $(event.target).closest('li').toggleClass('selected', checked)
