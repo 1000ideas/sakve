@@ -141,8 +141,17 @@ class Sakve
 
     $(document).on 'change', '.file-list input[type=checkbox]', (event) =>
       checked = $(event.target).is(':checked')
-      @selection_changed $(event.target).closest('li').toggleClass('selected', checked)
+      element = $(event.target).closest('li').toggleClass('selected', checked)
+      if checked
+        @selection_changed(element)
+      else
+        @selection_changed()
       event.stopPropagation()
+
+    $(document).on 'click', (event) =>
+      if $(event.target).closest('.file-list li').length == 0
+        $('.file-list input[type=checkbox]:checked').each (idx, el) ->
+          $(el).prop('checked', false).change()
 
     $(document).on 'click', '.file-list li', (event) =>
       return if $(event.target).closest('label.custom-check-box').length > 0
