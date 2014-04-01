@@ -69,7 +69,7 @@ Sakve::Application.routes.draw do
       via: :get,
       as: :download_transfer,
       constraints: {
-        token: /[0-9a-f]{64}/i
+        token: /[0-9a-f]{32,64}/i
       }
 
     resources :transfers, except: [:show, :new] do
@@ -77,6 +77,7 @@ Sakve::Application.routes.draw do
         resources :files, controller: :transfer_files, only: [:create, :destroy]
       end
       member do
+        get :status
         get :save
         post :save
       end

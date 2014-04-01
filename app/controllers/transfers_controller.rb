@@ -19,6 +19,15 @@ class TransfersController < ApplicationController
     end
   end
 
+  def status
+    @transfer = Transfer.find(params[:id])
+    authorize! :update, @transfer
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def download
     @transfer = Transfer.find_by_token(params[:token])
 
@@ -57,11 +66,6 @@ class TransfersController < ApplicationController
   def create
     authorize! :create, Transfer
     @transfer = Transfer.new(params[:transfer])
-    # if params[:transfer][:expires_at] == "\u{221e}"
-    #   @transfer.expires_at = DateTime.now + 25.years
-    # else
-    #   @transfer.expires_at = DateTime.now + params[:transfer][:expires_at].to_i.days
-    # end
     @transfer.user = current_user
 
     respond_to do |format|

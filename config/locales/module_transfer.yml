@@ -30,6 +30,10 @@ pl:
       save: "Zapisz w katalogu Sakve"
       destroy: "Usuń"
       sure: "Usunąć?"
+    create:
+      done: "Przetwarzanie zakończone!"
+      processing: "Przetwarzanie w toku..."
+
   menu:
     transfers: Transfers
   activerecord:

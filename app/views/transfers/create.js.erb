@@ -1,5 +1,8 @@
-var form = $('#<%= params[:form_id] %>');
+if (sakve.transfer_status_timeout == null) {
+  sakve.transfer_status_timeout = -1
+}
 
+var form = $('#<%= params[:form_id] %>');
 <% if @transfer.errors.any? %>
 sakve.show_errors(form,
   "<%= j render('l/partials/errors', errors: @transfer.errors) %>");
@@ -10,6 +13,12 @@ sakve.reload_list('transfers');
 $('transfer-files-modal').foundation('reveal', 'close')
 <% end %>
 modal = sakve.modal('transfer-created-modal', '<%= j render("create") %>', {
+  close: function () {
+    if (sakve.transfer_status_timeout > 0) {
+      clearTimeout(sakve.transfer_status_timeout);
+      sakve.transfer_status_timeout = -1;
+    }
+  },
   closed: function () {
     if (this.clipboard != null) {
       this.clipboard.destroy();
@@ -17,6 +26,7 @@ modal = sakve.modal('transfer-created-modal', '<%= j render("create") %>', {
   },
   opened: function() {
     this.clipboard = ZeroClipboard( $('.copy-to-clipboard', this) );
+    $.ajax({url: '<%= status_transfer_path(@transfer, format: :js) %>'});
   }
 });
 
