@@ -9,8 +9,15 @@ ul.file-list {
     background-color: #f2f2f2;
     border-top: 1px solid #ddd;
 
+    &:hover {
+      background-color: #fafafa;
+    }
+
     &.selected {
       background-color: lighten($secondary-color, 28%);
+      &:hover {
+        background-color: lighten($secondary-color, 30%);
+      }
       label.custom-check-box {
         i {
           color: $secondary-color;
