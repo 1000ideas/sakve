@@ -1,5 +1,29 @@
 @import 'overrides';
 
+.sortbar {
+  > div {
+    height: 3em;
+    line-height: 3em;
+
+    .current {
+      font-weight: bold;
+
+      &:after {
+        font-family: FontAwesome;
+        margin-left: .3em;
+      }
+
+      &.asc:after {
+        content: '\f107';
+      }
+
+      &.desc:after {
+        content: '\f106';
+      }
+    }
+  }
+}
+
 ul.file-list {
   list-style: none;
   margin-left: 0;

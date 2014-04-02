@@ -179,7 +179,6 @@ class Sakve
     $(document).on 'click', '.file-list li', (event) =>
       return if $(event.target).closest('label.custom-check-box').length > 0
       event.preventDefault()
-      event.stopPropagation()
 
       input = $('input[type=checkbox]', event.target)
       form = $(event.target).closest('form')

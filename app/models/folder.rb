@@ -22,6 +22,8 @@ class Folder < ActiveRecord::Base
   before_save :ensure_global
   alias_method :fid, :id
 
+  def date; updated_at; end
+
   scope :shared_for, lambda { |user|
     joins(:shares)
       .group("`#{table_name}`.`id`")

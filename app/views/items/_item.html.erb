@@ -1,11 +1,11 @@
 <li class="row item <%= !item.shared_for?(current_user) ? ((current_user.admin? or !item.folder.global?) ? "draggable" : "") : "" %>" id="item-<%= item.id %>" data-context="true" data-context-ajax="<%= context_path %>">
-  <div class="name columns small-6">
+  <div class="name columns small-7">
     <%= f.select_box :id, item %>
     <%= fa_icon 'file-o 2', text: item.name, data: {extension: item.extension} %>
   </div>
-  <div class="size columns small-2"><%= number_to_human_size item.object_file_size %></div>
-  <div class="date columns small-3" title="<%= l item.created_at, format: :long %>">
-    <%= l item.created_at, format: :short %>
+  <div class="size columns small-2 text-center"><%= number_to_human_size item.object_file_size %></div>
+  <div class="date columns small-3 text-center" title="<%= l item.updated_at, format: :long %>">
+    <%= l item.updated_at, format: :short %>
   </div>
   <a href="" data-context-button><%= fa_icon('ellipsis-h') %></a>
   <!--div class="actions" data-context-target="true">

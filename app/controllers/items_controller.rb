@@ -22,6 +22,19 @@ class ItemsController < ApplicationController
       @items = Item.shared_for(current_user)
     end
 
+    if params.has_key?(:sort)
+      column = (params[:sort][:column] || :name).to_sym
+      order = (params[:sort][:dir] || :asc).to_sym
+      if [:name, :size, :date].include?(column)
+        @items = @items.sort_by { |i| i.send(column) }
+        @items.reverse! if order == :desc
+      end
+      if [:name, :date].include?(column)
+        @subfolders = @subfolders.sort_by { |i| i.send(column) }
+        @subfolders.reverse! if order == :desc
+      end
+    end
+
     @folder = Folder.new parent: @current_folder, user: current_user, global: @current_folder.try(:global)
 
     respond_to do |format|
