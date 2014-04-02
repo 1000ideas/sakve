@@ -61,6 +61,13 @@ pl:
         tags: Tagi
         user_id: Uzytkownik
         thumb: Miniatura
+    errors:
+      models:
+        item:
+          attributes:
+            object:
+              spoofed_media_type: "wydaje się podejrzany, skontaktuj się z administratorem"
+
 en:
   folders:
     default_name: 'Main folder'

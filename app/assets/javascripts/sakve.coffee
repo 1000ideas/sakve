@@ -3,6 +3,7 @@ class Sakve
     progressbar: (name) ->
       label = $('<span>')
         .addClass('name')
+        .attr('title', name)
         .text( name )
       progress = $('<div>')
         .addClass('progress')
@@ -12,9 +13,9 @@ class Sakve
         .text("0%")
       $('<div>')
         .addClass('file-progress')
-        .append( label )
-        .append( progress )
         .append( value )
+        .append( progress )
+        .append( label )
     uploaded: (id, name, url) ->
       label = $('<span>')
         .addClass('name')
@@ -231,12 +232,22 @@ class Sakve
           data.submit()
         progress: @defaults.on_progress
         done: (event, data) =>
-          data.context.fadeOut ->
-            $(this).remove()
+          data
+            .context
+            .replaceWith(data.result.context)
+          $(event.target.form).foundation(alert: {animation: 'slideUp'})
           @reload_list('items')
-        error: (event, data) ->
-          true
+        fail: (event, data) ->
+          data
+            .context
+            .replaceWith(data.jqXHR.responseJSON.context)
+          $(event.target.form).foundation(alert: {animation: 'slideUp'})
+
       }
+
+    $(document).on 'closed', '#multiupload-files-modal', (event) =>
+      return unless $(event.target).is('[data-reveal]')
+      $(event.target).find('[data-alert]').remove()
 
   _init_transfer: ->
     default_value = $( "#transfer_expires_in" ).data('default')

@@ -89,10 +89,10 @@ class ItemsController < ApplicationController
     respond_to do |format|
       if @item.save
         format.html { redirect_to(items_path, notice: I18n.t('create.success') ) }
-        format.json  { render json: @item, status: :created, location: @item }
+        format.json { render action: :create, status: :ok, location: @item }
       else
         format.html { render action: "new" }
-        format.json  { render json: @item.errors, status: :unprocessable_entity }
+        format.json { render action: :create, status: :unprocessable_entity }
       end
     end
   end

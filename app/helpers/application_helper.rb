@@ -1,5 +1,13 @@
 module ApplicationHelper
 
+  def render_html(*args, &block)
+    _formats = self.formats
+    self.formats = [:html]
+    render(*args, &block)
+  ensure
+    self.formats = _formats
+  end
+
   def logo_tag
     content_tag(:div, class: :logo) do
       [

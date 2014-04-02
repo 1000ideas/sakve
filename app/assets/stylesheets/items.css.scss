@@ -126,3 +126,33 @@ ul.file-list {
 
   }
 }
+
+
+#multiupload-files-modal {
+  .file-progress {
+    font-size: .85em;
+
+    .name {
+      display: inline-block;
+      max-width: 30%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .progress {
+      display: inline-block;
+      width: 50%;
+      vertical-align: middle;
+      margin: 0 .5rem;
+    }
+
+    .progress-value {
+      display: inline-block;
+      width: 10%;
+      text-align: right;
+      vertical-align: middle;
+    }
+  }
+}
