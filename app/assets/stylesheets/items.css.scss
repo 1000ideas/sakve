@@ -82,6 +82,8 @@ ul.file-list {
           position: relative;
 
           &[data-extension]:after {
+            font-family: $header-font-family;
+            text-transform: uppercase;
             display: block;
             content: attr(data-extension);
             background: #555;

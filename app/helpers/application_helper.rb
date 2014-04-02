@@ -6,7 +6,7 @@ module ApplicationHelper
 
     class_name = [:sort, options.delete(:class)].compact
 
-    if params[:sort].try(:[], :column).to_sym == name
+    if params[:sort].try(:[], :column).try(:to_sym) == name
       direction = params[:sort].try(:[], :dir) == 'asc' ? :desc : :asc
       class_name << :current
       class_name << direction
