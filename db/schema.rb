@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140331132003) do
+ActiveRecord::Schema.define(:version => 20140402130801) do
 
   create_table "attachments", :force => true do |t|
     t.string   "upload_file_name"
@@ -120,6 +120,16 @@ ActiveRecord::Schema.define(:version => 20140331132003) do
     t.datetime "updated_at",                        :null => false
   end
 
+  create_table "transfer_stats", :force => true do |t|
+    t.integer  "transfer_id"
+    t.string   "client_ip",   :limit => 15
+    t.text     "browser"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+  end
+
+  add_index "transfer_stats", ["transfer_id"], :name => "index_transfer_stats_on_transfer_id"
+
   create_table "transfers", :force => true do |t|
     t.string   "name"
     t.string   "recipients"
@@ -134,6 +144,7 @@ ActiveRecord::Schema.define(:version => 20140331132003) do
     t.datetime "updated_at",                                           :null => false
     t.boolean  "done",                              :default => false
     t.string   "group_token",         :limit => 16
+    t.integer  "statistics_count",                  :default => 0
   end
 
   create_table "user_groups", :force => true do |t|

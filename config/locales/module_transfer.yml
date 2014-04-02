@@ -26,14 +26,23 @@ pl:
       wait: "Przetwarzanie..."
     transfer:
       download: "Pobierz"
-      clipboard: "Kopiuj do schowka"
+      clipboard: "Skopiuj link"
+      stats: "Statystyki pobierania"
       save: "Zapisz w katalogu Sakve"
       destroy: "Usuń"
       sure: "Usunąć?"
     create:
       done: "Przetwarzanie zakończone!"
       processing: "Przetwarzanie w toku..."
-
+    show:
+      download_page: "Przejdź do strony pobierania"
+      downloaded: "Pobrano: %{count} razy"
+      last: "Ostatni raz pobrano: %{date}"
+      stats:
+        title: Statystyki pobierania
+        download_start: "Data rozpoczecia"
+        client_ip: "Adres IP"
+        browser: "Przeglądarka (UserAgent)"
   menu:
     transfers: Transfers
   activerecord:

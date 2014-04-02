@@ -1,0 +1,29 @@
+<h2><%= @transfer.name %></h2>
+<p><%= link_to t('.download_page'), download_transfer_url(token: @transfer.token), class: [:button, :tiny] %></p>
+
+<h3>Statystyki</h3>
+<p><%= t('.downloaded', count: @transfer.statistics_count) %></p>
+<% if @transfer.statistics_count > 0 %>
+<p><%= t('.last', date: l(@transfer.last_downloaded_at, format: :short)) %></p>
+
+<div class="statistics-wrapper">
+  <table class="statistics">
+    <thead>
+      <tr>
+        <th><%= t('.stats.download_start') %></th>
+        <th><%= t('.stats.client_ip') %></th>
+        <th><%= t('.stats.browser') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @transfer.statistics.each do |stat| %>
+      <tr>
+        <td><%= l stat.created_at, format: :short %></td>
+        <td><%= stat.client_ip %></td>
+        <td><%= stat.browser %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<% end %>

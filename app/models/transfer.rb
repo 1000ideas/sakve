@@ -2,6 +2,7 @@ class Transfer < ActiveRecord::Base
 
   belongs_to :user
   has_many :folders
+  has_many :statistics, class_name: 'TransferStat', order: 'created_at DESC'
   scope :expired, lambda { where('`expires_at` IS NOT NULL AND `expires_at` < ?', DateTime.now) }
   scope :active, lambda { where('`expires_at` IS NULL OR `expires_at` >= ?', DateTime.now) }
   scope :for_user, lambda { |user| user.admin? ? where(true) : where(user_id: user.id) }
@@ -57,6 +58,10 @@ class Transfer < ActiveRecord::Base
     else
       [object_file_name]
     end
+  end
+
+  def last_downloaded_at
+    self.statistics.first.created_at
   end
 
   def zip?
