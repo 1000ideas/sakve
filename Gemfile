@@ -5,8 +5,6 @@ gem 'sqlite3'
 gem "mysql2"
 gem "rubyzip", '~> 1.1.1'
 
-# Gems used only for assets and not required
-# in production environments by default.
 group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
@@ -23,8 +21,6 @@ group :test do
   gem 'capybara-webkit'
 end
 
-# gem 'debugger', group: [:test, :development]
-
 gem 'jquery-rails'
 gem 'i18n-js', github: "cblavier/i18n-js"
 
@@ -39,4 +35,8 @@ gem "globalize3", "~> 0.3.0"
 gem "will_paginate", "~> 3.0"
 gem 'acts_as_tree', '~> 0.1.1'
 gem "nokogiri", '1.5.9'
+
+gem 'sinatra', '>= 1.3.0', :require => nil
+gem 'sidekiq'
+
 gem 'thin'

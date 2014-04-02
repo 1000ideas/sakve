@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
   has_many :folders, dependent: :destroy
   has_many :shares, as: :collaborator
   has_many :shared_items, through: :shares, source: :resource, source_type: 'Item'
+  has_many :selection_downloads
   # has_many :shared_folders, through: :shares, source: :resource, source_type: 'Folder'
 
   scope :starts_with, lambda { |query|

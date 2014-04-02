@@ -1,5 +1,16 @@
 <h2>Utworzono transfer</h2>
 <div class="row collapse">
+  <div class="columns small-12">
+    <p id="transfer-processing-status">
+      <% if @transfer.done? %>
+        <%= t('.done') %>
+      <% else %>
+        <%= t('.processing') %>
+      <% end %>
+    </p>
+  </div>
+</div>
+<div class="row collapse">
   <div class="columns small-10">
     <%= text_field_tag 'clipboard-text', download_transfer_url(token: @transfer.token) %>
   </div>

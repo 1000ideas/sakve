@@ -38,6 +38,7 @@ pickle-email-*.html
 .project
 uploads/*
 folder-zips/*
+selection-zips/*
 
 ###Ruby###
 

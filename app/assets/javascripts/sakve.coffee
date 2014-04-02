@@ -3,6 +3,7 @@ class Sakve
     progressbar: (name) ->
       label = $('<span>')
         .addClass('name')
+        .attr('title', name)
         .text( name )
       progress = $('<div>')
         .addClass('progress')
@@ -12,9 +13,9 @@ class Sakve
         .text("0%")
       $('<div>')
         .addClass('file-progress')
-        .append( label )
-        .append( progress )
         .append( value )
+        .append( progress )
+        .append( label )
     uploaded: (id, name, url) ->
       label = $('<span>')
         .addClass('name')
@@ -74,7 +75,7 @@ class Sakve
         @selection_changed()
 
   modal: (id, content, options = {}) ->
-    on_close = (event)->
+    on_close = (event) ->
       return unless $(event.target).is('[data-reveal]')
       options.closed.call(event.target) if options.closed?
       $(this).remove()
@@ -86,6 +87,8 @@ class Sakve
       .appendTo('body')
       .foundation()
       .on('opened', options.opened ? -> )
+      .on('open', options.open ? -> )
+      .on('close', options.close ? -> )
       .on('closed', on_close )
       .foundation('reveal', 'open')
 
@@ -132,13 +135,29 @@ class Sakve
       img.src = path
 
   _init_selection: ->
+    ## Duble click on folder
+    $(document).on 'dblclick', '.file-list li.folder[data-url]', (event) =>
+      event.preventDefault()
+      window.location.href = $(event.currentTarget).data('url')
+
     $(document).on 'change', '.file-list input[type=checkbox]', (event) =>
       checked = $(event.target).is(':checked')
-      @selection_changed $(event.target).closest('li').toggleClass('selected', checked)
+      element = $(event.target).closest('li').toggleClass('selected', checked)
+      if checked
+        @selection_changed(element)
+      else
+        @selection_changed()
       event.stopPropagation()
+
+    $(document).on 'click', (event) =>
+      if $(event.target).closest('.file-list li').length == 0
+        $('.file-list input[type=checkbox]:checked').each (idx, el) ->
+          $(el).prop('checked', false).change()
 
     $(document).on 'click', '.file-list li', (event) =>
       return if $(event.target).closest('label.custom-check-box').length > 0
+      event.preventDefault()
+      event.stopPropagation()
 
       input = $('input[type=checkbox]', event.target)
       form = $(event.target).closest('form')
@@ -151,11 +170,15 @@ class Sakve
             $('input[type=checkbox]', el).prop('checked', true).change()
         input.prop('checked', true).change()
       else if event.ctrlKey
-        input.prop('checked', true).change()
+        input.prop('checked', !input.prop('checked')).change()
       else
-        form.find('input[type=checkbox]:checked').each (idx, el) ->
-          $(el).prop('checked', false).change()
-        input.prop('checked', true).change()
+        checked_count = form.find('input[type=checkbox]:checked').length
+        if checked_count >= 1 and !input.prop('checked') or checked_count > 1 and input.prop('checked')
+          form.find('input[type=checkbox]:checked').each (idx, el) ->
+            $(el).prop('checked', false).change()
+          input.prop('checked', true).change()
+        else
+          input.prop('checked', !input.prop('checked')).change()
 
     $('.file-list input[type=checkbox]:checked').each (idx, el) =>
       $(el).closest('li').toggleClass('selected', true)
@@ -209,12 +232,22 @@ class Sakve
           data.submit()
         progress: @defaults.on_progress
         done: (event, data) =>
-          data.context.fadeOut ->
-            $(this).remove()
+          data
+            .context
+            .replaceWith(data.result.context)
+          $(event.target.form).foundation(alert: {animation: 'slideUp'})
           @reload_list('items')
-        error: (event, data) ->
-          true
+        fail: (event, data) ->
+          data
+            .context
+            .replaceWith(data.jqXHR.responseJSON.context)
+          $(event.target.form).foundation(alert: {animation: 'slideUp'})
+
       }
+
+    $(document).on 'closed', '#multiupload-files-modal', (event) =>
+      return unless $(event.target).is('[data-reveal]')
+      $(event.target).find('[data-alert]').remove()
 
   _init_transfer: ->
     default_value = $( "#transfer_expires_in" ).data('default')

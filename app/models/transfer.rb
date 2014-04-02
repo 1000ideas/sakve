@@ -10,38 +10,37 @@ class Transfer < ActiveRecord::Base
   has_attached_file :object,
     path: ':partition/:class/:id/:filename'
 
-  attr_writer :expires_in, :group_token
+  attr_writer :expires_in
   attr_accessible :expires_in, :name, :object,
     :recipients, :token, :user_id, :user, :group_token
 
 
   #before_validation :compress_files
-  before_validation :set_default_name
+  before_validation :generate_token, :set_default_name, on: :create
   before_create :setup_exires_at
-  after_create :generate_token, :delete_transfer_files, :send_mail_to_recipients
+  after_create :delete_transfer_files, :send_mail_to_recipients
+  after_commit :async_compress_files, on: :create
 
   validates :token, uniqueness: true
   # validates :name, presence: true
-  validates :group_token, presence: true, length: {is: 16}
+  validates :group_token, presence: true, length: {is: 16}, unless: :done?
+  validates :token, presence: true, length: {is: 32}
   validate :valid_recipients
-  validates :files, length: {minimum: 1}, if: Proc.new { |a| a.token.blank? }
-  validates :object, attachment_presence: true, on: :create, if: proc {|a| a.files.any? }
+  validates :files, length: {minimum: 1}, unless: :done?
+  validates :object, attachment_presence: true, on: :update
   validates :object, attachment_content_type: { content_type: /.*/i }
+
+  def initialize(*args)
+    super
+    if read_attribute(:group_token).blank?
+      write_attribute(:group_token, last_user_group_token)
+    end
+  end
 
   def expires_in
     if expires_at.present?
       ((expires_at.to_datetime - DateTime.now)/1.day).ceil
     end
-  end
-
-  def group_token
-    @group_token ||= last_user_group_token || SecureRandom.hex(8)
-  end
-
-  def group_token=(value)
-    @group_token = value
-    compress_files
-    group_token
   end
 
   def saved_by_user(user)
@@ -61,7 +60,11 @@ class Transfer < ActiveRecord::Base
   end
 
   def zip?
-    !!object.content_type.match(%r{application/zip})
+    if object?
+      !!object.content_type.match(%r{application/zip})
+    else
+      make_archive?
+    end
   end
 
   def files
@@ -99,11 +102,13 @@ class Transfer < ActiveRecord::Base
   private
 
   def last_user_group_token
-    TransferFile.where(user_id: user_id).first.try(:token)
+    TransferFile.loose.where(transfer_files: {user_id: user_id}).first.try(:token) || SecureRandom.hex(8)
   end
 
   def generate_token
-    saved = self.update_attributes( token: SecureRandom.hex(32) ) until saved
+    begin
+      self.token = SecureRandom.hex(16)
+    end until self.class.where(token: self.token).empty?
   end
 
   def valid_recipients
@@ -118,20 +123,53 @@ class Transfer < ActiveRecord::Base
     # self.errors.add(:recipients, :too_short, count: 1) unless recipient_count > 0
   end
 
+  def async_compress_files
+    TransferArchiveWorker.perform_async(self.token)
+  end
+
   def compress_files
-    if group_token && !self.object? && files.any?
-      self.object = TransferFile.compress(group_token)
-      if self.object_file_name.empty?
-        self.object.instance_write :file_name,  file_name_from_title
-      end
-      @delete_files = true
+    self.object = create_object_from_transfer
+    if self.object_file_name.empty?
+      self.object.instance_write :file_name,  file_name_from_title
     end
+    @delete_files = true
+    self.done = true
+    self
   end
 
   def file_name_from_title(ext = :zip)
     name = self.name.try(:parameterize)
     name = "quicktransfer-#{token || group_token}" if name.blank?
     "#{name}.#{ext}"
+  end
+
+  def make_archive?
+    !files.one? or files.first.psd?
+  end
+
+  def create_object_from_transfer
+    if files.one? and !(single_file = files.first).psd?
+      return single_file.object
+    end
+
+    filename = Dir::Tmpname.make_tmpname("transfer-#{token}", ".zip")
+    filepath = File.join(Dir::tmpdir, filename)
+
+    Zip::File.open(filepath, Zip::File::CREATE) do |zipfile|
+      files.map do |file|
+        name = file.name
+        ext = File.extname(name)
+        basename = File.basename(name, ext)
+        it = 1
+        while zipfile.find_entry(name)
+          name = "#{basename}.#{it}#{ext}"
+          it += 1
+        end
+        zipfile.add(name, file.object.path) { true }
+      end
+    end
+
+    File.open(filepath)
   end
 
   def delete_transfer_files
@@ -151,8 +189,8 @@ class Transfer < ActiveRecord::Base
   end
 
   def set_default_name
-    if name.blank? and !zip?
-      self.name = File.basename(object_file_name, '.*').titleize
+    if name.blank? and !make_archive?
+      self.name = File.basename(files.first.object_file_name, '.*').titleize
     elsif name.blank?
       t = (token || group_token).first(5)
       self.name = "Quicktransfer #{t}"

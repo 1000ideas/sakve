@@ -44,6 +44,9 @@ class FoldersController < ApplicationController
     authorize! :download, @folder
 
     respond_to do |format|
+      format.js do
+        @folder.async_recreate_zip_file
+      end
       format.zip
     end
   end

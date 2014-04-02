@@ -79,7 +79,9 @@ class ItemsController < ApplicationController
   # POST /items
   # POST /items.xml
   def create
-    @item = Item.new(params[:item])
+    @item = Item.new
+    @item.prevent_processing!
+    @item.attributes = params[:item]
     @item.user = current_user
 
     authorize! :create, @item
@@ -87,10 +89,10 @@ class ItemsController < ApplicationController
     respond_to do |format|
       if @item.save
         format.html { redirect_to(items_path, notice: I18n.t('create.success') ) }
-        format.json  { render json: @item, status: :created, location: @item }
+        format.json { render action: :create, status: :ok, location: @item }
       else
         format.html { render action: "new" }
-        format.json  { render json: @item.errors, status: :unprocessable_entity }
+        format.json { render action: :create, status: :unprocessable_entity }
       end
     end
   end
@@ -154,39 +156,15 @@ class ItemsController < ApplicationController
   end
 
   def bulk_download
-    @folders = Folder
-      .accessible_by(current_ability, :update)
-      .where( id: selection[:fids] )
-    @items = Item
-      .accessible_by(current_ability, :update)
-      .where( id: selection[:ids] )
 
-    tmp_name = (selection[:ids] + selection[:fids]).join('-')
-
-    filename = Dir::Tmpname.make_tmpname("selection-#{tmp_name}", ".zip")
-    @filepath = File.join(Dir::tmpdir, filename)
-    Zip::File.open(@filepath, Zip::File::CREATE) do |zipfile|
-      @folders.each do |folder|
-        folder.each_descendant do |f|
-          path = f.ancestors_until(folder.parent, true).map(&:name).reverse.join('/')
-          unless path.blank?
-            zipfile.mkdir(path) unless zipfile.find_entry(path)
-            Rails.logger.debug "[zip mkdir] #{path}"
-            path += '/'
-          end
-          f.items.each do |item|
-            Rails.logger.debug "[zip add] #{path}#{item.name_for_download}"
-            zipfile.add("#{path}#{item.name_for_download}", item.object.path) { true }
-          end
-        end
-      end
-      @items.each do |item|
-        Rails.logger.debug "[zip add] #{item.name_for_download}"
-        zipfile.add("#{item.name_for_download}", item.object.path) { true }
-      end
+    if params[:token]
+      @selection = current_user.selection_downloads.where(id: params[:token]).first
+    else
+      @selection = current_user.selection_downloads.create(selection)
     end
 
     respond_to do |format|
+      format.js
       format.zip
     end
   end

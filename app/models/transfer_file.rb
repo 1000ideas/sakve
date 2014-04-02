@@ -6,7 +6,7 @@ class TransferFile < ActiveRecord::Base
   has_attached_file :object,
     path: ':partition/:class/:token/:id/:filename'
 
-  before_create :init_token
+  before_validation :generate_token, on: :create
 
   validates :token, length: {is: 16}
   validates :user_id, presence: true
@@ -14,32 +14,9 @@ class TransferFile < ActiveRecord::Base
     attachment_presence: true,
     attachment_content_type: { content_type: /.*/i }
 
-  # Returns tempfile containg zipped files marked with token
-  def self.compress(token, debug = false)
-    if self.where(token: token).one? and !(single_file = self.where(token: token).first).psd?
-      return single_file.object
-    end
-    filename = Dir::Tmpname.make_tmpname("transfer-#{token}", ".zip")
-    filepath = File.join(Dir::tmpdir, filename)
-
-    Zip::File.open(filepath, Zip::File::CREATE) do |zipfile|
-      self.where(token: token).map do |file|
-        name = file.name
-        ext = File.extname(name)
-        basename = File.basename(name, ext)
-        it = 1
-        while zipfile.find_entry(name)
-          name = "#{basename}.#{it}#{ext}"
-          it += 1
-        end
-        zipfile.add(name, file.object.path) { true }
-      end
-    end
-
-    File.open(filepath)
-  end
-
   alias_attribute :name, :object_file_name
+
+  scope :loose, lambda { joins("LEFT JOIN `#{Transfer.table_name}` ON `#{table_name}`.`token` = `#{Transfer.table_name}`.`group_token`").where(transfers: {id: nil} )}
 
   def psd?
     !!object.content_type.match(%r{(photoshop|psd)$})
@@ -47,10 +24,11 @@ class TransferFile < ActiveRecord::Base
 
   private
 
-  def init_token
-    if token.blank?
-      ntoken = SecureRandom.hex(8) until self.class.where(token: ntoken) == 0
-      self.update_attributes(token: ntoken)
+  def generate_token
+    if self.token.blank?
+      begin
+        self.token = SecureRandom.hex(8)
+      end until self.class.where(token: self.token).empty?
     end
   end
 end

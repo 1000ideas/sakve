@@ -3,7 +3,9 @@
   <div class="columns small-centered">
     <%= logo_tag %>
     <h1><small>Pobieranie pliku:</small> <%= @transfer.name %></h1>
-    <% if @transfer.expired? %>
+    <% if !@transfer.object? %>
+      <p>Plik jest jeszcze przetwarzany</p>
+    <% elsif @transfer.expired? %>
       <p>Plik nie jest już dostepny</p>
     <% else %>
       <h3>Zawartość</h3>

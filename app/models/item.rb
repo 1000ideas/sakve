@@ -1,5 +1,9 @@
 class Item < ActiveRecord::Base
+  @@statuses = %w(unprocessed processing finished).map(&:to_sym).freeze
+
   include Sakve::ItemTypes
+  include ItemBulkActions
+  include ConvertStatus
 
   belongs_to :user
   belongs_to :folder, touch: true
@@ -39,6 +43,7 @@ class Item < ActiveRecord::Base
     url: '/:class/:id/download/:style/:name.:extension'
 
   before_save :fix_mime_type, :save_tags, :default_name
+  after_commit :async_reprocess!
 
   attr_accessible :name, :object, :type, :user_id, :user, :tags, :folder_id, :folder,
     :object_file_name
@@ -48,40 +53,23 @@ class Item < ActiveRecord::Base
     attachment_content_type: { content_type: /.*/i }
 
   validates :folder_id, presence: true
-  validates :name, uniqueness: { scope: :folder_id, case_sensitive: false }
 
-  def self.subaction(selection)
-    ba = selection[:subaction]
-    raise ArgumentError, "Unknown subaction '#{ba}'" unless methods.grep(/bulk_#{ba}/).any?
-    ba
+  def async_reprocess!
+    ItemProcessWorker.perform_async(self.id) if status_unprocessed?
   end
 
-  def self.bulk(selection)
-    self
-      .where(id: selection[:ids])
-      .send(:"bulk_#{subaction(selection)}", selection)
+  def reprocess!
+    self.status_processing!
+    self.object.reprocess!
+    self.status_finished!
   end
-
-  def self.bulk_move(selection)
-    self.update_all(folder_id: selection[:folder_id])
-    true
-  end
-
-  def self.bulk_tags(selection)
-    output = true
-
-    self.transaction do
-      all.each do |item|
-        item.instance_variable_set("@readonly", false)
-        item.tags_list << (Tag.from_list(selection[:tags]) - item.tags_list)
-      end
-    end
-    output
-  end
-
 
   def public?
     self.folder.global?
+  end
+
+  def prevent_processing!
+    self.object.post_processing = false
   end
 
   def shared_for? user
@@ -148,6 +136,10 @@ class Item < ActiveRecord::Base
 
   def self.access_denied_image(style)
 
+  end
+
+  def extension
+    File.extname(object_file_name).gsub('.', '')
   end
 
   def name_for_download(extension = nil, increment = nil)
