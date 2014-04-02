@@ -108,12 +108,38 @@ class Sakve
   selection_changed: (element = null) ->
     @last_selected = element
 
-    selected = $('.file-list input[type=checkbox]:checked')
-    $('.buttons-line').toggleClass('selected', selected.length > 0)
+    _selection_changed = =>
+      selected = $('.file-list input[type=checkbox]:checked')
+      $('.buttons-line').toggleClass('selected', selected.length > 0)
 
-    folders = selected.filter (idx) ->
-      this.name.match(/fid/i)
-    $('.buttons-line').toggleClass('folders-selected', folders.length > 0)
+      folders = selected.filter (idx) ->
+        this.name.match(/\[fids\]/i)
+
+      items = selected.filter (idx) ->
+        this.name.match(/\[ids\]/i)
+
+      _data = {
+        selection: {
+          fids: folders.map((idx, el) -> parseInt(el.value)).toArray()
+          ids: items.map((idx, el) -> parseInt(el.value)).toArray()
+
+        }
+      }
+
+      $('.buttons-line').toggleClass('folders-selected', folders.length > 0)
+
+      if selected.length > 0 and @last_selected?
+        $.ajax
+          url: @last_selected.data('context-ajax')
+          type: 'POST'
+          data: _data
+          success: (data) ->
+            $('.buttons-line .for-selection').html(data)
+
+      @selection_changed_timeout = null
+
+    unless @selection_changed_timeout?
+      @selection_changed_timeout = setTimeout(_selection_changed, 100)
 
   _init_clipboard: ->
     ZeroClipboard.config
@@ -142,11 +168,7 @@ class Sakve
 
     $(document).on 'change', '.file-list input[type=checkbox]', (event) =>
       checked = $(event.target).is(':checked')
-      element = $(event.target).closest('li').toggleClass('selected', checked)
-      if checked
-        @selection_changed(element)
-      else
-        @selection_changed()
+      @selection_changed $(event.target).closest('li').toggleClass('selected', checked)
       event.stopPropagation()
 
     $(document).on 'click', (event) =>

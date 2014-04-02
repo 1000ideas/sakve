@@ -47,14 +47,29 @@ body > header {
     .button, input {
         // margin-bottom: 0;
     }
-    .for-all { @include transition(margin .45s);  }
+    .for-all {
+      @include transition(margin .45s);
+      height: -3.4625rem;
+    }
     &.selected .for-all {
       margin-top: -3.4625rem ;
     }
-
     margin-bottom: 1.25rem;
     height: 2.3125rem;
     overflow: hidden;
+
+    .for-selection {
+      ul {
+        list-style: none;
+        margin: 0;
+        font-size: 1.2em;
+        > li {
+          margin-left: 1em;
+          display: inline-block;
+        }
+      }
+    }
+
   }
 
 }
