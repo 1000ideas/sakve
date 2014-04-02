@@ -18,7 +18,7 @@ class Transfer < ActiveRecord::Base
   #before_validation :compress_files
   before_validation :generate_token, :set_default_name, on: :create
   before_create :setup_exires_at
-  after_create :delete_transfer_files, :send_mail_to_recipients
+  after_commit :delete_transfer_files, :send_mail_to_recipients
   after_commit :async_compress_files, on: :create
 
   validates :token, uniqueness: true
@@ -173,11 +173,15 @@ class Transfer < ActiveRecord::Base
   end
 
   def delete_transfer_files
-    self.files.each(&:destroy) if @delete_files
+    if @delete_files and done?
+      self.files.each(&:destroy)
+    end
   end
 
   def send_mail_to_recipients
-    TransferMailer.after_create(self).deliver if recipients_list.any?
+    if recipients_list.any? and done?
+      TransferMailer.after_create(self).deliver
+    end
   end
 
   def setup_exires_at

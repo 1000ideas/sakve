@@ -1,4 +1,4 @@
-<div class="transfer-file" data-fid="<%= transfer_file.id %>">
+<div class="transfer-file label" data-fid="<%= transfer_file.id %>">
+  <%= link_to raw('&times;'), file_path(transfer_file, format: :js), method: :delete, confirm: t('confirm.text'), remote: true %>
   <span class="name"><%= transfer_file.name %></span>
-  <%= link_to t('destroy'), file_path(transfer_file, format: :js), method: :delete, confirm: t('confirm.text'), remote: true %>
 </div>

@@ -21,17 +21,17 @@ class Sakve
         .addClass('name')
         .text( name )
       destroy = $('<a>')
-        .text(I18n.t('destroy'))
+        .html("&times;")
         .attr
           href: url
           'data-method': 'delete'
           'data-confirm': I18n.t('confirm.text')
           'data-remote': true
       $('<div>')
-        .addClass('transfer-file')
+        .addClass('transfer-file label')
         .attr('data-fid', id)
-        .append( label )
         .append( destroy )
+        .append( label )
     collaborator_select: (ul, item) ->
       label = $('<a>')
         .append( "<strong>#{item.type_name}</strong>" )
