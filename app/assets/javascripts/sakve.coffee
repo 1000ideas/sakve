@@ -271,7 +271,7 @@ class Sakve
       $(event.target).find('[data-alert]').remove()
 
   _init_transfer: ->
-    default_value = $( "#transfer_expires_in" ).data('default')
+    default_value = $( "#transfer_expires_in" ).val()
     $( "#expires_in_slider" )
       .slider
         value: default_value
@@ -280,8 +280,8 @@ class Sakve
         step: 1
         animate: "fast"
         slide: ( event, ui ) ->
-          $( "#transfer_expires_at" ).val( if ui.value == 31 then '\u221e' else ui.value )
-    $( "#transfer_expires_at" ).val( default_value )
+          $( "#transfer_expires_in" ).val( if ui.value == 31 then '\u221e' else ui.value )
+    # $( "#transfer_expires_in" ).val( default_value )
 
     $('.transfer-fileupload').each (idx, el) =>
       @fileupload_with_dropzone el, {

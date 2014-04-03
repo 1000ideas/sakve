@@ -12,6 +12,7 @@
       <%= render partial: 'l/partials/errors', object: @transfer.errors %>
       <% if f.object.new_record? %>
       <div class="field">
+        <%#= f.hidden_field :expires_in, data: {default: "7"} %>
         <%= f.hidden_field :group_token %>
         <%= file_field_tag(:object, multiple: true, class: 'transfer-fileupload', data: { value: t('.fileupload', default: 'Select files'), file_upload: true, url: files_path(format: :json) }) %>
       </div>
