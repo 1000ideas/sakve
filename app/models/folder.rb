@@ -103,6 +103,10 @@ class Folder < ActiveRecord::Base
     true
   end
 
+  def create_transfer(user)
+
+  end
+
   def shared_for? user
     users.exists? (user) || user.groups.map {|g| groups.exists?(g) }.inject{|a,b| a || b }
   end
