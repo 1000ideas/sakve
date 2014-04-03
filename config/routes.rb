@@ -72,7 +72,7 @@ Sakve::Application.routes.draw do
         token: /[0-9a-f]{32,64}/i
       }
 
-    resources :transfers, except: [:show, :new] do
+    resources :transfers, except: [:new] do
       collection do
         resources :files, controller: :transfer_files, only: [:create, :destroy]
       end

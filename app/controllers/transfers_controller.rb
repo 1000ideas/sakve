@@ -19,6 +19,15 @@ class TransfersController < ApplicationController
     end
   end
 
+  def show
+    @transfer = Transfer.find(params[:id])
+    authorize! :update, @transfer
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def status
     @transfer = Transfer.find(params[:id])
     authorize! :update, @transfer
@@ -35,6 +44,7 @@ class TransfersController < ApplicationController
       format.html { render layout: 'download' }
       format.zip do
         head(:gone) and return if @transfer.expired?
+        @transfer.statistics.create(client_ip: request.remote_ip, browser: request.user_agent)
         send_file @transfer.object.path
       end
     end

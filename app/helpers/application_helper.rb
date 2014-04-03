@@ -1,5 +1,22 @@
 module ApplicationHelper
 
+  def sort_link(name, title = nil, options = {})
+    title ||= t(name, scope: :sortbar)
+    direction = :asc
+
+    class_name = [:sort, options.delete(:class)].compact
+
+    if params[:sort].try(:[], :column).try(:to_sym) == name
+      direction = params[:sort].try(:[], :dir) == 'asc' ? :desc : :asc
+      class_name << :current
+      class_name << direction
+    end
+
+    options[:class] = class_name
+
+    link_to title, {sort: {column: name, dir: direction}}, options
+  end
+
   def cp(path)
     'active' if current_page?(path)
   end

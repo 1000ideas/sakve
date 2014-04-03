@@ -21,17 +21,17 @@ class Sakve
         .addClass('name')
         .text( name )
       destroy = $('<a>')
-        .text(I18n.t('destroy'))
+        .html("&times;")
         .attr
           href: url
           'data-method': 'delete'
           'data-confirm': I18n.t('confirm.text')
           'data-remote': true
       $('<div>')
-        .addClass('transfer-file')
+        .addClass('transfer-file label')
         .attr('data-fid', id)
-        .append( label )
         .append( destroy )
+        .append( label )
     collaborator_select: (ul, item) ->
       label = $('<a>')
         .append( "<strong>#{item.type_name}</strong>" )
@@ -179,7 +179,6 @@ class Sakve
     $(document).on 'click', '.file-list li', (event) =>
       return if $(event.target).closest('label.custom-check-box').length > 0
       event.preventDefault()
-      event.stopPropagation()
 
       input = $('input[type=checkbox]', event.target)
       form = $(event.target).closest('form')
@@ -272,7 +271,7 @@ class Sakve
       $(event.target).find('[data-alert]').remove()
 
   _init_transfer: ->
-    default_value = $( "#transfer_expires_in" ).data('default')
+    default_value = $( "#transfer_expires_in" ).val()
     $( "#expires_in_slider" )
       .slider
         value: default_value
@@ -281,8 +280,8 @@ class Sakve
         step: 1
         animate: "fast"
         slide: ( event, ui ) ->
-          $( "#transfer_expires_at" ).val( if ui.value == 31 then '\u221e' else ui.value )
-    $( "#transfer_expires_at" ).val( default_value )
+          $( "#transfer_expires_in" ).val( if ui.value == 31 then '\u221e' else ui.value )
+    # $( "#transfer_expires_in" ).val( default_value )
 
     $('.transfer-fileupload').each (idx, el) =>
       @fileupload_with_dropzone el, {

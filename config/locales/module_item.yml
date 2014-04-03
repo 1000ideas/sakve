@@ -27,6 +27,10 @@ pl:
       private: 'Pliki prywatne'
       shared: 'Współdzielone pliki'
       breadcrumbs: 'Gdzie ja jestem?'
+      sort:
+        name: "Nazwa"
+        size: Rozmiar
+        date: "Data modyfikacji"
     multiupload:
       title: 'Dodawanie plików'
       fileupload: 'Dodaj pliki'

@@ -81,9 +81,16 @@ body {
     margin-left: 0;
     font-size: .9rem;
     margin-bottom: 2em;
+    max-height: 10*2em;
+    overflow: auto;
 
     li {
+      line-height: 1.5em;
       margin-bottom: .5em;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -ms-text-overflow: ellipsis;
     }
   }
 

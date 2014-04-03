@@ -2,6 +2,7 @@ class Transfer < ActiveRecord::Base
 
   belongs_to :user
   has_many :folders
+  has_many :statistics, class_name: 'TransferStat', order: 'created_at DESC'
   scope :expired, lambda { where('`expires_at` IS NOT NULL AND `expires_at` < ?', DateTime.now) }
   scope :active, lambda { where('`expires_at` IS NULL OR `expires_at` >= ?', DateTime.now) }
   scope :for_user, lambda { |user| user.admin? ? where(true) : where(user_id: user.id) }
@@ -18,7 +19,7 @@ class Transfer < ActiveRecord::Base
   #before_validation :compress_files
   before_validation :generate_token, :set_default_name, on: :create
   before_create :setup_exires_at
-  after_create :delete_transfer_files, :send_mail_to_recipients
+  after_commit :delete_transfer_files, :send_mail_to_recipients
   after_commit :async_compress_files, on: :create
 
   validates :token, uniqueness: true
@@ -40,6 +41,8 @@ class Transfer < ActiveRecord::Base
   def expires_in
     if expires_at.present?
       ((expires_at.to_datetime - DateTime.now)/1.day).ceil
+    else
+      @expires_in || 7
     end
   end
 
@@ -57,6 +60,10 @@ class Transfer < ActiveRecord::Base
     else
       [object_file_name]
     end
+  end
+
+  def last_downloaded_at
+    self.statistics.first.created_at
   end
 
   def zip?
@@ -173,18 +180,22 @@ class Transfer < ActiveRecord::Base
   end
 
   def delete_transfer_files
-    self.files.each(&:destroy) if @delete_files
+    if @delete_files and done?
+      self.files.each(&:destroy)
+    end
   end
 
   def send_mail_to_recipients
-    TransferMailer.after_create(self).deliver if recipients_list.any?
+    if recipients_list.any? and done?
+      TransferMailer.after_create(self).deliver
+    end
   end
 
   def setup_exires_at
+    Rails.logger.debug "EXPIN: #{expires_in.inspect}"
+    Rails.logger.debug "EXPIN: #{expires_in.to_i.inspect}"
     if expires_in.to_i > 0
       self.expires_at = DateTime.now + expires_in.to_i.days
-    elsif expires_in.nil?
-      self.expires_at = DateTime.now + 7.days
     end
   end
 

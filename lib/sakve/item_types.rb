@@ -17,7 +17,7 @@ module Sakve::ItemTypes
     ! object_content_type.match(/^audio/).nil?
   end
 
-  def document?
+  def office?
     ! object_content_type.match(/(word|excel|powerpoint|officedocument|opendocument)/).nil?
   end
 
@@ -37,8 +37,20 @@ module Sakve::ItemTypes
     ! object_content_type.match(/pdf$/).nil?
   end
 
+  def document?
+    office? or presentation? or spreadsheet? or text_document? or pdf_document?
+  end
+
+  def psd?
+    !!object.content_type.match(%r{(photoshop|psd)$})
+  end
+
+  def graphics?
+    image? or psd?
+  end
+
   def archive?
-    ! object_content_type.match(/(bzip2$|[gl]zip$|zip$|lzma$|lzop$|xz$|commpress|archive|diskimage$)/).nil?
+    !!object_content_type.match(/(bzip2$|[gl]zip$|zip$|lzma$|lzop$|xz$|commpress|archive|diskimage$)/)
   end
 
   def webpage?

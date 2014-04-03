@@ -54,6 +54,9 @@ class Item < ActiveRecord::Base
 
   validates :folder_id, presence: true
 
+  def size; object_file_size; end
+  def date; updated_at; end
+
   def async_reprocess!
     ItemProcessWorker.perform_async(self.id) if status_unprocessed?
   end
@@ -75,6 +78,7 @@ class Item < ActiveRecord::Base
   def shared_for? user
     users.exists?(user) || user.groups.map{|g| groups.exists?(g) }.inject{|a,b| a || b} || folder.shared_for?(user)
   end
+
 
   def content_type(style = nil)
     style ||= :original

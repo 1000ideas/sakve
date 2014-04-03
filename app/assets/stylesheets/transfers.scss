@@ -1,0 +1,21 @@
+.uploaded-files {
+  .label {
+    margin-bottom: 1em;
+    margin-left: .5em;
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+    max-width: 90%;
+
+    a {
+      color: #fff;
+      font-weight: bold;
+      margin-right: .3em;
+    }
+  }
+}
+
+.statistics-wrapper {
+  max-height: 12rem;
+  overflow: auto;
+}
