@@ -1,13 +1,13 @@
 <li><%= link_to fa_icon('picture-o', text: t('.show')), item_path(item, format: :js), data: { remote: true } %></li>
 <li><%= link_to fa_icon('cloud-download', text: t('.download')), download_item_path(item, name: item.name) %></li>
-<% if can? :share, :item %>
+<% if can? :share, item %>
 <li><%= link_to fa_icon('link', text: t('.share')), share_item_path(item, format: :js), data: {remote: true} %></li>
 <% end %>
-<% if can? :update, :item %>
+<% if can? :update, item %>
 <li><%= link_to fa_icon('edit', text: t('.rename')), rename_item_path(item, format: :js), data: {remote: true} %></li>
 <li><%= link_to fa_icon('level-up', text: t('.move')), move_item_path(item, format: :js), data: {remote: true} %></li>
 <li><%= link_to fa_icon('tag', text: t('.tag')), tags_item_path(item, format: :js), data: {remote: true} %></li>
 <% end %>
-<% if can? :destroy, :item %>
+<% if can? :destroy, item %>
 <li><%= link_to fa_icon('trash-o', text: t('.remove')), item_path(item, format: :js), data: {remote: true, method: :delete, confirm: t('.sure', name: item.name)} %></li>
 <% end %>
