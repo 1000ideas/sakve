@@ -42,13 +42,20 @@ class UsersController < ApplicationController
 
   def ban
     @user = User.find(params[:id])
-    authorize! :update, @user
+    authorize! :manage, @user
     @user.updated_by = current_user
     if params[:ban] === true
       @user.ban!
     else
       @user.unban!
     end
+  end
+
+  def activate
+    @user = User.find(params[:id])
+    authorize! :manage, @user
+    @user.updated_by = current_user
+    @user.activate!
   end
 
   def destroy

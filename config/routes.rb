@@ -93,6 +93,7 @@ Sakve::Application.routes.draw do
     # resources :groups
     resources :users do
       member do
+        put :activate
         put :ban, ban: true
         put :unban, action: :ban, ban: false
       end

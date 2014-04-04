@@ -1,4 +1,4 @@
-<li class="row" data-uid="<%= user.id %>" data-context>
+<li class="row <%= 'inactive' unless user.active? %>" data-uid="<%= user.id %>" data-context>
   <div class="name columns small-6">
     <% if user.banned? %>
       <%= fa_icon 'ban fw', text: user.name %>
@@ -13,9 +13,11 @@
   <ul class="actions" data-context-target>
     <li><%= link_to fa_icon('fw edit', text: t('.edit')), edit_user_path(user, format: :js), data: {remote: true} %></li>
     <%# if can?(:update, @user) %>
+    <% if user.active? %>
     <li><%= link_to fa_icon('fw ban', text: t(".ban.#{!user.banned?}")), {id: user, action: :ban, ban: !user.banned?}, data: {method: :put, remote: :true} %></li>
-    <%# end %>
+    <% else %>
+    <li><%= link_to fa_icon('fw check-square-o', text: t(".activate")), {id: user, action: :activate}, data: {method: :put, remote: :true} %></li>
+    <% end %>
     <li><%= link_to fa_icon('fw trash-o', text: t('.destroy')), user_path(user, format: :js), data: {remote: true, confirm: t('.confirm', name: user.name), method: :delete } %></li>
-
   </ul>
 </li>

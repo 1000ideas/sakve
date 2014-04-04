@@ -71,12 +71,14 @@ class User < ActiveRecord::Base
   end
 
   def active_for_authentication?
-    super && !banned?
+    super && !banned? && active?
   end
 
   def inactive_message
     if banned?
       :banned
+    elsif !active?
+      :inactive
     else
       super
     end
@@ -94,6 +96,15 @@ class User < ActiveRecord::Base
 
   def banned?
     self.banned_at.present?
+  end
+
+  def activate!
+    self.activated_at = DateTime.now
+    self.save
+  end
+
+  def active?
+    self.activated_at.present?
   end
 
 protected

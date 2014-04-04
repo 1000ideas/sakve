@@ -32,6 +32,7 @@ pl:
       edit: "Edytuj"
       destroy: "Usuń"
       confirm: "Usunąć użytkownika %{name}?"
+      activate: "Aktywuj"
       ban:
         'true': "Zbanuj"
         'false': "Zdejmij bana"
