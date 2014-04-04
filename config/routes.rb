@@ -36,9 +36,12 @@ Sakve::Application.routes.draw do
         get :bulk_tags, action: :bulk_edit, subaction: :tags
         get :bulk_download
         put :bulk_update
+        get :bulk_transfer
         delete :bulk, action: :bulk_destroy
       end
+
       member do
+        get :transfer
         get :share
         put :share
         get 'download(/:style)/:name(.:format)',

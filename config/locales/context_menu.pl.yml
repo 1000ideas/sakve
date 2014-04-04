@@ -1,30 +1,21 @@
 pl:
   application:
-    context_folder:
+    context_common: &COMMON
       download: Pobierz
       share: Udostępnij
       transfer: Szybki transfer
       open: Otwórz
+      show: Pokaż
       rename: Zmień nazwę
       move: Przenieś
       tag: Otaguj
       remove: Usuń
+    context_folder:
+      <<: *COMMON
       sure: "Usunąć trwale folder %{name}?"
     context_item:
-      download: Pobierz
-      share: Udostępnij
-      show: Pokaż
-      rename: Zmień nazwę
-      move: Przenieś
-      tag: Otaguj
-      remove: Usuń
+      <<: *COMMON
       sure: "Usunąć %{name}?"
     context_bulk:
-      download: Pobierz
-      share: Udostępnij
-      show: Pokaż
-      rename: Zmień nazwę
-      move: Przenieś
-      tag: Otaguj
-      remove: Usuń
+      <<: *COMMON
       sure: "Usunąć zaznaczone?"

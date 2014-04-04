@@ -65,6 +65,11 @@ class SelectionDownload < ActiveRecord::Base
 
   private
 
+  def file_for_transfer
+    create_archive unless done?
+    file
+  end
+
   def generate_id
     self.id = SecureRandom.hex(16) until self.class.where(id: self.id).empty?
   end

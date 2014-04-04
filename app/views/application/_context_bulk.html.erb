@@ -1,12 +1,13 @@
-<li><%= link_to fa_icon('cloud-download', text: t('.download')), bulk_download_items_path(selection: selection, format: :js), data: {remote: true} %></li>
-<!-- <li><%= link_to fa_icon('link', text: t('.share')) %></li> -->
-<!-- <li><%= link_to fa_icon('edit', text: t('.rename')) %></li> -->
+<li><%= link_to fa_icon('fw cloud-download', text: t('.download')), bulk_download_items_path(selection: selection, format: :js), data: {remote: true} %></li>
+<li><%= link_to fa_icon('fw envelop', text: t('.transfer')), bulk_transfer_items_path(selection: selection, format: :js), data: {remote: true} %></li>
+<!-- <li><%= link_to fa_icon('fw link', text: t('.share')) %></li> -->
+<!-- <li><%= link_to fa_icon('fw edit', text: t('.rename')) %></li> -->
 <% if @can_update %>
-<li><%= link_to fa_icon('level-up', text: t('.move')), bulk_move_items_path(selection: selection, format: :js), data: {remote: true} %></li>
+<li><%= link_to fa_icon('fw level-up', text: t('.move')), bulk_move_items_path(selection: selection, format: :js), data: {remote: true} %></li>
 <% end %>
 <% if @folders.empty? and @can_update %>
-  <li><%= link_to fa_icon('tag', text: t('.tag')), bulk_tags_items_path(selection: selection, format: :js), data: {remote: true} %></li>
+  <li><%= link_to fa_icon('fw tag', text: t('.tag')), bulk_tags_items_path(selection: selection, format: :js), data: {remote: true} %></li>
 <% end %>
 <% if @can_destroy %>
-<li><%= link_to fa_icon('trash-o', text: t('.remove')) , bulk_items_path(selection: selection), data: {method: :delete, remote: true, confirm: t('.sure') } %></li>
+<li><%= link_to fa_icon('fw trash-o', text: t('.remove')) , bulk_items_path(selection: selection), data: {method: :delete, remote: true, confirm: t('.sure') } %></li>
 <% end %>
