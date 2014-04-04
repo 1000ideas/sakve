@@ -1,5 +1,5 @@
 <li><%= link_to fa_icon('fw cloud-download', text: t('.download')), bulk_download_items_path(selection: selection, format: :js), data: {remote: true} %></li>
-<li><%= link_to fa_icon('fw envelop', text: t('.transfer')), bulk_transfer_items_path(selection: selection, format: :js), data: {remote: true} %></li>
+<li><%= link_to fa_icon('fw envelope', text: t('.transfer')), bulk_transfer_items_path(selection: selection, format: :js), data: {remote: true} %></li>
 <!-- <li><%= link_to fa_icon('fw link', text: t('.share')) %></li> -->
 <!-- <li><%= link_to fa_icon('fw edit', text: t('.rename')) %></li> -->
 <% if @can_update %>
