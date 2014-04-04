@@ -37,4 +37,6 @@ gem 'acts_as_tree', '~> 0.1.1'
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'sidekiq'
 
-gem 'thin'
+
+gem 'debugger'
+

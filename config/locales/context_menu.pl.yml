@@ -3,6 +3,7 @@ pl:
     context_folder:
       download: Pobierz
       share: Udostępnij
+      transfer: Szybki transfer
       open: Otwórz
       rename: Zmień nazwę
       move: Przenieś

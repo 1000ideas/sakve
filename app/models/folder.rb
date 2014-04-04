@@ -89,13 +89,17 @@ class Folder < ActiveRecord::Base
         tfolder = self.subfolders.create! name: get_child_name(transfer.name),
           user: user,
           transfer_id: transfer.id
+        Rails.logger.debug "PLiki: #{zf.map(&:name)}"
         zf.each do |file|
           Rails.logger.debug file.inspect
           file.get_input_stream do |io|
-            item = Item.create! object: StringIO.new(io.read),
+            item = Item.new
+            item.prevent_processing!
+            item.attributes = {object: StringIO.new(io.read),
               object_file_name: file.name.force_encoding('utf-8'),
               folder: tfolder,
-              user: user
+              user: user }
+          Rails.logger.debug "DONE!"
           end
         end
       end
@@ -199,6 +203,12 @@ class Folder < ActiveRecord::Base
   end
 
 protected
+
+  def file_for_transfer
+    raise RuntimeError, "Element is currently processing, retry later" if processing?
+    recreate_zip_file if zip_file.nil?
+    zip_file
+  end
 
   def zip_file_path
     @zip_file_name ||= Rails.root.join('folder-zips', "folder-#{id}.zip")

@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
   has_many :shared_items, through: :shares, source: :resource, source_type: 'Item'
   has_many :selection_downloads
   # has_many :shared_folders, through: :shares, source: :resource, source_type: 'Folder'
+  has_many :transfers
 
   scope :starts_with, lambda { |query|
     where('`first_name` like :q OR `last_name` LIKE :q OR `email` LIKE :q', q: "#{query}%")

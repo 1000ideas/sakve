@@ -12,22 +12,24 @@ class Transfer < ActiveRecord::Base
     path: ':partition/:class/:id/:filename'
 
   attr_writer :expires_in
+  attr_accessor :empty
   attr_accessible :expires_in, :name, :object,
-    :recipients, :token, :user_id, :user, :group_token
+    :recipients, :token, :user_id, :user, :group_token,
+    :empty, :done
 
 
   #before_validation :compress_files
   before_validation :generate_token, :set_default_name, on: :create
   before_create :setup_exires_at
   after_commit :delete_transfer_files, :send_mail_to_recipients
-  after_commit :async_compress_files, on: :create
+  after_commit :async_compress_files, unless: proc {done? or empty}
 
   validates :token, uniqueness: true
   # validates :name, presence: true
   validates :group_token, presence: true, length: {is: 16}, unless: :done?
   validates :token, presence: true, length: {is: 32}
   validate :valid_recipients
-  validates :files, length: {minimum: 1}, unless: :done?
+  validates :files, length: {minimum: 1}, unless: proc {done? or empty}
   validates :object, attachment_presence: true, on: :update
   validates :object, attachment_content_type: { content_type: /.*/i }
 
@@ -192,8 +194,6 @@ class Transfer < ActiveRecord::Base
   end
 
   def setup_exires_at
-    Rails.logger.debug "EXPIN: #{expires_in.inspect}"
-    Rails.logger.debug "EXPIN: #{expires_in.to_i.inspect}"
     if expires_in.to_i > 0
       self.expires_at = DateTime.now + expires_in.to_i.days
     end

@@ -86,7 +86,7 @@ module PaperclipProcessors
 
       if item.video?
         process_video
-      elsif item.document?
+      elsif item.office?
         process_document
       elsif item.pdf_document?
         process_pdf
@@ -143,8 +143,6 @@ module PaperclipProcessors
       dst = Tempfile.new([@basename, ".#{@format}"])
 
       if format == :png
-        Rails.logger.debug @file.path
-        Rails.logger.debug File.exists? @file.path
         pdf = Tempfile.new([@basename, '.pdf'])
         jodconvert('-i :format :src :dst',
           format: @current_format.gsub('.', ''),

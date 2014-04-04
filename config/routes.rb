@@ -57,6 +57,7 @@ Sakve::Application.routes.draw do
         get :rename, action: :edit, subaction: :rename
         get :move, action: :edit, subaction: :move
         get :download
+        get :transfer
         get :share
         put :share
       end

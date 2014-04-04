@@ -1,13 +1,14 @@
 class SelectionDownload < ActiveRecord::Base
   self.primary_key = :id
-  attr_accessible :user_id, :ids, :fids
+  attr_accessor :prevent_async_create
+  attr_accessible :user_id, :ids, :fids, :prevent_async_create
 
   serialize :ids, JSON
   serialize :fids, JSON
   belongs_to :user
 
   before_create :generate_id
-  after_commit :async_create_archive, on: :create
+  after_commit :async_create_archive, on: :create, unless: :prevent_async_create
 
   def self.check_dir_existance(dir)
     unless File.exists?(dir)
