@@ -1,8 +1,10 @@
 <li class="row transfer-file-<%= transfer.id %>"  data-context="true">
     <div class="name columns small-6">
       <%= transfer.name %>
-      <% if (folder = transfer.saved_by_user(current_user)) %>
+      <% if (folder = transfer.saved) %>
+        <% cache([:transfer, :saved, folder]) do %>
         <small><%= link_to folder.parent.name_for_select, items_path(folder: folder.parent_id), class: :tiny %></small>
+        <% end %>
       <% end %>
     </div>
     <div class="recipients columns small-4">

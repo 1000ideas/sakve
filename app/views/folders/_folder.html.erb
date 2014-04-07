@@ -3,7 +3,9 @@
   <%= content_tag :span do %>
     <%= link_to fa_icon('caret', text: folder.name), items_path(folder: folder.id) %>
   <% end %>
-  <%= content_tag :ul do %>
-    <%= render folder.subfolders, level: (level+1) %>
-  <% end if folder.has_subfolders? %>
+  <% cache([:subfolders, folder]) do %>
+    <%= content_tag :ul do %>
+      <%= render folder.subfolders, level: (level+1) %>
+    <% end if folder.has_subfolders? %>
+  <% end %>
 </li>

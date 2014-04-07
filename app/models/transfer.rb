@@ -48,8 +48,10 @@ class Transfer < ActiveRecord::Base
     end
   end
 
-  def saved_by_user(user)
-    folders.where(user_id: user.id).first
+  def saved
+    if folders_count > 0
+      folders.where(user_id: user.id).first
+    end
   end
 
   def content

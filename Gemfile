@@ -20,6 +20,8 @@ group :test do
   gem 'capybara-webkit'
 end
 
+gem 'rack-mini-profiler'
+
 gem 'jquery-rails'
 gem 'i18n-js', github: "cblavier/i18n-js"
 

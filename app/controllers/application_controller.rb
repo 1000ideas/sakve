@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::Base
 
+  # before_filter :miniprofiler
+
   rescue_from CanCan::AccessDenied do |exception|
     head 401 and return if request.format != :html
     unless current_user
@@ -21,11 +23,15 @@ class ApplicationController < ActionController::Base
   layout 'application'
 
   def context
-    @folders = Folder.where( id: params[:selection].try(:[], :fids) )
-    @items = Item.where( id: params[:selection].try(:[], :ids) )
-    if (@folders.count + @items.count) == 1
-      @item = [*@folders, *@items].first
+    if selection_count == 1
+      if selection[:ids].size > 0
+        @item = Item.find(selection[:ids].first)
+      else
+        @item = Folder.find(selection[:fids].first)
+      end
     else
+      @folders = Folder.where( id: selection[:fids] )
+      @items = Item.where( id: selection[:ids] )
       @can_destroy = @folders.accessible_by(current_ability, :destroy).any? ||
         @items.accessible_by(current_ability, :destroy).any?
 
@@ -97,6 +103,10 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def miniprofiler
+    Rack::MiniProfiler.authorize_request
+  end
+
   def set_locale
       lang = session[:locale] || params[:locale] || I18n.default_locale
       I18n.locale = lang.to_sym
@@ -125,6 +135,10 @@ class ApplicationController < ActionController::Base
       selection[:ids] ||= []
       selection[:fids] ||= []
     end
+  end
+
+  def selection_count
+    selection[:fids].size + selection[:ids].size
   end
   helper_method :selection
 

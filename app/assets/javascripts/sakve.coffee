@@ -316,8 +316,8 @@ class Sakve
       cursorAt: {top: -5, left: -5}
       distance: 20
 
-    $( "section#left-menu ul li h1.droppable, section#left-menu ul li ul li.droppable" ).droppable
-      accept: 'ul.file-list li'
+    $( "section#folders-list h1.droppable, section#folders-list li.droppable" ).droppable
+      accept: 'li.item'
       greedy: true
       tolerance: "pointer"
       drop: (e, ui) ->
@@ -330,6 +330,12 @@ class Sakve
           },
           success: ->
             $(ui.draggable).fadeOut( 'slow' )
+          error: ->
+            alert('Not allowed')
+          statusCode:
+            403: ->
+              alert('403: Permission denied')
+
     true
 
   _init_share: ->

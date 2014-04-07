@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  @@_root_folders = {}
   @@showable_attributes = %w(name email)
   mattr_reader :showable_attributes
 
@@ -105,6 +106,15 @@ class User < ActiveRecord::Base
 
   def active?
     self.activated_at.present?
+  end
+
+  def root_folder(unchached = false)
+    @@_root_folders.delete(self.id) if unchached
+    @@_root_folders[self.id] ||= self.folders(parent_id: nil, global: false).first
+  end
+
+  def clear_root_folder_cache!
+    @@_root_folders.delete(self.id)
   end
 
 protected
