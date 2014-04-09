@@ -3,7 +3,7 @@ class AddSubfoldersCountToFolder < ActiveRecord::Migration
     add_column :folders, :subfolders_count, :integer, default: 0
 
 
-    FolderTransfer.scoped.each do |f|
+    Folder.scoped.each do |f|
       Folder.reset_counters(f.id, :subfolders)
     end
   end
