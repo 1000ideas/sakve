@@ -8,7 +8,7 @@ class Share < ActiveRecord::Base
   @@available_resource_types = %w(Item Folder)
   mattr_accessor :available_resource_types
 
-  attr_accessible :collaborator_id, :collaborator_type, :resource_id, :resource_type, 
+  attr_accessible :collaborator_id, :collaborator_type, :resource_id, :resource_type,
     :collaborator, :resource
 
   validates :collaborator_type, inclusion: { in: @@available_collaborator_types }

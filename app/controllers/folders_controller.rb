@@ -70,6 +70,22 @@ class FoldersController < ApplicationController
     end
   end
 
+  def transfer
+    @folder = Folder.find(params[:id])
+    authorize! :share, @folder
+
+    @transfer = current_user.transfers.create(empty: true, name: @folder.name)
+
+    if @transfer.errors.empty?
+      CloudTransferWorker
+        .perform_async(@transfer.id, folder_id: @folder.id)
+    end
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   def destroy
     @folder = Folder.find(params[:id])
 

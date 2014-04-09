@@ -1,7 +1,7 @@
 class Folder < ActiveRecord::Base
   belongs_to :user
-  belongs_to :transfer, conditions: ['`expires_at` >= ?', DateTime.now]
-  belongs_to :parent, class_name: 'Folder', touch: true
+  belongs_to :transfer, conditions: ['`expires_at` >= ?', DateTime.now], counter_cache: :folders_count
+  belongs_to :parent, class_name: 'Folder', touch: true, counter_cache: :subfolders_count
 
   has_many :subfolders, class_name: 'Folder', foreign_key: :parent_id
   has_many :items, dependent: :destroy
@@ -20,6 +20,7 @@ class Folder < ActiveRecord::Base
   validate :loop_in_hierarchy
 
   before_save :ensure_global
+  after_save :clear_cache
   alias_method :fid, :id
 
   def date; updated_at; end
@@ -89,22 +90,22 @@ class Folder < ActiveRecord::Base
         tfolder = self.subfolders.create! name: get_child_name(transfer.name),
           user: user,
           transfer_id: transfer.id
+        Rails.logger.debug "PLiki: #{zf.map(&:name)}"
         zf.each do |file|
           Rails.logger.debug file.inspect
           file.get_input_stream do |io|
-            item = Item.create! object: StringIO.new(io.read),
+            item = Item.new
+            item.prevent_processing!
+            item.attributes = {object: StringIO.new(io.read),
               object_file_name: file.name.force_encoding('utf-8'),
               folder: tfolder,
-              user: user
+              user: user }
+          Rails.logger.debug "DONE!"
           end
         end
       end
     end
     true
-  end
-
-  def create_transfer(user)
-
   end
 
   def shared_for? user
@@ -149,7 +150,7 @@ class Folder < ActiveRecord::Base
   end
 
   def has_subfolders?
-    subfolders.count > 0
+    subfolders_count > 0
   end
 
   def each_descendant(&block)
@@ -159,13 +160,14 @@ class Folder < ActiveRecord::Base
     end
   end
 
-  def self.global_root
-    Folder.where(global: true, parent_id: nil).first || Folder.create(global: true)
+  def self.global_root(unchached = false)
+    @@_global_root = nil if unchached
+    @@_global_root ||= Folder.where(global: true, parent_id: nil).first || Folder.create(global: true)
   end
 
-  def self.user_root(user)
+  def self.user_root(user, unchached = false)
     return nil if user.nil?
-    Folder.where(global: false, parent_id: nil, user_id: user.id).first
+    user.root_folder(unchached)
   end
 
 
@@ -183,7 +185,11 @@ class Folder < ActiveRecord::Base
   def for_select_with_children(level = 0)
     prefix = level > 0 ? '-'*level : ''
     self_name = [ "#{prefix} #{name_for_select}", id ]
-    [ self_name ] + subfolders.map{|f| f.for_select_with_children(level+1) }.flatten(1)
+    if has_subfolders?
+      [ self_name ] + subfolders.map{|f| f.for_select_with_children(level+1) }.flatten(1)
+    else
+      [ self_name ]
+    end
   end
 
   def zip_file
@@ -199,6 +205,22 @@ class Folder < ActiveRecord::Base
   end
 
 protected
+
+  def clear_cache
+    if global? and parent.nil?
+      @_global_root = nil
+    end
+
+    if !global? and user.present?
+      user.clear_root_folder_cache!
+    end
+  end
+
+  def file_for_transfer
+    raise RuntimeError, "Element is currently processing, retry later" if processing?
+    recreate_zip_file if zip_file.nil?
+    zip_file
+  end
 
   def zip_file_path
     @zip_file_name ||= Rails.root.join('folder-zips', "folder-#{id}.zip")

@@ -79,6 +79,22 @@ class ItemsController < ApplicationController
     send_data Item.access_denied_image(params[:style]), type: 'image/png'
   end
 
+  def transfer
+    @item = Item.find(params[:id])
+    authorize! :share, @item
+
+    @transfer = current_user.transfers.create(empty: true, name: @item.name)
+
+    if @transfer.errors.empty?
+      CloudTransferWorker
+        .perform_async(@transfer.id, item_id: @item.id)
+    end
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   # GET /items/1/edit
   def edit
     @item = Item.find(params[:id])
@@ -129,10 +145,10 @@ class ItemsController < ApplicationController
 
   def change_folder
     item = Item.find(params[:item_id])
-    folder_id = params[:folder_id]
-    item.update_attributes(folder_id: folder_id)
+    authorize! :update, item
+    item.update_attributes(folder_id: params[:folder_id])
 
-    render nothing: true
+    head :ok
   end
 
   def share
@@ -179,6 +195,25 @@ class ItemsController < ApplicationController
     respond_to do |format|
       format.js
       format.zip
+    end
+  end
+
+  def bulk_transfer
+    if params[:token]
+      @selection = current_user.selection_downloads.where(id: params[:token]).first
+    else
+      @selection = current_user.selection_downloads.create(selection.merge(prevent_async_create: true))
+    end
+
+    @transfer = current_user.transfers.create(empty: true)
+
+    if @transfer.errors.empty?
+      CloudTransferWorker
+        .perform_async(@transfer.id, selection_id: @selection.id)
+    end
+
+    respond_to do |format|
+      format.js
     end
   end
 

@@ -21,6 +21,8 @@ group :test do
   gem 'capybara-webkit'
 end
 
+gem 'rack-mini-profiler'
+
 gem 'jquery-rails'
 gem 'i18n-js', github: "cblavier/i18n-js"
 
@@ -39,4 +41,6 @@ gem "nokogiri", '1.5.9'
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'sidekiq'
 
-gem 'thin'
+
+gem 'debugger'
+

@@ -37,12 +37,13 @@ class Item < ActiveRecord::Base
   }
 
   has_attached_file :object,
-    styles: Proc.new {|object| object.instance.item_styles } ,
+    styles: proc {|object| object.instance.item_styles } ,
     processors: [:item_processor],
     path: ':partition/:class/:id/:style/:filename',
     url: '/:class/:id/download/:style/:name.:extension'
 
-  before_save :fix_mime_type, :save_tags, :default_name
+  before_validation :fix_mime_type, :default_name
+  before_create :save_tags
   after_commit :async_reprocess!
 
   attr_accessible :name, :object, :type, :user_id, :user, :tags, :folder_id, :folder,
@@ -93,7 +94,7 @@ class Item < ActiveRecord::Base
       styles[:mp4] = ['640x480>', :mp4]
       styles[:flash] = ['640x480>', :flv]
       styles[:preview] = ['640x480>', :png]
-    elsif image? or pdf_document? or document?
+    elsif image? or document?
       styles[:preview] = ['640x480>', :png]
     end
     styles[:slides] = ['200', :pdf] if presentation?
@@ -152,6 +153,10 @@ class Item < ActiveRecord::Base
   end
 
   protected
+
+  def file_for_transfer
+    self.object
+  end
 
   def default_name
     self.name ||= File.basename(object_file_name, '.*').titleize if object?

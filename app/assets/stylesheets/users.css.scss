@@ -1,0 +1,10 @@
+@import 'overrides';
+
+ul#users-list {
+  li {
+    &.inactive {
+      color: lighten($body-font-color, 30%);
+    }
+  }
+
+}

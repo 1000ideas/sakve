@@ -1,7 +1,9 @@
 <ul class="actions">
   <% if @item %>
-    <% name = @item.class.name.downcase %>
-    <%= render "context_#{name}", :"#{name}" => @item %>
+    <% cache([:context, current_user, @item]) do %>
+      <% name = @item.class.name.downcase %>
+      <%= render "context_#{name}", :"#{name}" => @item %>
+    <% end %>
   <% else %>
     <%= render "context_bulk" %>
   <% end %>
