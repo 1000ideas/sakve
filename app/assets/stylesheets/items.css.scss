@@ -1,12 +1,26 @@
 @import 'overrides';
 
 .sortbar {
+  border-top: 1px solid #ddd;
   > div {
-    height: 3em;
-    line-height: 3em;
+    height: 2.5em;
+    line-height: 2.5rem;
 
+    .list-icon {
+      display: inline-block;
+      width: 5rem;
+    }
+
+    .sort {
+      font-size: 0.75rem;
+      color: $body-font-color;
+
+      &:hover, &:focus {
+        color: darken($body-font-color, 10%);
+      }
+    }
     .current {
-      font-weight: bold;
+      // font-weight: bold;
 
       &:after {
         font-family: FontAwesome;
@@ -14,11 +28,11 @@
       }
 
       &.asc:after {
-        content: '\f107';
+        content: '\f0d7';
       }
 
       &.desc:after {
-        content: '\f106';
+        content: '\f0d8';
       }
     }
   }
@@ -77,6 +91,11 @@ ul.file-list {
 
     &.item {
       > div.name {
+        > span {
+          font-size: 0.75rem;
+          line-height: 3rem;
+        }
+
         i.fa {
           font-size: 2.2em;
           position: relative;
@@ -100,6 +119,15 @@ ul.file-list {
       }
     }
 
+    &.folder {
+      > div.name {
+        > span {
+          font-size: 0.85rem;
+          line-height: 3rem;
+        }
+      }
+    }
+
 
     > div {
       white-space: nowrap;
@@ -108,7 +136,14 @@ ul.file-list {
       line-height: 3em;
       height: 3em;
 
+      &.size,
+      &.date {
+        font-size: 0.75rem;
+        line-height: 3.2rem;
+        height: 3rem;
+      }
       &.name {
+
         label.custom-check-box {
           margin-right: .8em;
         }
@@ -119,8 +154,6 @@ ul.file-list {
           width: 1.8rem;
           vertical-align: middle;
         }
-
-
       }
 
       &[data-context-target] {

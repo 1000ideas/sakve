@@ -1,5 +1,7 @@
 pl:
   partials:
+    search:
+      placeholder: 'Szukaj plików'
     menu:
       items: 'Foldery'
       transfer: 'Prześlij plik'
@@ -189,7 +191,7 @@ pl:
   time:
     formats:
       default: "%a, %d %b %Y %H:%M:%S %z"
-      short: "%d %b %H:%M"
+      short: "%d %b %Y, %H:%M"
       long: "%d %B %Y, %H:%M"
     am: "przed południem"
     pm: "po południu"

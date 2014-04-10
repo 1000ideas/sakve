@@ -1,7 +1,8 @@
 <li class="row folder" id="folder-<%= folder.id %>" data-context="true" data-context-ajax="<%= context_path %>" data-url="<%= items_path(folder: folder.id) %>">
   <div class="name columns small-7">
     <%= f.select_box :fid, folder %>
-    <%= fa_icon 'folder-open', text: folder.name %>
+    <%= fa_icon 'folder-open fw' %>
+    <%= content_tag(:span, folder.name) %>
   </div>
   <div class="size columns small-2 text-center">&nbsp;</div>
   <div class="date columns small-3 text-center"><%= l folder.updated_at, format: :short %></div>

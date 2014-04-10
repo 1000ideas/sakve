@@ -1,4 +1,4 @@
 <%= form_for(:search, url: search_path, method: :get, html: {id: :'search-file'}) do |f| %>
-  <%= f.text_field :query, value: params[:search].try(:[], :query) %>
+  <%= f.text_field :query, value: params[:search].try(:[], :query), placeholder: t('.placeholder') %>
   <%= f.button fa_icon('search'), class: [:'search-button'] %>
 <% end %>

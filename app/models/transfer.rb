@@ -21,7 +21,8 @@ class Transfer < ActiveRecord::Base
   #before_validation :compress_files
   before_validation :generate_token, :set_default_name, on: :create
   before_create :setup_exires_at
-  after_commit :delete_transfer_files, :send_mail_to_recipients
+  after_commit :delete_transfer_files, :send_mail_to_recipients, on: :create
+  after_commit :delete_transfer_files, :send_mail_to_recipients, on: :update
   after_commit :async_compress_files, unless: proc {done? or empty}
 
   validates :token, uniqueness: true

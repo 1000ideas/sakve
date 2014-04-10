@@ -60,6 +60,9 @@ label.custom-check-box {
     }
   }
 
+  &.checked i:before {content: '\f00c';}
+  &.unknown i:before {content: '\f068';}
+
   input[type=checkbox]:focus + i {
     box-shadow: 1px 1px 1px #ddd;
   }

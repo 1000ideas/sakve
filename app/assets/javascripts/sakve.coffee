@@ -109,6 +109,7 @@ class Sakve
     @last_selected = element
 
     _selection_changed = =>
+      all = $('.file-list input[type=checkbox]')
       selected = $('.file-list input[type=checkbox]:checked')
       $('.buttons-line').toggleClass('selected', selected.length > 0)
 
@@ -127,6 +128,13 @@ class Sakve
       }
 
       $('.buttons-line').toggleClass('folders-selected', folders.length > 0)
+
+      if all.length > 0 and all.length == selected.length
+        $('label#select-all').removeClass('unknown').addClass('checked')
+      else if all.length > 0 and selected.length > 0
+        $('label#select-all').removeClass('checked').addClass('unknown')
+      else
+        $('label#select-all').removeClass('checked unknown')
 
       if selected.length > 0 and @last_selected?
         $.ajax
@@ -165,6 +173,17 @@ class Sakve
     $(document).on 'dblclick', '.file-list li.folder[data-url]', (event) =>
       event.preventDefault()
       window.location.href = $(event.currentTarget).data('url')
+
+    $(document).on 'click', 'label#select-all', (event) =>
+      event.preventDefault()
+      event.stopPropagation()
+
+      if $(event.currentTarget).hasClass('checked') || $(event.currentTarget).hasClass('unknown')
+        $('.file-list input[type=checkbox]:checked').each (idx, el) ->
+          $(el).prop('checked', false).change()
+      else
+        $('.file-list input[type=checkbox]:not(:checked)').each (idx, el) ->
+          $(el).prop('checked', true).change()
 
     $(document).on 'change', '.file-list input[type=checkbox]', (event) =>
       checked = $(event.target).is(':checked')
