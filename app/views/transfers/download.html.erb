@@ -8,12 +8,14 @@
     <% elsif @transfer.expired? %>
       <p>Plik nie jest już dostepny</p>
     <% else %>
+      <% cache([:content, @transfer]) do %>
       <h3>Zawartość</h3>
       <ul>
       <% @transfer.content.each do |name| %>
       <li><%= name %></li>
       <% end %>
       </ul>
+      <% end %>
       <% unless @transfer.forever? %>
       <h3 title="<%= l @transfer.expires_at, format: :long %>">Plik jest jeszcze dostępny przez: <%= @transfer.expiration_distance %></h3>
       <% end %>
