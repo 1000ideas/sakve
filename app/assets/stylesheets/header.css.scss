@@ -7,6 +7,8 @@ body > header {
   margin-bottom: 1rem;
 
   h1 {
+    font-size: 1rem;
+    margin: .2em 0;
     height: 100%;
     white-space: nowrap;
 
@@ -21,7 +23,7 @@ body > header {
   nav {
     > ul {
       list-style: none;
-      margin: .6em 0;
+      margin: 0;
       > li {
         display: inline-block;
       }
@@ -29,15 +31,35 @@ body > header {
 
     &.main-menu {
       a {
+        color: $body-font-color;
         font-family: $header-font-family;
         text-transform: uppercase;
         display: block;
-        padding: .2em 0 0;
-        margin: 0 1em;
-        border-bottom: .2em solid transparent;
+        padding: 1.2em 1em;
+        border-left: 1px solid transparent;
+        border-right: 1px solid transparent;
 
-        &:hover, &:focus, &.active {
-          border-bottom-color: $primary-color;
+        &:hover, &:focus, {
+          // border-bottom-color: $primary-color;
+          color: $secondary-color;
+        }
+        &.active {
+          color: $secondary-color;
+          border-left-color: #f2f2f2;
+          border-right-color: #f2f2f2;
+        }
+      }
+    }
+
+    &.user-menu {
+      a {
+        color: $body-font-color;
+        padding: 1.2rem 1rem;
+        font-size: 0.75rem;
+        line-height: 2em;
+        display: block;
+        &:hover, &:focus, {
+          color: $secondary-color;
         }
       }
     }

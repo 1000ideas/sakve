@@ -18,7 +18,11 @@ module ApplicationHelper
   end
 
   def cp(path)
-    'active' if current_page?(path)
+    if path.kind_of? Hash
+      'active' if path.inject(true) {|memo, val| memo && send(:"#{val.first}_name").to_sym == val.last }
+    else
+      'active' if current_page?(path)
+    end
   end
 
   def render_html(*args, &block)
