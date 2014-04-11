@@ -3,10 +3,11 @@ class TransfersController < ApplicationController
   # GET /transfers
   # GET /transfers.xml
   def index
+    @bodycover = true
     authorize! :read, Transfer
     @transfer = Transfer.new(user: current_user)
 
-    @transfers = Transfer.active.for_user(current_user)
+    # @transfers = Transfer.active.for_user(current_user)
 
     respond_to do |format|
       format.html do

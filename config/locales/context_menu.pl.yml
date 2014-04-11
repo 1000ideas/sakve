@@ -10,12 +10,19 @@ pl:
       move: Przenieś
       tag: Otaguj
       remove: Usuń
+      sure: "Usunąć?"
     context_folder:
       <<: *COMMON
       sure: "Usunąć trwale folder %{name}?"
     context_item:
       <<: *COMMON
       sure: "Usunąć %{name}?"
+    context_transfer:
+      <<: *COMMON
+      clipboard: "Skopiuj link"
+      stats: "Statystyki pobierania"
+      save: "Zapisz w moich plikach"
+      sure: "Usunąć transfer %{name}?"
     context_bulk:
       <<: *COMMON
       sure: "Usunąć zaznaczone?"

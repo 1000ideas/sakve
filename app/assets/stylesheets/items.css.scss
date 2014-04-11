@@ -128,6 +128,15 @@ ul.file-list {
       }
     }
 
+    &.transfer {
+      > div.name {
+        > span:not(.fa-stack) {
+          font-size: 0.75rem;
+          line-height: 3rem;
+        }
+      }
+    }
+
 
     > div {
       white-space: nowrap;
@@ -148,6 +157,11 @@ ul.file-list {
           margin-right: .8em;
         }
 
+        span.fa-stack {
+
+          width: 1.8rem;
+          margin-right: .8rem;
+        }
         i.fa {
           margin-right: .8rem;
           font-size: 2em;

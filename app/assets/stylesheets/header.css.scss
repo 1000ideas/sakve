@@ -5,6 +5,8 @@ body > header {
   background: #fff;
   box-shadow: 0 1px 4px rgba(#181819, .2);
   margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
 
   h1 {
     font-size: 1rem;

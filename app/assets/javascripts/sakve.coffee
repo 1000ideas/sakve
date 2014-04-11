@@ -116,12 +116,16 @@ class Sakve
       folders = selected.filter (idx) ->
         this.name.match(/\[fids\]/i)
 
+      transfers = selected.filter (idx) ->
+        this.name.match(/\[tids\]/i)
+
       items = selected.filter (idx) ->
         this.name.match(/\[ids\]/i)
 
       _data = {
         selection: {
           fids: folders.map((idx, el) -> parseInt(el.value)).toArray()
+          tids: transfers.map((idx, el) -> parseInt(el.value)).toArray()
           ids: items.map((idx, el) -> parseInt(el.value)).toArray()
 
         }
@@ -136,7 +140,7 @@ class Sakve
       else
         $('label#select-all').removeClass('checked unknown')
 
-      if selected.length > 0 and @last_selected?
+      if selected.length > 0 and @last_selected? and @last_selected.data('context-ajax')
         $.ajax
           url: @last_selected.data('context-ajax')
           type: 'POST'

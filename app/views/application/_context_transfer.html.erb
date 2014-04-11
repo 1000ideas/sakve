@@ -1,0 +1,7 @@
+<li><%= link_to fa_icon('fw cloud-download', text: t('.download')), download_transfer_path(token: transfer.token) %></li>
+<li><%= link_to fa_icon('fw list-alt', text: t('.stats')), transfer_path(transfer, format: :js), data: {remote: true} %></li>
+<li><%= link_to fa_icon('fw clipboard', text: t('.clipboard')), '#', data: {clipboard_text: download_transfer_url(token: transfer.token)} %></li>
+<li><%= link_to fa_icon('fw save', text: t('.save')), save_transfer_path(transfer, format: :js), data: {remote: true} %></li>
+<% if can? :destroy, transfer %>
+<li><%= link_to fa_icon('fw trash-o', text: t('.remove')), transfer_path(transfer, format: :js), data: {remote: true, method: :delete, confirm: t('.sure', name: transfer.name)} %></li>
+<% end %>

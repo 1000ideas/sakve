@@ -26,9 +26,6 @@ pl:
       wait: "Przetwarzanie..."
     transfer:
       download: "Pobierz"
-      clipboard: "Skopiuj link"
-      stats: "Statystyki pobierania"
-      save: "Zapisz w katalogu Sakve"
       destroy: "Usuń"
       sure: "Usunąć?"
     create:

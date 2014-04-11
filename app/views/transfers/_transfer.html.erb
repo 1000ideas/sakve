@@ -1,24 +1,23 @@
-<li class="row transfer-file-<%= transfer.id %>"  data-context="true">
-    <div class="name columns small-6">
-      <%= transfer.name %>
-      <% if (folder = transfer.saved) %>
-        <% cache([:transfer, :saved, folder]) do %>
-        <small><%= link_to folder.parent.name_for_select, items_path(folder: folder.parent_id), class: :tiny %></small>
+<li class="row transfer transfer-file-<%= transfer.id %>"  data-context="true" data-context-ajax="<%= context_path %>">
+    <div class="name columns small-7">
+      <%= f.select_box :tid, transfer %>
+      <%= fa_stacked_icon 'long-arrow-right', base: 'file-o', class: 'transfer-icon' %>
+      <span>
+        <%= transfer.name %>
+        <% if (folder = transfer.saved) %>
+          <em><%= link_to folder.parent.name_for_select, items_path(folder: folder.parent_id), class: :tiny %></em>
         <% end %>
-      <% end %>
+      </span>
     </div>
-    <div class="recipients columns small-4">
-      <%= transfer.recipients_list.join(', ') %>
-    </div>
-
-    <div title="<%= l(transfer.expires_at, format: :long) unless transfer.forever? %>" class="columns small-2"> <%= transfer.expiration_distance %></div>
+    <div class="size columns small-2 text-center"><%= number_to_human_size transfer.object_file_size %></div>
+    <div title="<%= l(transfer.expires_at, format: :long) unless transfer.forever? %>" class="columns small-3 text-center date"> <%= transfer.expiration_distance %></div>
 
   <a href="" data-context-button><%= fa_icon('ellipsis-h') %></a>
-  <div class="actions" data-context-target="true">
+  <!-- <div class="actions" data-context-target="true">
     <%= link_to t('.download'), download_transfer_path(token: transfer.token), target: '_blank' %>
     <%= link_to t('.stats'), transfer_path(transfer, format: :js), data: {remote: true} %>
     <%= link_to t('.clipboard'), '#', data: {clipboard_text: download_transfer_url(token: transfer.token)} %>
     <%= link_to t('.save'), save_transfer_path(transfer, format: :js), data: {remote: true} %>
     <%= link_to t('.destroy'), transfer, class: "destroy", data: { confirm: t('.sure'), method: :delete, remote: true } %>
-  </div>
+  </div> -->
 </li>

@@ -41,6 +41,12 @@ class Transfer < ActiveRecord::Base
     end
   end
 
+  alias :tid :id
+  def size; object_file_size; end
+  def date
+    expires_at || (Time.now + 1000.years)
+  end
+
   def expires_in
     if expires_at.present?
       ((expires_at.to_datetime - DateTime.now)/1.day).ceil
