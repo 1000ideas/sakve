@@ -1,13 +1,5 @@
 <% title t('.title') %>
-<% content_for(:buttons) do %>
-  <div class="for-all">
-    <%= link_to fa_icon('cloud-upload', text: t('.upload')), '#', class: [:button, :tiny, :secondary], data: {:'reveal-id' => 'multiupload-files-modal'} if can? :create, @item  %>
-    <%= link_to fa_icon('folder-open', text: t('.new_folder')), '#', class: [:button, :tiny], data: {:'reveal-id' => 'new-folder-modal'} if can? :create, @folder %>
-    <%= render 'partials/search' %>
-  </div>
-  <div class="for-selection">
-  </div>
-<% end %>
+
 
 <div class="row collapse">
   <section id="folders-list" class="columns hide-for-small medium-4 large-2 folders-tree">
@@ -49,8 +41,28 @@
     </ul>
   </section>
   <section id="files" class="columns small-12 medium-8 large-10 end">
+    <div class="row buttons-line">
+      <div class="small-12 columns">
+        <div class="for-all row collapse">
+          <div class="columns small-6">
+            <%= render 'partials/search' %>
+          </div>
+          <div class="columns small-6 text-right">
+            <%= link_to fa_icon('fw folder-open', text: t('.new_folder')), '#', class: [:button, :tiny, :secondary, :round], data: {:'reveal-id' => 'new-folder-modal'} if can? :create, @folder %>
+            <%= link_to fa_icon('fw cloud-upload', text: t('.upload')), '#', class: [:button, :tiny, :secondary, :round], data: {:'reveal-id' => 'multiupload-files-modal'} if can? :create, @item  %>
+          </div>
+        </div>
+        <div class="for-selection">
+        </div>
+      </div>
+    </div>
     <div class="row sortbar">
-      <div class="small-7 medium-7 large-7 columns text-center">
+      <div class="small-7 medium-7 large-7 columns">
+        <div class="list-icon">
+          <%= label_tag nil, class: :'custom-check-box', id: :'select-all' do %>
+            <i></i>
+          <% end %>
+        </div>
         <%= sort_link :name, t('.sort.name') %>
       </div>
       <div class="small-2 medium-2 large-2 columns text-center">

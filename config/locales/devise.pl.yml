@@ -23,7 +23,7 @@ pl:
     passwords:
       new:
         title: 'Przypominj hasło'
-        submit: 'Wyślij link do zmiany hasła na maila'
+        submit: 'Prześlij dalsze instrukcje'
       edit:
         title: 'Zmień hasło'
         submit: 'Zmień hasło i zaloguj'

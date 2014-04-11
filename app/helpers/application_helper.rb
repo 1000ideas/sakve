@@ -18,7 +18,11 @@ module ApplicationHelper
   end
 
   def cp(path)
-    'active' if current_page?(path)
+    if path.kind_of? Hash
+      'active' if path.inject(true) {|memo, val| memo && send(:"#{val.first}_name").to_sym == val.last }
+    else
+      'active' if current_page?(path)
+    end
   end
 
   def render_html(*args, &block)
@@ -29,11 +33,11 @@ module ApplicationHelper
     self.formats = _formats
   end
 
-  def logo_tag
+  def logo_tag(path = root_path)
     content_tag(:div, class: :logo) do
       [
-        link_to( image_tag('1000i-logo.svg'), 'http://1000i.pl', target: '_blank' ),
-        link_to( image_tag('sakve-logo.svg'), root_path )
+        link_to( image_tag('1000i-logo.svg'), path ),
+        link_to( image_tag('sakve-logo.svg'), path )
       ].join.html_safe
     end
   end

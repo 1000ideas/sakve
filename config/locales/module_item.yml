@@ -21,8 +21,8 @@ pl:
       title: Dodawanie zasobu
     index:
       title: Pliki
-      upload: 'Dodaj pliki'
-      new_folder: 'Utwórz folder'
+      upload: 'Dodaj plik do tego folderu'
+      new_folder: 'Nowy folder'
       public: 'Pliki publiczne'
       private: 'Pliki prywatne'
       shared: 'Współdzielone pliki'

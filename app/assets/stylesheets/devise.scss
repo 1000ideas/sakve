@@ -1,0 +1,80 @@
+@import "overrides";
+
+
+.row.login-box {
+  max-width: 370px;
+  padding-top: 70px;
+  margin: 0 auto;
+
+  > .columns {
+    background: #fff;
+    box-shadow: 0 0 5px rgba(#222, .25);
+    padding: 0 2rem;
+
+    h1 {
+      font-size: 1rem;
+      text-align: center;
+      padding: .5em 0;
+      margin : 0 -2rem 1rem -2rem;
+      min-height: 5.3rem;
+      .logo {
+        img { max-height: 80px; }
+      }
+      border-bottom: 1px solid #f2f2f2;
+    }
+
+    h2 {
+      font-size: 1.5em;
+      color: $body-font-color;
+      margin: 1em 0 .5em 0;
+    }
+
+    .field.with-error {
+      label { color: $secondary-color; }
+      input[type=text],
+      input[type=email],
+      input[type=password] {
+        background-color: lighten($secondary-color, 35%);
+        border-color: $secondary-color;
+      }
+    }
+
+    .center-button {
+      text-align: center;
+      margin: 1rem 0;
+      button {
+        padding-left: 3.5rem;
+        padding-right: 3.5rem;
+      }
+    }
+
+    .buttons {
+      margin : 0 -2rem 0 -2rem;
+      font-size: 0.75rem;
+      background: #f2f2f2;
+
+      &:after {
+        display: block;
+        clear: both;
+        content: '';
+      }
+      a {
+        &:first-child {
+          border-right: 1px solid #dbdbdb;
+        }
+        display: block;
+        text-align: center;
+        width: 50%;
+        float: left;
+        color: $body-font-color;
+        background: #f2f2f2;
+        line-height: 3em;
+        height: 3em;
+
+        &:hover, &:focus {
+          color: $secondary-color;
+        }
+      }
+    }
+  }
+}
