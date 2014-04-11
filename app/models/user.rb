@@ -117,6 +117,14 @@ class User < ActiveRecord::Base
     @@_root_folders.delete(self.id)
   end
 
+  def label_or_error(field)
+    if errors.include?(field)
+      errors.full_message(field, errors[field].first)
+    else
+      self.class.human_attribute_name(field)
+    end
+  end
+
 protected
 
   def create_private_folder

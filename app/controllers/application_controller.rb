@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
 
   # before_filter :miniprofiler
+  before_filter :set_body_cover
 
   rescue_from CanCan::AccessDenied do |exception|
     head 401 and return if request.format != :html
@@ -141,6 +142,10 @@ class ApplicationController < ActionController::Base
     selection[:fids].size + selection[:ids].size
   end
   helper_method :selection
+
+  def set_body_cover
+    @bodycover = devise_controller?
+  end
 
 
 end

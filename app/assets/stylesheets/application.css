@@ -5,6 +5,7 @@
  *= require jquery.ui.all
  *= require fileupload
  *= require defaults
+ *= require devise
  *= require header
  *= require context.menu
  *= require items

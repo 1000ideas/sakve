@@ -33,11 +33,11 @@ module ApplicationHelper
     self.formats = _formats
   end
 
-  def logo_tag
+  def logo_tag(path = root_path)
     content_tag(:div, class: :logo) do
       [
-        link_to( image_tag('1000i-logo.svg'), 'http://1000i.pl', target: '_blank' ),
-        link_to( image_tag('sakve-logo.svg'), root_path )
+        link_to( image_tag('1000i-logo.svg'), path ),
+        link_to( image_tag('sakve-logo.svg'), path )
       ].join.html_safe
     end
   end
