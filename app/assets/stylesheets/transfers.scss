@@ -1,5 +1,12 @@
 .row.transfer-box {
+  padding-top: 2rem;
 
+  > .columns {
+    background: #fff;
+    box-shadow: 0 0 5px rgba(#222, .25);
+    padding: 2rem;
+
+  }
 }
 
 .uploaded-files {
