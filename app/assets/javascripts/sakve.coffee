@@ -64,6 +64,20 @@ class Sakve
         .closest('[data-reveal]')
         .foundation('reveal', 'close')
 
+    $(document).on 'dragenter dragleave', 'body', (event) ->
+      event.preventDefault()
+      event.stopPropagation()
+      dragCount = $(event.currentTarget).data('dragCount') || 0
+      offset = if event.type == 'dragenter' then +1 else -1
+      dragCount += offset
+      $(event.currentTarget).data('dragCount', dragCount)
+
+      $(event.currentTarget).toggleClass('file-drop-over', dragCount > 0)
+    $(document).on 'drop', (event) ->
+      $('body')
+        .data('dragCount', 0)
+        .removeClass('file-drop-over')
+
     # console.profileEnd()
     true
 
@@ -325,6 +339,12 @@ class Sakve
       else if spinbox
         $('#transfer_expires_in').prop('spinBox').revert_infinity()
 
+    $('input#show_recipients').change (event) ->
+      if $(event.currentTarget).is(':checked')
+        $('#transfer_recipients').slideDown()
+      else
+        $('#transfer_recipients').slideUp()
+
 
     $('.transfer-fileupload').each (idx, el) =>
       @fileupload_with_dropzone el, {
@@ -396,7 +416,7 @@ class Sakve
 
   fileupload_with_dropzone: (element, options = {}) ->
     value = $(element).data('value')
-    $(element).wrap $('<div>').addClass('fileupload-dropzone')
+    # $(element).wrap $('<div>').addClass('fileupload-dropzone')
     $(element).wrap $('<div>').addClass('button round fileupload-button')
     $(element).after $('<span>').text( value )
 

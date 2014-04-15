@@ -32,23 +32,22 @@ body > header {
     }
 
     &.main-menu {
+      padding-left: 0;
+
       a {
         color: $body-font-color;
         font-family: $header-font-family;
         text-transform: uppercase;
         display: block;
-        padding: 1.2em 1em;
-        border-left: 1px solid transparent;
-        border-right: 1px solid transparent;
+        padding: 1.2em 0;
+        margin-right: 2em;
 
         &:hover, &:focus, {
           // border-bottom-color: $primary-color;
-          color: $secondary-color;
+          color: lighten($secondary-color, 10%);
         }
         &.active {
           color: $secondary-color;
-          border-left-color: #f2f2f2;
-          border-right-color: #f2f2f2;
         }
       }
     }

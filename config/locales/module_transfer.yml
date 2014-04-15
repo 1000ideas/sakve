@@ -4,8 +4,9 @@ pl:
       new: Dodaj Transfer
       index: Lista transfers
     form:
-      subject: "Temat przesyłanych plików"
-      recipients: "Email odbiorcy (możesz wpisać kilka maili oddzielając je spacją)"
+      or_drop: "upuść tutaj"
+      subject: "Nazwa dla przesyłanych plików"
+      recipients: "Chcę wysłać maila (możesz wpisać kilka maili oddzielając je przecinkiem)"
       infinity: 'Zawsze dostępne'
       fileupload: Dodaj pliki
       expires_in: "Pliki dostępne przez (dni)"

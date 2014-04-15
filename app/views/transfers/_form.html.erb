@@ -7,8 +7,14 @@
       <%= f.text_field :name  %>
     </div>
     <div class="field">
-      <%= f.label :recipients, t('.recipients') %>
-      <%= f.text_field :recipients  %>
+      <%= f.label :recipients do %>
+        <%= label_tag :show_recipients, class: 'custom-check-box' do %>
+          <%= check_box_tag :show_recipients %>
+          <i></i>
+        <% end %>
+        <%= t('.recipients') %>
+      <% end %>
+      <%= f.text_field :recipients, style: 'display: none;'  %>
     </div>
     <div class="field expires-in-field">
       <%= f.label :expires_in, t('.expires_in') %>
@@ -23,7 +29,10 @@
     <% if f.object.new_record? %>
     <div class="field">
       <%= f.hidden_field :group_token %>
-      <%= file_field_tag(:object, multiple: true, class: 'transfer-fileupload', data: { value: t('.fileupload', default: 'Select files'), file_upload: true, url: files_path(format: :json) }) %>
+      <div class="fileupload-dropzone">
+        <%= file_field_tag(:object, multiple: true, class: 'transfer-fileupload', data: { value: t('.fileupload', default: 'Select files'), file_upload: true, url: files_path(format: :json) }) %>
+        <p><%= t('.or_drop') %></p>
+      </div>
       <script type="text/html" charset="utf-8" id="transfer_uploaded_template">
         <%= render TransferFile.template %>
       </script>
