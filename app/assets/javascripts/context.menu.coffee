@@ -1,4 +1,22 @@
 class ContextMenu
+  @position: (x, y, w, h, from_mouse) ->
+    position = {}
+    ww = window.innerWidth
+    wh = window.innerHeight
+
+    if x + w > ww or !from_mouse
+      position.left = x - w
+    else
+      position.left = x
+
+    if y + h > wh and y - h > 0 and from_mouse
+      position.top = y - h
+    else
+      position.top = y
+
+    position
+
+
   close_all_context_menus: ->
     $('[data-context-holder]')
       .trigger('context:close')
@@ -29,15 +47,18 @@ class ContextMenu
 
   constructor: ->
     $.fn.openContextMenu = (x, y, from_mouse = true) ->
-      this
+      el = this
         .first()
-        .hide()
         .attr('data-context-holder', true)
         .appendTo(document.body)
+        .show()
+
+      position = ContextMenu.position(x, y, el.outerWidth(), el.height(), from_mouse)
+
+      el
         .toggleClass('from-mouse', from_mouse)
         .toggleClass('from-button', !from_mouse)
-        .css(top: y, left: x)
-        .show()
+        .css(position)
         .trigger('context:open')
 
     $(document).on 'contextmenu', '[data-context]', (event) =>
