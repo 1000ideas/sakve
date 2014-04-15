@@ -107,6 +107,21 @@ class Sakve
     $(selector).foundation(alert: {animation: 'slideUp'})
     # $(selector).foundation()
 
+  start_ping: ->
+    return if @ping_timeout_id?
+
+    ping_func = =>
+      @ping_timeout_id = null
+      $.ajax('/ping')
+      @start_ping()
+
+    @ping_timeout_id = setTimeout(ping_func, 5000)
+
+  stop_ping: ->
+    if @ping_timeout_id?
+      clearTimeout(@ping_timeout_id)
+      @ping_timeout_id = null
+
   selection_changed: (element = null) ->
     @last_selected = element
 
@@ -283,6 +298,10 @@ class Sakve
             .replaceWith(data.result.context)
           $(event.target.form).foundation(alert: {animation: 'slideUp'})
           @reload_list('items')
+        start: (event, data) =>
+          @start_ping()
+        stop: (event, data) =>
+          @stop_ping()
         fail: (event, data) ->
           data
             .context
@@ -310,6 +329,8 @@ class Sakve
     $('.transfer-fileupload').each (idx, el) =>
       @fileupload_with_dropzone el, {
         url: $(el).data('url')
+        start: =>
+          @start_ping()
         add: (event, data) =>
           group = $(event.target.form).children('.uploaded-files').first()
           file = data.files[0]
@@ -322,7 +343,6 @@ class Sakve
             jqXHR.abort()
             data.context.slideUp ->
               data.context.remove()
-
           $("input[type=submit], button", data.form).prop('disabled', true)
         progress: @defaults.on_progress
         done: (event, data) =>
@@ -333,7 +353,8 @@ class Sakve
           $("input[type=submit], button", data.form).prop('disabled', false)
         error: (event, data) ->
           $("input[type=submit], button", data.form).prop('disabled', false)
-        stop: (event, data) ->
+        stop: (event, data) =>
+          @stop_ping()
           $("input[type=submit], button", data.form).prop('disabled', false)
       }
 

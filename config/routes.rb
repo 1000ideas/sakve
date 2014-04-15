@@ -108,5 +108,6 @@ Sakve::Application.routes.draw do
     end
     root to: 'transfers#index'
   end
-  # root to: 'items#index'
+
+  get :ping, to: 'application#ping'
 end

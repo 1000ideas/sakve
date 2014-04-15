@@ -102,6 +102,15 @@ class ApplicationController < ActionController::Base
   end
 
 
+  def ping
+    unless current_user
+      head :forbidden
+    else
+      head :ok
+    end
+  end
+
+
 
   protected
   include L::FilterHelper
