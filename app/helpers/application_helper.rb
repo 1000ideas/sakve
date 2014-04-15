@@ -14,7 +14,7 @@ module ApplicationHelper
 
     options[:class] = class_name
 
-    link_to title, {sort: {column: name, dir: direction}}, options
+    link_to title, {folder: @current_folder_id, sort: {column: name, dir: direction}}, options
   end
 
   def cp(path)

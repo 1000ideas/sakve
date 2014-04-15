@@ -7,7 +7,6 @@ class Transfer < ActiveRecord::Base
   scope :active, lambda { where('`expires_at` IS NULL OR `expires_at` >= ?', DateTime.now) }
   scope :for_user, lambda { |user| user.admin? ? where(true) : where(user_id: user.id) }
 
-
   has_attached_file :object,
     path: ':partition/:class/:id/:filename'
 
@@ -15,7 +14,7 @@ class Transfer < ActiveRecord::Base
   attr_accessor :empty
   attr_accessible :expires_in, :name, :object,
     :recipients, :token, :user_id, :user, :group_token,
-    :empty, :done
+    :empty, :done, :expires_in_infinity
 
 
   #before_validation :compress_files
@@ -41,12 +40,24 @@ class Transfer < ActiveRecord::Base
     end
   end
 
+  alias :tid :id
+  def size; object_file_size; end
+  def date
+    expires_at || (Time.now + 1000.years)
+  end
+
   def expires_in
     if expires_at.present?
       ((expires_at.to_datetime - DateTime.now)/1.day).ceil
     else
       @expires_in || 7
     end
+  end
+
+
+  def expires_in_infinity=(value); end
+  def expires_in_infinity
+    false
   end
 
   def saved

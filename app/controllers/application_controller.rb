@@ -27,14 +27,18 @@ class ApplicationController < ActionController::Base
     if selection_count == 1
       if selection[:ids].size > 0
         @item = Item.find(selection[:ids].first)
-      else
+      elsif  selection[:fids].size > 0
         @item = Folder.find(selection[:fids].first)
+      else
+        @item = Transfer.find(selection[:tids].first)
       end
     else
-      @folders = Folder.where( id: selection[:fids] )
       @items = Item.where( id: selection[:ids] )
+      @folders = Folder.where( id: selection[:fids] )
+      @transfers = Transfer.where( id: selection[:tids] )
       @can_destroy = @folders.accessible_by(current_ability, :destroy).any? ||
-        @items.accessible_by(current_ability, :destroy).any?
+        @items.accessible_by(current_ability, :destroy).any? ||
+        @transfers.accessible_by(current_ability, :destroy).any?
 
       @can_update = @folders.accessible_by(current_ability, :update).any? ||
         @items.accessible_by(current_ability, :update).any?
@@ -135,11 +139,12 @@ class ApplicationController < ActionController::Base
     (params[:selection] || {}).tap do |selection|
       selection[:ids] ||= []
       selection[:fids] ||= []
+      selection[:tids] ||= []
     end
   end
 
   def selection_count
-    selection[:fids].size + selection[:ids].size
+    selection[:fids].size + selection[:ids].size + selection[:tids].size
   end
   helper_method :selection
 

@@ -4,8 +4,11 @@ pl:
       new: Dodaj Transfer
       index: Lista transfers
     form:
+      subject: "Temat przesyłanych plików"
+      recipients: "Email odbiorcy (możesz wpisać kilka maili oddzielając je spacją)"
+      infinity: 'Zawsze dostępne'
       fileupload: Dodaj pliki
-      expires_in: "Wygaśnie za (dni)"
+      expires_in: "Pliki dostępne przez (dni)"
       processing: "Przetwarzanie..."
     new:
       title: Dodawanie Transfer
@@ -26,9 +29,6 @@ pl:
       wait: "Przetwarzanie..."
     transfer:
       download: "Pobierz"
-      clipboard: "Skopiuj link"
-      stats: "Statystyki pobierania"
-      save: "Zapisz w katalogu Sakve"
       destroy: "Usuń"
       sure: "Usunąć?"
     create:

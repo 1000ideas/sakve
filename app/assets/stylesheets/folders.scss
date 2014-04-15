@@ -1,4 +1,5 @@
 @import 'overrides';
+@import 'compass/css3/transform';
 
 .folders-tree {
   font-size: 1.1em;
@@ -32,6 +33,13 @@
     display: none;
     &.open {
       // display: block;
+      > h3,
+      > span {
+        a i {
+          @include transform(rotate(-45deg));
+        }
+      }
+
       > ul > li.folder {
         display: block;
       }

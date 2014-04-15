@@ -1,4 +1,5 @@
 @import "overrides";
+@import "mixins";
 @import "compass/css3/opacity";
 @import "compass/css3/transition";
 
@@ -25,6 +26,14 @@ body {
 
   }
 
+}
+
+.fa-stack.transfer-icon {
+  .fa-long-arrow-right {
+    font-size: 1.6em !important;
+    left: 9px;
+    top: 4px;
+  }
 }
 
 
@@ -72,39 +81,9 @@ label.custom-check-box {
   position: relative;
   vertical-align: middle;
 
-  input[type=checkbox] {
-    @include opacity(0);
-    width: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    &:checked + i:before {
-      content: '\f00c';
-    }
-  }
-
-  &.checked i:before {content: '\f00c';}
-  &.unknown i:before {content: '\f068';}
-
-  input[type=checkbox]:focus + i {
-    box-shadow: 1px 1px 1px #ddd;
-  }
-
+  @include custom-checkbox(1.6em);
   i {
     display: block;
-    border: 1px solid #ddd;
-    background: #fff;
-    width: 1.6em;
-    height: 1.6em;
-    text-align: center;
-
-    &:before {
-      position: relative;
-      left: -1px;
-      font-family: FontAwesome;
-      content: '';
-    }
   }
 }
 
@@ -114,5 +93,79 @@ label.custom-check-box {
     font-size: .8875rem;
     padding-top: .525rem;
     padding-bottom: .525rem;
+  }
+}
+
+.button.gray {
+  background: #f2f2f2;
+  color: $primary-color;
+  @include transition-property(background, color);
+
+  &:hover, &:focus {
+    background: darken(#f2f2f2, 10%);
+    outline: none;
+  }
+  &.checked {
+    color: #fff;
+    background: $primary-color;
+
+    &:hover, &:focus {
+      background: darken($primary-color, 10%);
+      outline: none;
+    }
+  }
+}
+
+.progress-info {
+  font-size: 0.85rem;
+  margin: 0 2em;
+  padding: 1.5em 0;
+  position: relative;
+  > i.fa {
+    position: absolute;
+    color: $primary-color;
+    vertical-align: middle;
+    left: 0;
+    top:  50%;
+    margin-top: -0.5em;
+    height: 1em;
+
+  }
+
+  > .file-progress {
+    display: inline-block;
+    vertical-align: middle;
+    width: 80%;
+    padding-left: 3em;
+    .name {
+      float: left;
+    }
+
+    .progress-value {
+      float: right;
+    }
+
+    .progress {
+      clear: both;
+      padding: 0;
+      margin: 0;
+      height: 1em;
+    }
+  }
+
+  > .remove,
+  > .cancel {
+    color: #919191;
+    display: inline-block;
+    vertical-align: middle;
+    width: 20%;
+    text-align: right;
+    &:hover, &:focus {
+      color: darken(#919191, 10%);
+    }
+  }
+
+  > .cancel {
+    padding-top: 1em;
   }
 }

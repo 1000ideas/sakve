@@ -18,6 +18,13 @@ class TransferFile < ActiveRecord::Base
 
   scope :loose, lambda { joins("LEFT JOIN `#{Transfer.table_name}` ON `#{table_name}`.`token` = `#{Transfer.table_name}`.`group_token`").where(transfers: {id: nil} )}
 
+  def self.template
+    t = self.new
+    t.id = ':id'
+    t.name = ":name"
+    t
+  end
+
   def psd?
     !!object.content_type.match(%r{(photoshop|psd)$})
   end

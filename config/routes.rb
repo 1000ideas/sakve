@@ -106,7 +106,7 @@ Sakve::Application.routes.draw do
       post :context
       get :search
     end
-    root to: 'items#index'
+    root to: 'transfers#index'
   end
   # root to: 'items#index'
 end

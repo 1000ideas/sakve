@@ -19,18 +19,21 @@ pl:
       new_folder: Dodaj folder
     new:
       title: Dodawanie zasobu
+    folders_list:
+      public: 'Pliki wewnętrzne'
+      private: 'Moje pliki'
+      shared: 'Udostępnione dla mnie'
+      transfers: 'Przesłane pliki'
     index:
       title: Pliki
       upload: 'Dodaj plik do tego folderu'
       new_folder: 'Nowy folder'
-      public: 'Pliki publiczne'
-      private: 'Pliki prywatne'
-      shared: 'Współdzielone pliki'
       breadcrumbs: 'Gdzie ja jestem?'
       sort:
         name: "Nazwa"
         size: Rozmiar
         date: "Data modyfikacji"
+        expires: "Ważność"
     multiupload:
       title: 'Dodawanie plików'
       fileupload: 'Dodaj pliki'

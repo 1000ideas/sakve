@@ -9,18 +9,31 @@ class ItemsController < ApplicationController
     @global_folder = Folder.global_root
     @user_folder = Folder.user_root(current_user)
     @shared_folders = Folder.shared_for(current_user)
-    @current_folder = Folder.where(id: params[:folder]).first || (params[:folder] == 'user' ? @user_folder : @global_folder)
-    @current_folder = nil if params[:folder] == 'shared'
+    @current_folder_id = params[:folder]
+    @current_folder = Folder.where(id: @current_folder_id).first
+
+    @current_folder ||= if @current_folder_id.nil?
+      @user_folder
+    elsif @current_folder_id == 'global'
+      @global_folder
+    end
+
+    @current_folder_id = @current_folder_id.to_sym if @current_folder.nil? and @current_folder_id.present?
 
     @item = Item.new(folder: @current_folder, user: current_user)
 
     if @current_folder
       @subfolders = @current_folder.subfolders.scoped
       @items = Item.where(folder_id: @current_folder.try(:id))
-    elsif params[:folder] == 'shared'
+    elsif @current_folder_id == :shared
       @subfolders = @shared_folders
       @items = Item.shared_for(current_user)
+    elsif @current_folder_id == :transfers
+      @subfolders = []
+      @items = current_user.transfers.active
     end
+
+    @empty_list = (@subfolders + @items).size == 0
 
     if params.has_key?(:sort)
       column = (params[:sort][:column] || :name).to_sym
@@ -35,7 +48,9 @@ class ItemsController < ApplicationController
       end
     end
 
-    @folder = Folder.new parent: @current_folder, user: current_user, global: @current_folder.try(:global)
+    unless [:shared, :transfers].include?(@current_folder_id)
+      @folder = Folder.new parent: @current_folder, user: current_user, global: @current_folder.try(:global)
+    end
 
     respond_to do |format|
       format.html { render layout: !request.xhr? }
@@ -260,6 +275,10 @@ class ItemsController < ApplicationController
     @items = Item
       .accessible_by(current_ability, :update)
       .where( id: selection[:ids] )
+      .destroy_all
+    @transfers = Transfer
+      .accessible_by(current_ability, :update)
+      .where( id: selection[:tids] )
       .destroy_all
 
     respond_to do |format|

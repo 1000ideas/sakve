@@ -1,0 +1,41 @@
+@mixin custom-checkbox($size: 1.6em, $focus: true) {
+input[type=checkbox] {
+    @include opacity(0);
+    width: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    &:checked + i:before {
+      content: '\f00c';
+    }
+  }
+
+  &.checked i:before {content: '\f00c';}
+  &.unknown i:before {content: '\f068';}
+  @if $focus {
+    input[type=checkbox]:focus + i {
+      box-shadow: 1px 1px 1px #ddd;
+    }
+  }
+
+  i {
+    display: inline-block;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+    background: #fff;
+    font-size: 1em;
+    color: #333;
+    width: $size;
+    height: $size;
+    text-align: center;
+
+    &:before {
+      display: block;
+      position: relative;
+      left: -1px;
+      font-family: FontAwesome;
+      content: '';
+    }
+  }
+}
