@@ -6,6 +6,7 @@
     <meta name="zeroclipboard" content="<%= image_path('ZeroClipboard.swf') %>" />
 
     <title><%= content_for?(:title) ? yield(:title) : "1000ideas Sakve" %></title>
+    <%= tag(:link, rel: :icon, type: "image/png", href: '/favicon.png') %>
 
     <%= stylesheet_link_tag    "application" %>
     <%= javascript_include_tag "vendor/modernizr" %>
@@ -22,5 +23,9 @@
 
     <%= yield %>
     <%= javascript_include_tag "application" %>
+    <script type="text/javascript" charset="utf-8">
+      I18n.defaultLocale = "<%= I18n.default_locale %>";
+      I18n.locale = "<%= I18n.locale %>";
+    </script>
   </body>
 </html>

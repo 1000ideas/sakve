@@ -3,32 +3,39 @@
   <%= render partial: 'l/partials/errors', object: @transfer.errors %>
   <div class="group">
     <div class="field">
-      <%= f.label :name %>
+      <%= f.label :name, t('.subject') %>
       <%= f.text_field :name  %>
     </div>
     <div class="field">
-      <%= f.label :recipients %>
+      <%= f.label :recipients, t('.recipients') %>
       <%= f.text_field :recipients  %>
     </div>
-    <div>
+    <div class="field expires-in-field">
       <%= f.label :expires_in, t('.expires_in') %>
-      <%= f.text_field :expires_in, readonly: true, data: { default: 7 } %>
+      <%= f.text_field :expires_in, data: {spin_box: true}, min: 0 %>
+      <%= f.label :expires_in_infinity, class: [:gray, :button, :round, :tiny],
+        id: :transfer_expires_in_infinity_label do %>
+        <%= f.check_box :expires_in_infinity %>
+        <i></i>
+        <span><%= t('.infinity') %></span>
+      <% end %>
     </div>
-    <div id="expires_in_slider"></div>
     <% if f.object.new_record? %>
     <div class="field">
       <%= f.hidden_field :group_token %>
       <%= file_field_tag(:object, multiple: true, class: 'transfer-fileupload', data: { value: t('.fileupload', default: 'Select files'), file_upload: true, url: files_path(format: :json) }) %>
+      <script type="text/html" charset="utf-8" id="transfer_uploaded_template">
+        <%= render TransferFile.template %>
+      </script>
     </div>
     <% end %>
+  </div>
+  <div class="actions text-center">
+     <%= f.button nil, data: {disable_with: t('.processing')}, class: [:button, :secondary, :round] %>
   </div>
   <% if f.object.new_record? %>
   <div class="uploaded-files">
     <%= render f.object.files %>
   </div>
   <% end %>
-  <div class="actions">
-     <%= f.button nil, data: {disable_with: t('.processing')}, class: [:button, :tiny, :secondary] %>
-    <%= link_to t('.cancel'), '#', class: [:button, :tiny], data: {reveal_close: true} %>
-  </div>
 <% end %>

@@ -11,27 +11,29 @@ class Sakve
       value = $('<span>')
         .addClass('progress-value')
         .text("0%")
-      $('<div>')
+      file_progress = $('<div>')
         .addClass('file-progress')
+        .append( label )
         .append( value )
         .append( progress )
-        .append( label )
-    uploaded: (id, name, url) ->
-      label = $('<span>')
-        .addClass('name')
-        .text( name )
-      destroy = $('<a>')
-        .html("&times;")
-        .attr
-          href: url
-          'data-method': 'delete'
-          'data-confirm': I18n.t('confirm.text')
-          'data-remote': true
+      cancel = $('<a>')
+        .text( I18n.t('confirm.cancel') )
+        .addClass('cancel')
       $('<div>')
-        .addClass('transfer-file label')
-        .attr('data-fid', id)
-        .append( destroy )
-        .append( label )
+        .addClass('progress-info')
+        .append('<i class="fa fa-spinner fa-2x">')
+        .append(file_progress)
+        .append(cancel)
+    uploaded: (id, name, url) ->
+      template = $( $('#transfer_uploaded_template').html() )
+      template
+        .find('span.name')
+        .attr('title', name)
+        .text(name)
+      template
+        .find('a.remove')
+        .attr('href', url)
+      template.attr('data-fid', id)
     collaborator_select: (ul, item) ->
       label = $('<a>')
         .append( "<strong>#{item.type_name}</strong>" )
@@ -294,17 +296,16 @@ class Sakve
       $(event.target).find('[data-alert]').remove()
 
   _init_transfer: ->
-    default_value = $( "#transfer_expires_in" ).val()
-    $( "#expires_in_slider" )
-      .slider
-        value: default_value
-        min: 1
-        max: 31
-        step: 1
-        animate: "fast"
-        slide: ( event, ui ) ->
-          $( "#transfer_expires_in" ).val( if ui.value == 31 then '\u221e' else ui.value )
-    # $( "#transfer_expires_in" ).val( default_value )
+    $('input[data-spin-box]').spinBox()
+    $('#transfer_expires_in_infinity').change (event) ->
+      checked = $(event.currentTarget).is(':checked')
+      $(event.currentTarget).parent().toggleClass('checked', checked)
+      spinbox = $('#transfer_expires_in').prop('spinBox')?
+      if checked and spinbox
+        $('#transfer_expires_in').prop('spinBox').infinity()
+      else if spinbox
+        $('#transfer_expires_in').prop('spinBox').revert_infinity()
+
 
     $('.transfer-fileupload').each (idx, el) =>
       @fileupload_with_dropzone el, {
@@ -315,15 +316,20 @@ class Sakve
           data.context = @views
             .progressbar( file.name )
             .appendTo( group )
+          jqXHR = data.submit()
+          data.context.on 'click', 'a.cancel', (event) ->
+            event.preventDefault()
+            jqXHR.abort()
+            data.context.slideUp ->
+              data.context.remove()
+
           $("input[type=submit], button", data.form).prop('disabled', true)
-          data.submit()
         progress: @defaults.on_progress
         done: (event, data) =>
           result = data.result
           uploaded = @views
             .uploaded(result.id, result.name, data.jqXHR.getResponseHeader('Location'))
-            .appendTo $(event.target.form).children('.uploaded-files')
-          data.context.remove()
+          data.context.replaceWith(uploaded)
           $("input[type=submit], button", data.form).prop('disabled', false)
         error: (event, data) ->
           $("input[type=submit], button", data.form).prop('disabled', false)
@@ -370,7 +376,7 @@ class Sakve
   fileupload_with_dropzone: (element, options = {}) ->
     value = $(element).data('value')
     $(element).wrap $('<div>').addClass('fileupload-dropzone')
-    $(element).wrap $('<div>').addClass('button fileupload-button')
+    $(element).wrap $('<div>').addClass('button round fileupload-button')
     $(element).after $('<span>').text( value )
 
     $(element).fileupload $.extend({

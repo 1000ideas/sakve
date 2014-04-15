@@ -1,29 +1,58 @@
+@import "overrides";
+@import "mixins";
+@import "compass/css3/opacity";
+
 .row.transfer-box {
   padding-top: 2rem;
 
   > .columns {
     background: #fff;
     box-shadow: 0 0 5px rgba(#222, .25);
-    padding: 2rem;
+    padding: 2rem 2rem 0 2rem;
 
+  }
+
+  .actions,
+  .fileupload-dropzone {
+    .button {
+      font-size: 0.85em;
+      min-width: 10em;
+    }
+  }
+
+  .expires-in-field {
+    position: relative;
+    padding-right: 10em;
+
+    label {
+      display: inline-block;
+      margin: .5em 2em .5em 0;
+
+    }
+
+    #transfer_expires_in_infinity_label {
+      position: absolute;
+      margin: -0.5*2.3125rem 0 0 ;
+      height: 2.3125rem;
+      top: 50%;
+      right: 0;
+      span {
+        vertical-align: middle;
+      }
+
+      @include custom-checkbox(1.2em, false);
+      i {
+        margin-right: .3em;
+        &:before { left: -2px; }
+      }
+    }
   }
 }
 
 .uploaded-files {
-  .label {
-    margin-bottom: 1em;
-    margin-left: .5em;
-    overflow: hidden;
-    -ms-text-overflow: ellipsis;
-    text-overflow: ellipsis;
-    max-width: 90%;
-
-    a {
-      color: #fff;
-      font-weight: bold;
-      margin-right: .3em;
-    }
-  }
+  background: #f2f2f2;
+  margin-left: -2rem;
+  margin-right: -2rem;
 }
 
 .statistics-wrapper {

@@ -27,6 +27,7 @@
 //= require jquery.tinysort
 //= require jquery-fileupload/basic
 //= require context.menu
+//= require spin_box
 //= require sakve
 
 

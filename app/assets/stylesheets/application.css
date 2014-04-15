@@ -4,6 +4,7 @@
  *= require font-awesome
  *= require jquery.ui.all
  *= require fileupload
+ *= require spin_box
  *= require defaults
  *= require devise
  *= require header

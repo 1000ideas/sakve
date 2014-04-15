@@ -1,1 +1,3 @@
-$('.transfer-file[data-fid=<%= @file.id %>]').remove();
+$('.transfer-file[data-fid=<%= @file.id %>]').slideUp(function() {
+  $(this).remove();
+});
