@@ -7,10 +7,12 @@
   > .columns {
     padding: 0;
   }
+  position: relative;
+  z-index: 1;
 
   > ul {
     padding: 0 1rem;
-    max-width: rem-calc(300);
+    width: rem-calc(300);
 
     > li.folder {
       display: block;

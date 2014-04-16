@@ -26,6 +26,8 @@ body > header {
     > .logo-column {
       width: 0;
       padding: 0;
+      position: relative;
+      z-index: 1;
     }
 
     > .menu-column {
