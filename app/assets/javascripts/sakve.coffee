@@ -54,7 +54,7 @@ class Sakve
 
     for module in ['tags', 'multiupload', 'transfer',
       'drag_drop', 'share', 'folders', 'selection', 'body_cover',
-      'clipboard']
+      'clipboard', 'scrollpane']
       @["_init_#{module}"]()
 
     @last_selected = null
@@ -79,13 +79,26 @@ class Sakve
         .data('dragCount', 0)
         .removeClass('file-drop-over')
 
+
+    $(window)
+      .on 'resize', (event) ->
+        height = $(window).innerHeight() - $('.file-list').offset().top;
+        if height > 0
+          list = $('.file-list')
+            .css(marginBottom: 0)
+            .height(height)
+          if list.is('.scroll-pane')
+            list.data('jsp').reinitialise()
+      .resize()
+
+    # console.profileEnd()
+    true
+
+  _init_scrollpane: ->
     $('.scroll-pane')
       .jScrollPane()
       .on 'jsp-scroll-start jsp-scroll-stop', (event) ->
         $(event.target).toggleClass('jspScrolling', event.type.match(/-start/))
-
-    # console.profileEnd()
-    true
 
   reload_list: (name) ->
     # items_url = $("##{name}-list").data('url');
@@ -95,6 +108,8 @@ class Sakve
           .find("##{name}-list")
           .replaceAll("##{name}-list")
         @selection_changed()
+        @_init_scrollpane()
+        $(window).resize()
 
   modal: (id, content, options = {}) ->
     on_close = (event) ->

@@ -4,6 +4,7 @@
  *= require font-awesome
  *= require jquery.ui.all
  *= require jscrollpane
+ *= require jscrollpane.custom
  *= require fileupload
  *= require spin_box
  *= require defaults
