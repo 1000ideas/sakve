@@ -7,7 +7,11 @@ class ApplicationController < ActionController::Base
     head 401 and return if request.format != :html
     unless current_user
       session[:access_page] = request.path
-      redirect_to new_user_session_url, alert:  exception.message
+      if ['/', *I18n.available_locales.map{|l| "/#{l}" }].include?(request.path)
+        redirect_to new_user_session_url
+      else
+        redirect_to new_user_session_url, alert:  exception.message
+      end
     else
       render action: '401', status: 401
     end
