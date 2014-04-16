@@ -82,16 +82,16 @@ class Sakve
 
     $(window)
       .on 'resize', (event) ->
-        height = $(window).innerHeight() - $('.file-list').offset().top;
-        if height > 0
-          list = $('.file-list')
-            .css(marginBottom: 0)
-            .height(height)
-          if list.is('.scroll-pane')
-            list.data('jsp').reinitialise()
+        wh = $(window).innerHeight()
+        $('.file-list').each (idx, el) ->
+          height = wh - $(el).offset().top;
+          if height > 0
+            list = $(el)
+              .css(marginBottom: 0)
+              .height(height)
+            if list.is('.scroll-pane')
+              list.data('jsp').reinitialise()
       .resize()
-
-    # console.profileEnd()
     true
 
   _init_scrollpane: ->
