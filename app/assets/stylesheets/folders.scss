@@ -3,11 +3,22 @@
 
 .folders-tree {
   font-size: 1.1em;
-
-  > ul > li.folder {
-    display: block;
-    margin-bottom: 1em;
+  width: 0;
+  > .columns {
+    padding: 0;
   }
+
+  > ul {
+    padding: 0 1rem;
+    max-width: rem-calc(300);
+
+    > li.folder {
+      display: block;
+      margin-bottom: 1em;
+    }
+  }
+
+
 
   ul {
     list-style:  none;
@@ -96,6 +107,3 @@
 
 
 }
-.row.collapse > .folders-tree.columns {
-    padding: 0 1em;
-  }

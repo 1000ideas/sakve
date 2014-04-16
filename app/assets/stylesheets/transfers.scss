@@ -3,7 +3,9 @@
 @import "compass/css3/opacity";
 
 .row.transfer-box {
-  padding-top: 2rem;
+  padding: 2rem 1rem 1rem 1rem;
+  max-width: rem-calc(700px);
+  margin: 0 auto;
 
   > .columns {
     background: #fff;

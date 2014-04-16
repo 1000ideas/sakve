@@ -38,6 +38,15 @@
   }
 }
 
+#files {
+  @media #{$small-only} {
+    padding: 0;
+  }
+
+  padding-left: rem-calc(300);
+  max-width: rem-calc(1600);
+}
+
 ul.file-list {
   list-style: none;
   margin-left: 0;

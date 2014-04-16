@@ -91,6 +91,8 @@ class Sakve
               .height(height)
             if list.is('.scroll-pane')
               list.data('jsp').reinitialise()
+        $('body > .cover').each (idx, el) ->
+          $(el).height $(document).height()
       .resize()
     true
 
@@ -385,6 +387,7 @@ class Sakve
             data.context.slideUp ->
               data.context.remove()
           $("input[type=submit], button", data.form).prop('disabled', true)
+          $(window).resize()
         progress: @defaults.on_progress
         done: (event, data) =>
           result = data.result
