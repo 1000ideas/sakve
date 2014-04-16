@@ -64,9 +64,11 @@ body {
     font-size: .9rem;
     margin-bottom: 2em;
     max-height: 10*2em;
-    overflow: auto;
+    overflow: hidden;
+    // padding-right: 2em !important;
 
     li {
+      max-width: 90%;
       line-height: 1.5em;
       margin-bottom: .5em;
       white-space: nowrap;

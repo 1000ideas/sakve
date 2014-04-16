@@ -8,6 +8,34 @@ body > header {
   position: relative;
   z-index: 1;
 
+  .row.collapse {
+
+    @media #{$small-only} {
+      > .logo-column {
+        width: 100%;
+        text-align: center;
+      }
+
+      > .menu-column {
+        width: 100%;
+        padding: 0 2rem;
+        text-align: center;
+      }
+    }
+
+    > .logo-column {
+      width: 0;
+      padding: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    > .menu-column {
+      width: 100%;
+      padding-left: rem-calc(300);
+    }
+  }
+
   h1 {
     font-size: 1rem;
     margin: .2em 0;
@@ -32,25 +60,26 @@ body > header {
     }
 
     &.main-menu {
+      padding-left: 0;
+
       a {
         color: $body-font-color;
         font-family: $header-font-family;
         text-transform: uppercase;
         display: block;
-        padding: 1.2em 1em;
-        border-left: 1px solid transparent;
-        border-right: 1px solid transparent;
+        padding: 1.2em 0;
+        margin-right: 2em;
 
         &:hover, &:focus, {
           // border-bottom-color: $primary-color;
-          color: $secondary-color;
+          color: lighten($secondary-color, 10%);
         }
         &.active {
           color: $secondary-color;
-          border-left-color: #f2f2f2;
-          border-right-color: #f2f2f2;
         }
       }
+
+      li:last-child a { margin-right: 0;}
     }
 
     &.user-menu {

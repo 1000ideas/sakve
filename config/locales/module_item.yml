@@ -35,6 +35,7 @@ pl:
         date: "Data modyfikacji"
         expires: "Ważność"
     multiupload:
+      or_drop: "lub upuść tutaj"
       title: 'Dodawanie plików'
       fileupload: 'Dodaj pliki'
     edit:

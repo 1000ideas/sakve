@@ -54,7 +54,7 @@ class Sakve
 
     for module in ['tags', 'multiupload', 'transfer',
       'drag_drop', 'share', 'folders', 'selection', 'body_cover',
-      'clipboard']
+      'clipboard', 'scrollpane']
       @["_init_#{module}"]()
 
     @last_selected = null
@@ -64,8 +64,43 @@ class Sakve
         .closest('[data-reveal]')
         .foundation('reveal', 'close')
 
-    # console.profileEnd()
+    $(document).on 'dragenter dragleave', 'body', (event) ->
+      event.preventDefault()
+      event.stopPropagation()
+      dragCount = $(event.currentTarget).data('dragCount') || 0
+      offset = if event.type == 'dragenter' then +1 else -1
+      dragCount += offset
+      $(event.currentTarget).data('dragCount', dragCount)
+
+      $(event.currentTarget).toggleClass('file-drop-over', dragCount > 0)
+
+    $(document).on 'drop', (event) ->
+      $('body')
+        .data('dragCount', 0)
+        .removeClass('file-drop-over')
+
+
+    $(window)
+      .on 'resize', (event) ->
+        wh = $(window).innerHeight()
+        $('.file-list').each (idx, el) ->
+          height = wh - $(el).offset().top;
+          if height > 0
+            list = $(el)
+              .css(marginBottom: 0)
+              .height(height)
+            if list.is('.scroll-pane')
+              list.data('jsp').reinitialise()
+        $('body > .cover').each (idx, el) ->
+          $(el).height $(document).height()
+      .resize()
     true
+
+  _init_scrollpane: ->
+    $('.scroll-pane')
+      .jScrollPane()
+      .on 'jsp-scroll-start jsp-scroll-stop', (event) ->
+        $(event.target).toggleClass('jspScrolling', event.type.match(/-start/))
 
   reload_list: (name) ->
     # items_url = $("##{name}-list").data('url');
@@ -75,6 +110,8 @@ class Sakve
           .find("##{name}-list")
           .replaceAll("##{name}-list")
         @selection_changed()
+        @_init_scrollpane()
+        $(window).resize()
 
   modal: (id, content, options = {}) ->
     on_close = (event) ->
@@ -106,6 +143,21 @@ class Sakve
         .slideDown()
     $(selector).foundation(alert: {animation: 'slideUp'})
     # $(selector).foundation()
+
+  start_ping: ->
+    return if @ping_timeout_id?
+
+    ping_func = =>
+      @ping_timeout_id = null
+      $.ajax('/ping')
+      @start_ping()
+
+    @ping_timeout_id = setTimeout(ping_func, 5000)
+
+  stop_ping: ->
+    if @ping_timeout_id?
+      clearTimeout(@ping_timeout_id)
+      @ping_timeout_id = null
 
   selection_changed: (element = null) ->
     @last_selected = element
@@ -283,6 +335,10 @@ class Sakve
             .replaceWith(data.result.context)
           $(event.target.form).foundation(alert: {animation: 'slideUp'})
           @reload_list('items')
+        start: (event, data) =>
+          @start_ping()
+        stop: (event, data) =>
+          @stop_ping()
         fail: (event, data) ->
           data
             .context
@@ -306,10 +362,18 @@ class Sakve
       else if spinbox
         $('#transfer_expires_in').prop('spinBox').revert_infinity()
 
+    $('input#show_recipients').change (event) ->
+      if $(event.currentTarget).is(':checked')
+        $('#transfer_recipients').slideDown()
+      else
+        $('#transfer_recipients').slideUp()
+
 
     $('.transfer-fileupload').each (idx, el) =>
       @fileupload_with_dropzone el, {
         url: $(el).data('url')
+        start: =>
+          @start_ping()
         add: (event, data) =>
           group = $(event.target.form).children('.uploaded-files').first()
           file = data.files[0]
@@ -322,8 +386,8 @@ class Sakve
             jqXHR.abort()
             data.context.slideUp ->
               data.context.remove()
-
           $("input[type=submit], button", data.form).prop('disabled', true)
+          $(window).resize()
         progress: @defaults.on_progress
         done: (event, data) =>
           result = data.result
@@ -333,7 +397,8 @@ class Sakve
           $("input[type=submit], button", data.form).prop('disabled', false)
         error: (event, data) ->
           $("input[type=submit], button", data.form).prop('disabled', false)
-        stop: (event, data) ->
+        stop: (event, data) =>
+          @stop_ping()
           $("input[type=submit], button", data.form).prop('disabled', false)
       }
 
@@ -375,7 +440,7 @@ class Sakve
 
   fileupload_with_dropzone: (element, options = {}) ->
     value = $(element).data('value')
-    $(element).wrap $('<div>').addClass('fileupload-dropzone')
+    # $(element).wrap $('<div>').addClass('fileupload-dropzone')
     $(element).wrap $('<div>').addClass('button round fileupload-button')
     $(element).after $('<span>').text( value )
 

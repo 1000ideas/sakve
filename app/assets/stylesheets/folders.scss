@@ -3,11 +3,24 @@
 
 .folders-tree {
   font-size: 1.1em;
-
-  > ul > li.folder {
-    display: block;
-    margin-bottom: 1em;
+  width: 0;
+  > .columns {
+    padding: 0;
   }
+  position: relative;
+  z-index: 1;
+
+  > ul {
+    padding: 0 1rem;
+    width: rem-calc(300);
+
+    > li.folder {
+      display: block;
+      margin-bottom: 1em;
+    }
+  }
+
+
 
   ul {
     list-style:  none;
@@ -37,6 +50,7 @@
       > span {
         a i {
           @include transform(rotate(-45deg));
+          color: inherit !important;
         }
       }
 
@@ -45,7 +59,7 @@
       }
     }
 
-    .fa.fa-caret { width: 1em; }
+    .fa.fa-caret { width: 1em; color: lighten($body-font-color, 30%); }
     &.not-empty > span > a > .fa.fa-caret:before { content: '\f0da'; }
     &.not-empty > h3 > a > .fa.fa-caret:before { content: '\f0da'; }
     &.open > span > a > .fa.fa-caret:before { content: '\f0d7'; }
@@ -59,6 +73,16 @@
 
     h3, span {
 
+    }
+  }
+
+  h3 {
+    font-size: 1em;
+    text-transform: uppercase;
+    margin-bottom: 1em;
+
+    > a:hover, > a:focus {
+      color: lighten($secondary-color, 10%);
     }
   }
 
@@ -76,18 +100,12 @@
   li.current > h3 > a,
   li.current > span > a {
     color: $secondary-color;
+    i {
+      color: inherit !important;
+    }
   }
 
 
-
-  h3 {
-    font-size: 1em;
-    text-transform: uppercase;
-    margin-bottom: 1em;
-  }
 
 
 }
-.row.collapse > .folders-tree.columns {
-    padding: 0 1em;
-  }

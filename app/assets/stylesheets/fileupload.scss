@@ -13,8 +13,15 @@ input[type=file].fileupload {
   text-align: center;
 }
 
-.fileupload-dropzone > div {
-  margin: 5em auto;
+.fileupload-dropzone {
+  > div {
+    margin: 5em auto 2em auto;
+  }
+
+  > p {
+    font-size: 0.75rem;
+    color: darken(#eee, 30%);
+  }
 }
 
 .fileupload-button input[type=file] {
@@ -71,4 +78,15 @@ input[type=file].fileupload {
   margin: 10px 10px 10px 0;
   line-height: 20px;
   text-align: right;
+}
+
+.file-drop-over {
+  .fileupload-dropzone {
+    border-color: darken(#DDD, 10%);
+    // background: darken(#EEE, 30%);
+
+    > p {
+      color: darken(#eee, 60%);
+    }
+  }
 }

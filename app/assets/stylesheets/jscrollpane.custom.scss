@@ -1,0 +1,39 @@
+.jspScrollable {
+  &.v-only {
+    .jspHorizontalBar {height: 0;}
+  }
+
+  .jspTrack {
+    background: #fff;
+    border: 1px solid #fff;
+
+    .jspDrag {
+      background-color: #aaa;
+
+      &:hover, &.jspActive, &.jspHover {
+        background-color: #555;
+      }
+    }
+  }
+
+  &.jspScrolling {
+    .jspTrack {
+      background: #f2f2f2;
+      border-color: #ddd;
+    }
+  }
+
+
+  .jspVerticalBar { width: 10px; }
+  .jspHorizontalBar { width: 10px; }
+
+  .jspHorizontalBar, .jspVerticalBar {
+    &:hover {
+      .jspTrack {
+        background: #f2f2f2;
+        border-color: #ddd;
+      }
+
+    }
+  }
+}

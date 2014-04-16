@@ -3,7 +3,7 @@
 
 <div class="row collapse">
   <%= render 'folders_list' %>
-  <section id="files" class="columns small-12 medium-9 large-9 end">
+  <section id="files" class="columns small-12 end">
     <div class="row buttons-line">
       <div class="small-12 columns">
         <div class="for-all row collapse">
@@ -43,7 +43,7 @@
 
     <% else %>
       <%= form_for :selection do |f| %>
-      <ul class="file-list" id="items-list">
+      <ul class="file-list scroll-pane" id="items-list">
         <% @subfolders.each do |folder| %>
           <%= render 'folders/list_folder', folder: folder, f: f %>
         <% end %>
