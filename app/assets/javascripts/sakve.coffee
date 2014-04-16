@@ -73,10 +73,16 @@ class Sakve
       $(event.currentTarget).data('dragCount', dragCount)
 
       $(event.currentTarget).toggleClass('file-drop-over', dragCount > 0)
+
     $(document).on 'drop', (event) ->
       $('body')
         .data('dragCount', 0)
         .removeClass('file-drop-over')
+
+    $('.scroll-pane')
+      .jScrollPane()
+      .on 'jsp-scroll-start jsp-scroll-stop', (event) ->
+        $(event.target).toggleClass('jspScrolling', event.type.match(/-start/))
 
     # console.profileEnd()
     true

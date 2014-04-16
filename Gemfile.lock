@@ -134,11 +134,15 @@ GEM
     jquery-fileupload-rails (0.4.1)
       actionpack (>= 3.1)
       railties (>= 3.1)
+    jquery-mousewheel-rails (0.0.7)
+      railties (>= 3.1)
     jquery-rails (3.1.0)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (4.2.0)
       railties (>= 3.2.16)
+    jscrollpane-rails (2.0.19)
+      railties (>= 3.1)
     json (1.8.1)
     mail (2.5.4)
       mime-types (~> 1.16)
@@ -249,7 +253,9 @@ DEPENDENCIES
   foundation-rails (~> 5.1.0)
   globalize3 (~> 0.3.0)
   i18n-js!
+  jquery-mousewheel-rails
   jquery-rails
+  jscrollpane-rails
   l!
   mysql2
   rack-mini-profiler

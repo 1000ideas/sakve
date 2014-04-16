@@ -10,7 +10,7 @@
     <% else %>
       <% cache([:content, @transfer]) do %>
       <h3>Zawartość</h3>
-      <ul>
+      <ul class="scroll-pane v-only">
       <% @transfer.content.each do |name| %>
       <li><%= name %></li>
       <% end %>

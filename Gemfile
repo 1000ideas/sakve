@@ -23,6 +23,8 @@ end
 gem 'rack-mini-profiler'
 
 gem 'jquery-rails'
+gem 'jscrollpane-rails'
+gem 'jquery-mousewheel-rails'
 gem 'i18n-js', github: "cblavier/i18n-js"
 
 gem 'l', github: "1000ideas/l"

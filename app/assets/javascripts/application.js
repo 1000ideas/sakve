@@ -24,6 +24,8 @@
 //= require jquery.ui.droppable
 //= require jquery.ui.autocomplete
 //= require jquery.ui.slider
+//= require jquery.mousewheel
+//= require jquery.jscrollpane
 //= require jquery.tinysort
 //= require jquery-fileupload/basic
 //= require context.menu
