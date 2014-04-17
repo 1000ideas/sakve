@@ -153,7 +153,7 @@ class Transfer < ActiveRecord::Base
   def compress_files
     self.object = create_object_from_transfer
     if self.object_file_name.empty?
-      self.object.instance_write :file_name,  file_name_from_title
+
     end
     @delete_files = true
     self.done = true
@@ -192,6 +192,7 @@ class Transfer < ActiveRecord::Base
       end
     end
 
+    self.object.instance_write :file_name,  file_name_from_title
     File.open(filepath)
   end
 

@@ -121,6 +121,28 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def stream_file file, options = {}
+    headers['Accept-Ranges'] = 'bytes'
+    headers["Content-Transfer-Encoding"] = "binary"
+
+    if request.headers['Range']
+      unit, range = request.headers['Range'].split '=', 2
+      rstart, rend = range.split('-').map(&:to_i)
+      rend ||= (file.size - 1)
+      length = rend - rstart + 1;
+      head(:not_modified) and return if length <= 0
+      headers['Content-Length'] = length.to_s
+      headers['Content-Range'] = "bytes #{rstart}-#{rend}/#{file.size}"
+      file.seek(rstart, IO::SEEK_SET)
+    else
+      length = file.size
+      headers['Content-Length'] = length.to_s
+      headers['Content-Range'] = "bytes 0-#{length-1}/#{file.size}"
+    end
+
+    send_data file.read(length), options.merge(disposition: 'inline', status: 206)
+  end
+
   def miniprofiler
     Rack::MiniProfiler.authorize_request
   end
