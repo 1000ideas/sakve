@@ -3,14 +3,16 @@ pl:
     submenu:
       new: Dodaj Transfer
       index: Lista transfers
-    form:
+    form: &TRANFERFORM
       or_drop: "upuść tutaj"
       subject: "Nazwa dla przesyłanych plików"
       recipients: "Chcę wysłać maila (możesz wpisać kilka maili oddzielając je przecinkiem)"
-      infinity: 'Zawsze dostępne'
+      infinity: 'Zawsze dostępnne'
       fileupload: Dodaj pliki
       expires_in: "Pliki dostępne przez (dni)"
       processing: "Przetwarzanie..."
+    edit_form:
+      <<: *TRANFERFORM
     new:
       title: Dodawanie Transfer
     index:
@@ -21,6 +23,8 @@ pl:
       infinite: 'zawsze'
     edit:
       title: Edycja Transfer
+      processing: "Przetwarzanie"
+      infinity: "Przetwarzanie"
     download:
       download: "Zapisz plik"
       save: "Zapisz w Sakve"
@@ -59,6 +63,7 @@ pl:
         files: Pliki
       transfer_file:
         token: Token grupujący
+        object: "Plik"
     errors:
       models:
         transfer:
@@ -73,4 +78,6 @@ pl:
           attributes:
             token:
               wrong_length: "musi mieć długość %{count} znaków"
+            object:
+              spoofed_media_type: 'wydaje się podejrzany! Spróbuj wgrać go jeszcze raz lub skontaktuj sie z administratorem.'
 

@@ -42,7 +42,10 @@ class TransfersController < ApplicationController
     @transfer = Transfer.find_by_token(params[:token])
 
     respond_to do |format|
-      format.html { render layout: 'download' }
+      format.html do
+        @download = true
+        @bodycover = true
+      end
       format.zip do
         head(:gone) and return if @transfer.expired?
         @transfer.statistics.create(client_ip: request.remote_ip, browser: request.user_agent)
@@ -70,6 +73,10 @@ class TransfersController < ApplicationController
   def edit
     @transfer = Transfer.find(params[:id])
     authorize! :update, @transfer
+
+    respond_to do |format|
+      format.js
+    end
    end
 
   # POST /transfers

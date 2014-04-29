@@ -400,6 +400,19 @@ class Sakve
         stop: (event, data) =>
           @stop_ping()
           $("input[type=submit], button", data.form).prop('disabled', false)
+        fail: (event, data) ->
+          _content = $(data.jqXHR.responseJSON.context)
+          data
+            .context
+            .replaceWith(_content)
+          data.context = _content
+            .find 'a.remove'
+            .on 'click', (event) ->
+              event.preventDefault()
+              $(event.target)
+                .closest('.progress-info')
+                .slideUp ->
+                  $(this).remove()
       }
 
   _init_drag_drop: ->

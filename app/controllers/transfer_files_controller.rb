@@ -15,9 +15,9 @@ class TransferFilesController < ApplicationController
 
     respond_to do |format|
       if @file.save
-        format.json { render json: @file, only: [:id, :token], methods: :name, status: :created, location: file_path(@file, format: :js) }
+        format.json { render action: :create, status: :created, location: file_path(@file, format: :js) }
       else
-        format.json { render json: @file.errors, status: :unprocessable_entity }
+        format.json { render action: :create, status: :unprocessable_entity }
       end
     end
   end
