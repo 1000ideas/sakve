@@ -2,6 +2,7 @@ pl:
   application:
     context_common: &COMMON
       download: Pobierz
+      edit: Edytuj
       share: Udostępnij
       transfer: Szybki transfer
       open: Otwórz

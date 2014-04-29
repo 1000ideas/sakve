@@ -73,6 +73,10 @@ class TransfersController < ApplicationController
   def edit
     @transfer = Transfer.find(params[:id])
     authorize! :update, @transfer
+
+    respond_to do |format|
+      format.js
+    end
    end
 
   # POST /transfers

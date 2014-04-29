@@ -141,6 +141,13 @@ label.custom-check-box {
       float: left;
     }
 
+    .errors {
+      display: block;
+      clear: both;
+      font-size: 90%;
+      color: $alert-color;
+    }
+
     .progress-value {
       float: right;
     }
