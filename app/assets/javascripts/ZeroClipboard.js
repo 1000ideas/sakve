@@ -754,6 +754,7 @@
     return copy;
   };
   var _dispatchClientCallbacks = function(eventName, context, args, async) {
+    // console.log('eventName: ' + eventName);
     var handlers = _clientMeta[this.id] && _clientMeta[this.id].handlers[eventName];
     if (handlers && handlers.length) {
       var i, len, func, originalContext = context || this;

@@ -11,7 +11,7 @@ class Transfer < ActiveRecord::Base
     path: ':partition/:class/:id/:filename'
 
   attr_writer :expires_in
-  attr_accessor :empty
+  attr_accessor :empty, :expires_in_infinity
   attr_accessible :expires_in, :name, :object,
     :recipients, :token, :user_id, :user, :group_token,
     :empty, :done, :expires_in_infinity
@@ -52,12 +52,6 @@ class Transfer < ActiveRecord::Base
     else
       @expires_in || 7
     end
-  end
-
-
-  def expires_in_infinity=(value); end
-  def expires_in_infinity
-    false
   end
 
   def saved
@@ -209,8 +203,11 @@ class Transfer < ActiveRecord::Base
   end
 
   def setup_exires_at
-    if expires_in.to_i > 0
+    if @expires_in_infinity.to_i
+      self.expires_at = nil
+    elsif expires_in.to_i > 0
       self.expires_at = DateTime.now + expires_in.to_i.days
+
     end
   end
 

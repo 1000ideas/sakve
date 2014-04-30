@@ -25,7 +25,13 @@ modal = sakve.modal('transfer-created-modal', '<%= j render("create") %>', {
     }
   },
   opened: function() {
-    this.clipboard = ZeroClipboard( $('.copy-to-clipboard', this) );
+    var client =  this.clipboard = new ZeroClipboard( $('.copy-to-clipboard', this) );
+    client.on('load', function(event) {
+      client.on('complete', function(event) {
+        $(document).foundation('dropdown', 'closeall');
+        $(this).click();
+      });
+    });
     $.ajax({url: '<%= status_transfer_path(@transfer, format: :js) %>'});
   }
 });

@@ -123,6 +123,7 @@ class Sakve
       .addClass("reveal-modal #{options.size ? 'small'}")
       .attr('id', id)
       .html(content)
+      .append( $('<a class="close-reveal-modal">&#215;</a>') )
       .appendTo('body')
       .foundation()
       .on('opened', options.opened ? -> )

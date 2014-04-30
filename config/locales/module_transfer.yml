@@ -39,6 +39,8 @@ pl:
     create:
       done: "Przetwarzanie zakończone!"
       processing: "Przetwarzanie w toku..."
+      copy: "Kopiuj link"
+      copied: "Skopiowano link do schowka!"
     show:
       download_page: "Przejdź do strony pobierania"
       downloaded: "Pobrano: %{count} razy"
