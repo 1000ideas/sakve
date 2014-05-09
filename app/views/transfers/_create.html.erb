@@ -11,10 +11,14 @@
   </div>
 </div>
 <div class="row collapse">
-  <div class="columns small-10">
+  <div class="columns small-9">
     <%= text_field_tag 'clipboard-text', download_transfer_url(token: @transfer.token) %>
   </div>
-  <div class="columns small-2">
-    <%= link_to 'Copy', '#', class: 'button tiny copy-to-clipboard', data: {clipboard_target: 'clipboard-text'} %>
+  <div class="columns small-3">
+    <%= link_to t('.copy'), '#', class: 'button tiny copy-to-clipboard', data: {clipboard_target: 'clipboard-text', dropdown: 'copied-dropdown'} %>
   </div>
+  <div class="f-dropdown content" id="copied-dropdown" data-dropdown-content>
+    <%= t('.copied') %>
+  </div>
+
 </div>

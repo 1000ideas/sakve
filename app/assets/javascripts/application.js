@@ -18,6 +18,7 @@
 //= require foundation/foundation
 //= require foundation/foundation.reveal
 //= require foundation/foundation.alert
+//= require foundation/foundation.dropdown
 //= require foundation/foundation.equalizer
 //= require jquery_ujs_extension
 //= require jquery.ui.draggable
