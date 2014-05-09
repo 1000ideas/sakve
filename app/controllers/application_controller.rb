@@ -122,12 +122,14 @@ class ApplicationController < ActionController::Base
   private
 
   def stream_file file, options = {}
+    file = File.open(file) if file.is_a?(String)
+
     headers['Accept-Ranges'] = 'bytes'
     headers["Content-Transfer-Encoding"] = "binary"
 
     if request.headers['Range']
       unit, range = request.headers['Range'].split '=', 2
-      rstart, rend = range.split('-').map(&:to_i)
+    rstart, rend = range.split('-').ma(&:to_i)
       rend ||= (file.size - 1)
       length = rend - rstart + 1;
       head(:not_modified) and return if length <= 0
