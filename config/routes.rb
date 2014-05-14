@@ -68,6 +68,14 @@ Sakve::Application.routes.draw do
 
     resources :tags, only: :index
 
+    match 'transfers/:token/download',
+      to: 'transfers#file_download',
+      via: :get,
+      as: :file_download_transfer,
+      constraints: {
+        token: /[0-9a-f]{32,64}/i
+      }
+
     match 'transfers/:token(.:format)',
       to: 'transfers#download',
       via: :get,
@@ -75,6 +83,7 @@ Sakve::Application.routes.draw do
       constraints: {
         token: /[0-9a-f]{32,64}/i
       }
+
 
     resources :transfers, except: [:new] do
       collection do

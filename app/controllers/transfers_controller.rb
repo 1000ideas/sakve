@@ -54,6 +54,13 @@ class TransfersController < ApplicationController
     end
   end
 
+  def file_download
+    @transfer = Transfer.find_by_token(params[:token])
+    head(:gone) and return if @transfer.expired?
+    @transfer.statistics.create(client_ip: request.remote_ip, browser: request.user_agent)
+    stream_file File.open(@transfer.object.path), filename: @transfer.object_file_name
+  end
+
   def save
     @transfer = Transfer.find(params[:id])
     authorize! :read, @transfer
