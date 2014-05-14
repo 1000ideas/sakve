@@ -203,7 +203,7 @@ class Transfer < ActiveRecord::Base
   end
 
   def setup_exires_at
-    if @expires_in_infinity.to_i
+    if @expires_in_infinity.to_i == 1
       self.expires_at = nil
     elsif expires_in.to_i > 0
       self.expires_at = DateTime.now + expires_in.to_i.days
