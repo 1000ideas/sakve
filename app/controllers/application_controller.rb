@@ -129,7 +129,7 @@ class ApplicationController < ActionController::Base
 
     if request.headers['Range']
       unit, range = request.headers['Range'].split '=', 2
-    rstart, rend = range.split('-').ma(&:to_i)
+      rstart, rend = range.split('-').map(&:to_i)
       rend ||= (file.size - 1)
       length = rend - rstart + 1;
       head(:not_modified) and return if length <= 0
