@@ -29,3 +29,10 @@ PaperclipProcessors::ItemProcessor.setup do |config|
   config.jod_path = Rails.root.join('vendor', 'jodconverter', 'jodconverter-3.0.1.jar')
 end
 
+module Paperclip
+  class MediaTypeSpoofDetector
+    def spoofed?
+      false
+    end
+  end
+end
