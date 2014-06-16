@@ -157,8 +157,16 @@ class Sakve
     $(selector).foundation(alert: {animation: 'slideUp'})
     # $(selector).foundation()
 
+  enableBeforeClose: ->
+    window.onbeforeunload = (event) ->
+      I18n.t('onbeforeunload')
+
+  disableBeforeClose: ->
+    window.onbeforeunload = null
+
   start_ping: ->
     return if @ping_timeout_id?
+    @enableBeforeClose()
 
     ping_func = =>
       @ping_timeout_id = null
@@ -169,6 +177,7 @@ class Sakve
 
   stop_ping: ->
     if @ping_timeout_id?
+      @disableBeforeClose()
       clearTimeout(@ping_timeout_id)
       @ping_timeout_id = null
 

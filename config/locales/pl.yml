@@ -1,4 +1,5 @@
 pl:
+  onbeforeunload: 'Czy na pewno chcesz przerwać wgrywanie plików i opuścić tę stronę?'
   partials:
     search:
       placeholder: 'Szukaj plików'
