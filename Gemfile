@@ -28,7 +28,7 @@ gem 'jscrollpane-rails'
 gem 'jquery-mousewheel-rails'
 gem 'i18n-js', github: "cblavier/i18n-js"
 
-gem 'l', github: "1000ideas/l", tag: 'v1.0.3'
+gem 'l', github: "1000ideas/l", tag: 'v0.8.0'
 # gem 'l', path: '../gems/l'
 gem "tinymce-rails", github: "1000ideas/tinymce-rails", branch: "rails_3_2"
 
