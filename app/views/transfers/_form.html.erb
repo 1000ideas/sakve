@@ -21,7 +21,7 @@
       <%= f.text_field :expires_in, data: {spin_box: true}, min: 0 %>
       <%= f.label :expires_in_infinity, class: [:gray, :button, :round, :tiny],
         id: :transfer_expires_in_infinity_label do %>
-        <%= f.check_box :expires_in_infinity %>
+        <%= f.check_box :expires_in_infinity, {checked: f.object.forever?} %>
         <i></i>
         <span><%= t('.infinity') %></span>
       <% end %>
@@ -48,3 +48,6 @@
   </div>
   <% end %>
 <% end %>
+<script type="text/javascript">
+  sakve._init_transfer();
+</script>

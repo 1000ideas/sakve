@@ -19,7 +19,7 @@ class Transfer < ActiveRecord::Base
 
   #before_validation :compress_files
   before_validation :generate_token, :set_default_name, on: :create
-  before_create :setup_exires_at
+  before_validation :setup_exires_at
   after_commit :delete_transfer_files, :send_mail_to_recipients, on: :create
   after_commit :delete_transfer_files, :send_mail_to_recipients, on: :update
   after_commit :async_compress_files, unless: proc {done? or empty}
@@ -47,10 +47,10 @@ class Transfer < ActiveRecord::Base
   end
 
   def expires_in
-    if expires_at.present?
-      ((expires_at.to_datetime - DateTime.now)/1.day).ceil
+    @expires_in || if expires_at.present?
+      ((expires_at - Time.now)/1.day).ceil
     else
-      @expires_in || 7
+      7
     end
   end
 
@@ -101,7 +101,7 @@ class Transfer < ActiveRecord::Base
   end
 
   def forever?
-    expires_at.nil?
+    persisted? and expires_at.nil?
   end
 
   def expired?

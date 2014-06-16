@@ -49,11 +49,15 @@ class Sakve
         .val(id)
 
   constructor: ->
+    $ =>
+      @_on_load()
+
+  _on_load: ->
     # console.profile('Setup');
     $(document).foundation();
 
-    for module in ['tags', 'multiupload', 'transfer',
-      'drag_drop', 'share', 'folders', 'selection', 'body_cover',
+    for module in ['tags', 'multiupload', 'drag_drop',
+      'share', 'folders', 'selection', 'body_cover',
       'clipboard', 'scrollpane']
       @["_init_#{module}"]()
 
@@ -362,14 +366,16 @@ class Sakve
 
   _init_transfer: ->
     $('input[data-spin-box]').spinBox()
-    $('#transfer_expires_in_infinity').change (event) ->
-      checked = $(event.currentTarget).is(':checked')
-      $(event.currentTarget).parent().toggleClass('checked', checked)
-      spinbox = $('#transfer_expires_in').prop('spinBox')?
-      if checked and spinbox
-        $('#transfer_expires_in').prop('spinBox').infinity()
-      else if spinbox
-        $('#transfer_expires_in').prop('spinBox').revert_infinity()
+    $('#transfer_expires_in_infinity')
+      .change (event) ->
+        checked = $(event.currentTarget).is(':checked')
+        $(event.currentTarget).parent().toggleClass('checked', checked)
+        spinbox = $('#transfer_expires_in').prop('spinBox')?
+        if checked and spinbox
+          $('#transfer_expires_in').prop('spinBox').infinity()
+        else if spinbox
+          $('#transfer_expires_in').prop('spinBox').revert_infinity()
+      .change()
 
     $('input#show_recipients').change (event) ->
       if $(event.currentTarget).is(':checked')
@@ -509,4 +515,4 @@ class Sakve
         $('.progress-value', data.context).text( progress)
 
 
-jQuery -> (window.sakve = new Sakve())
+window.sakve = new Sakve()

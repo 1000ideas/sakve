@@ -1,0 +1,7 @@
+<%- if @transfer.errors.any? -%>
+sakve.show_errors('#edit-transfer-modal',
+  "<%= j render('l/partials/errors', errors: @transfer.errors) %>");
+<% else %>
+sakve.reload_list('items');
+$('#edit-transfer-modal').foundation('reveal', 'close');
+<% end %>
