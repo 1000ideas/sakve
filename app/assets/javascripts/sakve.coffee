@@ -49,11 +49,15 @@ class Sakve
         .val(id)
 
   constructor: ->
+    $ =>
+      @_on_load()
+
+  _on_load: ->
     # console.profile('Setup');
     $(document).foundation();
 
-    for module in ['tags', 'multiupload', 'transfer',
-      'drag_drop', 'share', 'folders', 'selection', 'body_cover',
+    for module in ['tags', 'multiupload', 'drag_drop',
+      'share', 'folders', 'selection', 'body_cover',
       'clipboard', 'scrollpane']
       @["_init_#{module}"]()
 
@@ -95,6 +99,14 @@ class Sakve
           $(el).height $(document).height()
       .resize()
     true
+
+    if /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor)
+      $(document).on 'keydown', '#user_password', (event) ->
+        if event.keyCode == 9 and !event.shiftKey
+          event.preventDefault()
+          $(event.target).blur()
+          $('input#user_remember_me').get(0).focus()
+
 
   _init_scrollpane: ->
     $('.scroll-pane')
@@ -145,8 +157,16 @@ class Sakve
     $(selector).foundation(alert: {animation: 'slideUp'})
     # $(selector).foundation()
 
+  enableBeforeClose: ->
+    window.onbeforeunload = (event) ->
+      I18n.t('onbeforeunload')
+
+  disableBeforeClose: ->
+    window.onbeforeunload = null
+
   start_ping: ->
     return if @ping_timeout_id?
+    @enableBeforeClose()
 
     ping_func = =>
       @ping_timeout_id = null
@@ -157,6 +177,7 @@ class Sakve
 
   stop_ping: ->
     if @ping_timeout_id?
+      @disableBeforeClose()
       clearTimeout(@ping_timeout_id)
       @ping_timeout_id = null
 
@@ -354,14 +375,16 @@ class Sakve
 
   _init_transfer: ->
     $('input[data-spin-box]').spinBox()
-    $('#transfer_expires_in_infinity').change (event) ->
-      checked = $(event.currentTarget).is(':checked')
-      $(event.currentTarget).parent().toggleClass('checked', checked)
-      spinbox = $('#transfer_expires_in').prop('spinBox')?
-      if checked and spinbox
-        $('#transfer_expires_in').prop('spinBox').infinity()
-      else if spinbox
-        $('#transfer_expires_in').prop('spinBox').revert_infinity()
+    $('#transfer_expires_in_infinity')
+      .change (event) ->
+        checked = $(event.currentTarget).is(':checked')
+        $(event.currentTarget).parent().toggleClass('checked', checked)
+        spinbox = $('#transfer_expires_in').prop('spinBox')?
+        if checked and spinbox
+          $('#transfer_expires_in').prop('spinBox').infinity()
+        else if spinbox
+          $('#transfer_expires_in').prop('spinBox').revert_infinity()
+      .change()
 
     $('input#show_recipients').change (event) ->
       if $(event.currentTarget).is(':checked')
@@ -373,6 +396,7 @@ class Sakve
     $('.transfer-fileupload').each (idx, el) =>
       @fileupload_with_dropzone el, {
         url: $(el).data('url')
+        limitConcurrentUploads: 3
         start: =>
           @start_ping()
         add: (event, data) =>
@@ -501,4 +525,4 @@ class Sakve
         $('.progress-value', data.context).text( progress)
 
 
-jQuery -> (window.sakve = new Sakve())
+window.sakve = new Sakve()

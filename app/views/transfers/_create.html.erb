@@ -12,7 +12,7 @@
 </div>
 <div class="row collapse">
   <div class="columns small-9">
-    <%= text_field_tag 'clipboard-text', download_transfer_url(token: @transfer.token) %>
+    <%= text_field_tag 'clipboard-text', t_url(token: @transfer.token, locale: nil) %>
   </div>
   <div class="columns small-3">
     <%= link_to t('.copy'), '#', class: 'button tiny copy-to-clipboard', data: {clipboard_target: 'clipboard-text', dropdown: 'copied-dropdown'} %>

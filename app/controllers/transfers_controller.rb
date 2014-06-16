@@ -111,12 +111,11 @@ class TransfersController < ApplicationController
 
     respond_to do |format|
       if @transfer.update_attributes(params[:transfer])
-      format.html { redirect_to(transfers_path, notice: I18n.t('update.success') ) }
-      format.xml  { head :ok }
+        format.html { redirect_to(transfers_path, notice: I18n.t('update.success') ) }
       else
-      format.html { render action: "edit" }
-      format.xml  { render xml: @transfer.errors, status: :unprocessable_entity }
+        format.html { render action: "edit" }
       end
+      format.js
     end
   end
 

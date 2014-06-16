@@ -69,6 +69,7 @@ label.selectable-checkbox {
 }
 
 div.logo {
+  margin: 0 1rem;
   display: inline-block;
   vertical-align: middle;
   white-space: nowrap;
@@ -89,6 +90,10 @@ label.custom-check-box {
 
 
 .button {
+  &:focus {
+    outline: none;
+  }
+
   &.tiny {
     font-size: .8875rem;
     padding-top: .525rem;
@@ -175,4 +180,10 @@ label.custom-check-box {
   > .cancel {
     padding-top: 1em;
   }
+}
+
+
+label.for-check-box {
+  display: inline-block;
+  margin: 0 0 2rem .8rem;
 }

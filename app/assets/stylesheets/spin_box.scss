@@ -16,7 +16,6 @@ div.spin-box {
     width: 3.5em;
     text-align: center;
     margin: 0;
-
   }
 
   > .plus {
@@ -27,5 +26,17 @@ div.spin-box {
     margin: 0;
     padding-left: .8rem;
     padding-right: .8rem;
+  }
+
+  > .plus, > .minus {
+    &[disabled] {
+      color: #42354a;
+      background: #f2f2f2;
+
+      &:hover, &:focus {
+        color: #42354a;
+        background: #f2f2f2;
+      }
+    }
   }
 }

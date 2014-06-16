@@ -1,7 +1,8 @@
 @mixin custom-checkbox($size: 1.6em, $focus: true) {
 input[type=checkbox] {
     @include opacity(0);
-    width: 0;
+    width: 1px;
+    height: 1px;
     position: absolute;
     top: 0;
     left: 0;
@@ -14,8 +15,12 @@ input[type=checkbox] {
   &.checked i:before {content: '\f00c';}
   &.unknown i:before {content: '\f068';}
   @if $focus {
+    &:active > i,
     input[type=checkbox]:focus + i {
-      box-shadow: 1px 1px 1px #ddd;
+      box-shadow: 0 0 5px #999;
+      border-color: #999;
+      background: #fafafa;
+
     }
   }
 

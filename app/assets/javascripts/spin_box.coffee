@@ -1,7 +1,10 @@
 class SpinBox
   constructor: (element) ->
+    # return if @element.prop('spinBox')?
+
     @element = $(element)
       .on 'change', (event) =>
+        @_toogle_buttons()
         val = @value()
         if isNaN(val)
           @element.val(@minimum)
@@ -95,18 +98,24 @@ class SpinBox
       @increment()
       @_timeout_increment_id = setTimeout((=> @_timeout_increment()), timeout)
 
+  _toogle_buttons: ->
+    @plus.prop('disabled', @disabled())
+    @minus.prop('disabled', @disabled())
+
   infinity: ->
     @last_value = @element.val()
     @element
       .prop('disabled', true)
       .val( '∞' )
       .trigger('spinbox:infinity')
+    @_toogle_buttons()
 
   revert_infinity: ->
     @element
       .prop('disabled', false)
-      .val( @last_value )
+      .val( @last_value ? @element.val() )
       .trigger('spinbox:revert_infinity')
+    @_toogle_buttons()
 
 
 

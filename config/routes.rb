@@ -73,7 +73,7 @@ Sakve::Application.routes.draw do
       via: :get,
       as: :file_download_transfer,
       constraints: {
-        token: /[0-9a-f]{32,64}/i
+        token: /[0-9a-f]{,64}/i
       }
 
     match 'transfers/:token(.:format)',
@@ -81,7 +81,7 @@ Sakve::Application.routes.draw do
       via: :get,
       as: :download_transfer,
       constraints: {
-        token: /[0-9a-f]{32,64}/i
+        token: /[0-9a-f]{,64}/i
       }
 
 
@@ -117,6 +117,11 @@ Sakve::Application.routes.draw do
     end
     root to: 'transfers#index'
   end
+
+  get 't/:token(.:format)', to: 'transfers#download', as: :t,
+    constraints: {
+      token: /[0-9a-f]{,64}/i
+    }
 
   get :ping, to: 'application#ping'
 end
