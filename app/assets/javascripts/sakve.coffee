@@ -96,6 +96,14 @@ class Sakve
       .resize()
     true
 
+    if /Safari/.test(navigator.userAgent) && /Apple Computer/.test(navigator.vendor)
+      $(document).on 'keydown', '#user_password', (event) ->
+        if event.keyCode == 9 and !event.shiftKey
+          event.preventDefault()
+          $(event.target).blur()
+          $('input#user_remember_me').get(0).focus()
+
+
   _init_scrollpane: ->
     $('.scroll-pane')
       .jScrollPane()
