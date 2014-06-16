@@ -387,6 +387,7 @@ class Sakve
     $('.transfer-fileupload').each (idx, el) =>
       @fileupload_with_dropzone el, {
         url: $(el).data('url')
+        limitConcurrentUploads: 3
         start: =>
           @start_ping()
         add: (event, data) =>
