@@ -27,7 +27,7 @@ class Transfer < ActiveRecord::Base
   validates :token, uniqueness: true
   # validates :name, presence: true
   validates :group_token, presence: true, length: {is: 16}, unless: :done?
-  validates :token, presence: true, length: {is: 32}
+  validates :token, presence: true, length: {minimum: 10, maximum: 64}
   validate :valid_recipients
   validates :files, length: {minimum: 1}, unless: proc {done? or empty}
   validates :object, attachment_presence: true, on: :update
@@ -124,7 +124,7 @@ class Transfer < ActiveRecord::Base
 
   def generate_token
     begin
-      self.token = SecureRandom.hex(16)
+      self.token = SecureRandom.hex(5)
     end until self.class.where(token: self.token).empty?
   end
 

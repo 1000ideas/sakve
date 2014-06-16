@@ -81,11 +81,83 @@ body.transfers.download {
   .buttons {
     margin-top: 2em;
 
+
+    &.double {
+      .columns {
+        width: 50%;
+        @include transition(width 300ms ease-in);
+
+
+        a {
+          span {
+            @include transition(font-size 300ms ease-in);
+            vertical-align: middle;
+            display: inline-block;
+            // width: 0;
+            overflow: hidden;
+            font-size: 0;
+          }
+
+        }
+      }
+
+      &:hover {
+        .download-button {
+          width: 25%;
+          .fa { margin-right: 0; }
+        }
+
+        .save-button {
+          width: 75%;
+          .fa { margin-right: .2em; }
+          span { font-size: 1rem; }
+        }
+
+        .download-button:hover {
+          width: 75%;
+          span { font-size: 1rem; }
+          .fa { margin-right: .2em; }
+          & + .save-button {
+            width: 25%;
+            .fa { margin-right: 0; }
+            span { font-size: 0; }
+          }
+        }
+
+      }
+
+      .download-button {
+        a {
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          padding-left: 1rem;
+        }
+      }
+
+      .save-button {
+        left: -1px;
+
+        a {
+          padding-right: 1rem;
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+      }
+
+    }
+
     a {
       font-size: 1.5em;
+      white-space: nowrap;
+      overflow: hidden;
+      margin: 0;
+
+      span {
+        font-size: 1rem;
+      }
 
       .fa {
-        margin-right: .2em;
+        vertical-align: middle;
       }
     }
   }
