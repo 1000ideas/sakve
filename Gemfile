@@ -47,4 +47,4 @@ gem 'paranoia'
 
 # gem 'debugger'
 
-gem 'quiet_assets', group: :development
+# gem 'quiet_assets', group: :development
