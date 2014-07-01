@@ -53,4 +53,6 @@ Sakve::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  # config.action_controller.asset_host = "http://static.local.dev"
 end

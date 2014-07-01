@@ -49,7 +49,7 @@ class TransfersController < ApplicationController
       format.zip do
         head(:gone) and return if @transfer.expired?
         @transfer.statistics.create(client_ip: request.remote_ip, browser: request.user_agent)
-        stream_file File.open(@transfer.object.path), filename: @transfer.object_file_name
+        send_file @transfer.object.path, filename: @transfer.object_file_name, x_sendfile: true
       end
     end
   end
@@ -58,7 +58,7 @@ class TransfersController < ApplicationController
     @transfer = Transfer.find_by_token(params[:token])
     head(:gone) and return if @transfer.expired?
     @transfer.statistics.create(client_ip: request.remote_ip, browser: request.user_agent)
-    stream_file File.open(@transfer.object.path), filename: @transfer.object_file_name
+    send_file @transfer.object.path, filename: @transfer.object_file_name, x_sendfile: true
   end
 
   def save

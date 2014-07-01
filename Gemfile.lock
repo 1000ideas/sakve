@@ -263,7 +263,6 @@ DEPENDENCIES
   nokogiri (= 1.5.9)
   paranoia
   public_activity
-  quiet_assets
   rails (= 3.2.16)
   rails-i18n
   rubyzip (~> 1.1.1)

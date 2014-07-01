@@ -86,9 +86,10 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
     authorize! :read, @item
 
-    stream_file @item.object.path(params[:style]),
+    send_file @item.object.path(params[:style]),
       filename: @item.name_for_download(params[:format]),
-      content_type: @item.content_type(params[:style])
+      content_type: @item.content_type(params[:style]),
+      x_sendfile: true
   rescue CanCan::AccessDenied
     send_data Item.access_denied_image(params[:style]), type: 'image/png'
   end
