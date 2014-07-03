@@ -35,4 +35,24 @@ module Paperclip
       false
     end
   end
+
+  # class AbstractAdapter
+  #   def copy_to_tempfile(src)
+  #     if same_fs?(src, destination)
+  #       Rails.logger.debug "copy_to_tempfile(#{src.path}) using ln"
+  #       FileUtils.rm(destination.path)
+  #       FileUtils.ln(src.path, destination.path)
+  #     else
+  #       Rails.logger.debug "copy_to_tempfile(#{src.path}) using cp"
+  #       FileUtils.cp(src.path, destination.path)
+  #     end
+  #     destination
+  #   end
+
+  #   def same_fs?(*args)
+  #     args.map do |file|
+  #       `/usr/bin/df --output=source #{file.path} | /usr/bin/tail -n1`.strip
+  #     end.uniq.one?
+  #   end
+  # end
 end
