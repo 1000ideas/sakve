@@ -17,9 +17,9 @@ class User < ActiveRecord::Base
     where('`first_name` like :q OR `last_name` LIKE :q OR `email` LIKE :q', q: "#{query}%")
   }
 
-  devise :database_authenticatable, :timeoutable,
-         :rememberable, :trackable, :registerable,
-         :recoverable, :validatable
+  devise :database_authenticatable, :rememberable,
+    :trackable, :registerable, :recoverable, :validatable,
+    :timeoutable
 
   attr_accessor :updated_by
   attr_accessible :first_name, :last_name, :name, :email,

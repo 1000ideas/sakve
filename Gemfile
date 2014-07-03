@@ -46,5 +46,8 @@ gem 'paranoia'
 
 
 # gem 'debugger'
-
-# gem 'quiet_assets', group: :development
+group :development do
+  gem 'quiet_assets'
+  gem 'guard-passenger'
+  gem 'guard-sidekiq'
+end

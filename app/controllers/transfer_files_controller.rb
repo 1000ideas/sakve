@@ -1,4 +1,5 @@
 class TransferFilesController < ApplicationController
+  prepend_before_filter :skip_timeout_logout
 
   rescue_from ActiveRecord::RecordNotFound do
     head :not_found
@@ -34,5 +35,9 @@ class TransferFilesController < ApplicationController
   end
 
   private
+
+  def skip_timeout_logout
+    request.env["devise.skip_timeout"] = true
+  end
 
 end
