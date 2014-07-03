@@ -6,4 +6,7 @@ Zip.setup do |config|
 
   #Fastet compression, biggest files
   config.default_compression = ::Zlib::BEST_SPEED
+
+  #Enable zip64 support
+  config.write_zip64_support = true
 end
