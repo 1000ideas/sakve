@@ -1,6 +1,7 @@
 <%= form_for(@transfer, remote: true, format: :js, html: {id: :'modal-transfer-form'}) do |f| %>
   <%= hidden_field_tag :form_id, 'modal-transfer-form' %>
   <%= render partial: 'l/partials/errors', object: @transfer.errors %>
+  <%= hidden_field_tag :user_auth_token, current_user.try(:auth_token) %>
   <div class="group">
     <div class="field">
       <%= f.label :name, t('.subject') %>

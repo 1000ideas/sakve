@@ -176,8 +176,9 @@ class Sakve
     @ping_timeout_id = setTimeout(ping_func, 5000)
 
   stop_ping: ->
+    @disableBeforeClose()
+
     if @ping_timeout_id?
-      @disableBeforeClose()
       clearTimeout(@ping_timeout_id)
       @ping_timeout_id = null
 
@@ -404,7 +405,6 @@ class Sakve
         $('#transfer_recipients').slideUp()
 
     $('button', $('.transfer-fileupload').prop('form') ).click (event) ->
-
       if $('.transfer-fileupload').data('blueimp-fileupload')._active > 0
         event.preventDefault()
         button = $(event.target)
@@ -437,6 +437,9 @@ class Sakve
           # $("input[type=submit], button", data.form).prop('disabled', true)
           $(window).resize()
         progress: @defaults.on_progress
+        beforeSend: (xhr, settings) ->
+          xhr.setRequestHeader('X-Auth-Token', $('#user_auth_token').val() )
+          true
         always: (event, data) ->
           sakve.create_transfer_after_upload()
         done: (event, data) =>
@@ -448,7 +451,8 @@ class Sakve
         error: (event, data) ->
           # $("input[type=submit], button", data.form).prop('disabled', false)
         stop: (event, data) =>
-          @stop_ping()
+          if $('.transfer-fileupload').data('blueimp-fileupload')._active == 0
+            @stop_ping()
           # $("input[type=submit], button", data.form).prop('disabled', false)
         fail: (event, data) ->
           _content = $(data.jqXHR.responseJSON.context)
