@@ -1,7 +1,8 @@
 # A sample Guardfile
 # More info at https://github.com/guard/guard#readme
 
-guard 'passenger', standalone: false, ping: 'http://sakve.local.dev' do
+guard 'passenger', standalone: false, ping: true, cli: '-a sakve.local.dev -p 80' do
+  watch(/^Gemfile/)
   watch(/^lib\/.*\.rb$/)
   watch(/^config\/.*\.rb$/)
 end

@@ -11,6 +11,7 @@ pl:
       fileupload: Dodaj pliki
       expires_in: "Pliki dostępne przez (dni)"
       processing: "Przetwarzanie..."
+      waiting_for_upload: "Oczekuje..."
     edit_form:
       <<: *TRANFERFORM
     new:

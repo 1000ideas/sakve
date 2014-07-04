@@ -373,6 +373,17 @@ class Sakve
       return unless $(event.target).is('[data-reveal]')
       $(event.target).find('[data-alert]').remove()
 
+  create_transfer_after_upload: ->
+    input = $('.transfer-fileupload')
+    form = $( input.prop('form') )
+    active_transfers = input.data('blueimp-fileupload')._active
+    if  active_transfers == 0 && form.data('send-after')
+      button = form.find('button')
+      button
+        .text( form.data('revert-text-send-after') )
+      if $('.transfer-file .errors').length == 0
+        form.submit()
+
   _init_transfer: ->
     $('input[data-spin-box]').spinBox()
     $('#transfer_expires_in_infinity')
@@ -392,6 +403,18 @@ class Sakve
       else
         $('#transfer_recipients').slideUp()
 
+    $('button', $('.transfer-fileupload').prop('form') ).click (event) ->
+
+      if $('.transfer-fileupload').data('blueimp-fileupload')._active > 0
+        event.preventDefault()
+        button = $(event.target)
+        text = button.text()
+        button
+          .text( button.data('text-send-after') )
+          .prop('disabled', true)
+        $.data( button.prop('form'), 'send-after', true)
+        $.data( button.prop('form'), 'revert-text-send-after', text )
+        false
 
     $('.transfer-fileupload').each (idx, el) =>
       @fileupload_with_dropzone el, {
@@ -411,20 +434,22 @@ class Sakve
             jqXHR.abort()
             data.context.slideUp ->
               data.context.remove()
-          $("input[type=submit], button", data.form).prop('disabled', true)
+          # $("input[type=submit], button", data.form).prop('disabled', true)
           $(window).resize()
         progress: @defaults.on_progress
+        always: (event, data) ->
+          sakve.create_transfer_after_upload()
         done: (event, data) =>
           result = data.result
           uploaded = @views
             .uploaded(result.id, result.name, data.jqXHR.getResponseHeader('Location'))
           data.context.replaceWith(uploaded)
-          $("input[type=submit], button", data.form).prop('disabled', false)
+          # $("input[type=submit], button", data.form).prop('disabled', false)
         error: (event, data) ->
-          $("input[type=submit], button", data.form).prop('disabled', false)
+          # $("input[type=submit], button", data.form).prop('disabled', false)
         stop: (event, data) =>
           @stop_ping()
-          $("input[type=submit], button", data.form).prop('disabled', false)
+          # $("input[type=submit], button", data.form).prop('disabled', false)
         fail: (event, data) ->
           _content = $(data.jqXHR.responseJSON.context)
           data
