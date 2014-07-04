@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140704091144) do
+ActiveRecord::Schema.define(:version => 20140704125717) do
 
   create_table "attachments", :force => true do |t|
     t.string   "upload_file_name"
@@ -115,7 +115,7 @@ ActiveRecord::Schema.define(:version => 20140704091144) do
     t.integer  "user_id"
     t.string   "object_file_name"
     t.string   "object_content_type"
-    t.integer  "object_file_size"
+    t.integer  "object_file_size",    :limit => 8
     t.datetime "object_updated_at"
     t.datetime "created_at",                        :null => false
     t.datetime "updated_at",                        :null => false
@@ -138,7 +138,7 @@ ActiveRecord::Schema.define(:version => 20140704091144) do
     t.string   "token",               :limit => 64
     t.string   "object_file_name"
     t.string   "object_content_type"
-    t.integer  "object_file_size"
+    t.integer  "object_file_size",    :limit => 8
     t.datetime "object_updated_at"
     t.datetime "expires_at"
     t.datetime "created_at",                                           :null => false
