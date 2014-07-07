@@ -35,6 +35,13 @@ class User < ActiveRecord::Base
   validates :password, :allow_blank => true, :confirmation => true, :length => {:minimum => 5}, :on => :update
   validates :first_name, :last_name, presence: true
 
+  def auth_token
+    read_attribute(:auth_token) || begin
+      update_column :auth_token, SecureRandom.hex(16)
+      read_attribute(:auth_token)
+    end
+  end
+
   def shared_folders
     Folder.shared_for_user(self) | Folder.shared_for_groups(self)
   end

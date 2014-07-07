@@ -120,10 +120,9 @@ GEM
       railties (>= 3.1.0)
       sass (>= 3.2.0)
     fssm (0.2.10)
-    globalize3 (0.3.1)
-      activemodel (>= 3.0.0)
-      activerecord (>= 3.0.0)
-      paper_trail (~> 2)
+    globalize (3.0.4)
+      activemodel (>= 3.0.0, < 4.0.0)
+      activerecord (>= 3.0.0, < 4.0.0)
     guard (2.6.1)
       formatador (>= 0.2.4)
       listen (~> 2.7)
@@ -166,9 +165,6 @@ GEM
     mysql2 (0.3.16)
     nokogiri (1.5.9)
     orm_adapter (0.0.7)
-    paper_trail (2.7.2)
-      activerecord (~> 3.0)
-      railties (~> 3.0)
     paperclip (4.1.1)
       activemodel (>= 3.0.0)
       activesupport (>= 3.0.0)
@@ -280,7 +276,7 @@ DEPENDENCIES
   devise
   font-awesome-rails (~> 4.1.0.0)
   foundation-rails (~> 5.2.0)
-  globalize3 (~> 0.3.0)
+  globalize (~> 3.0.0)
   guard-passenger
   guard-sidekiq
   i18n-js!
