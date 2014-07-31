@@ -30,7 +30,7 @@ module Sakve::ItemTypes
   end
 
   def text_document?
-    document? && ! object_content_type.match(/word|text/).nil?
+    office? && /word|text/ === object_content_type
   end
 
   def pdf_document?
