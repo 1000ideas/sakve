@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140704125717) do
+ActiveRecord::Schema.define(:version => 20140826075252) do
 
   create_table "attachments", :force => true do |t|
     t.string   "upload_file_name"
@@ -117,8 +117,9 @@ ActiveRecord::Schema.define(:version => 20140704125717) do
     t.string   "object_content_type"
     t.integer  "object_file_size",    :limit => 8
     t.datetime "object_updated_at"
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
+    t.datetime "created_at",                                           :null => false
+    t.datetime "updated_at",                                           :null => false
+    t.string   "upload_status",                     :default => "new", :null => false
   end
 
   create_table "transfer_stats", :force => true do |t|

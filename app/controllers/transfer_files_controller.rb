@@ -6,22 +6,40 @@ class TransferFilesController < ApplicationController
   end
 
   def create
-    authorize! :create, TransferFile
-
     @file = TransferFile.new(
-      object: params[:object],
+      object_file_name: params[:object].original_filename,
       token: params[:transfer].try(:[], :group_token),
       user: current_user
     )
 
+    authorize! :create, @file
+
+    options = {
+      action: :create,
+      status: :unprocessable_entity
+    }
+
+
+    if @file.save
+      # current_tmpname = tmpname(@file.token)
+
+      # FileUtils.ln params[:object].tempfile.path, current_tmpname
+      current_tmpname = params[:object].tempfile.path
+
+
+      CopyUploadedFileWorker.perform_async(@file.id, current_tmpname)
+      options.merge!(status: :created, location: file_path(@file, format: :js))
+    end
+
     respond_to do |format|
-      if @file.save
-        format.json { render action: :create, status: :created, location: file_path(@file, format: :js) }
-      else
-        format.json { render action: :create, status: :unprocessable_entity }
-      end
+      format.json { render options  }
     end
   end
+
+  # def create
+  #   CopyUploadedFileWorker.perform_in(1.second, params[:object].tempfile.path)
+  #   head :ok
+  # end
 
   def destroy
     @file = TransferFile.find(params[:id])
@@ -38,6 +56,10 @@ class TransferFilesController < ApplicationController
 
   def skip_timeout_logout
     request.env["devise.skip_timeout"] = true
+  end
+
+  def tmpname(token)
+    File.join(Dir::tmpdir, Dir::Tmpname.make_tmpname("upload", token))
   end
 
 end
