@@ -87,7 +87,9 @@ Sakve::Application.routes.draw do
 
     resources :transfers, except: [:new] do
       collection do
-        resources :files, controller: :transfer_files, only: [:create, :destroy]
+        resources :files, controller: :transfer_files, only: [:create, :destroy] do
+          delete :bulk_destroy, action: :bulk_destroy, on: :collection
+        end
       end
       member do
         get :status

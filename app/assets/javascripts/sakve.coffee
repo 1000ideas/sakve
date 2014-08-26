@@ -418,6 +418,35 @@ class Sakve
         $.data( button.prop('form'), 'revert-text-send-after', text )
         false
 
+    $(document).on 'click', '.uploaded-files .transfer-file[data-fid]', (event) ->
+      return if $(event.current).is('a')
+      $(event.currentTarget).toggleClass('selected')
+      $('.uploaded-files-panel .remove-selected').toggle($('.uploaded-files .selected').length > 0)
+
+    $('.uploaded-files-panel .remove-all').click (event) ->
+      event.preventDefault()
+      ids = $('.uploaded-files .transfer-file[data-fid]').slideUp().map( (idx, el) -> $(el).data('fid') ).toArray()
+      $.ajax
+        url: $(event.target).attr('href')
+        type: 'POST'
+        data:
+          _method: 'delete'
+          ids: ids
+      $(event.target).hide()
+
+
+    $('.uploaded-files-panel .remove-selected').hide().click (event) ->
+      event.preventDefault()
+      ids = $('.uploaded-files .selected.transfer-file[data-fid]').slideUp().map( (idx, el) -> $(el).data('fid') ).toArray()
+      $.ajax
+        url: $(event.target).attr('href')
+        type: 'POST'
+        data:
+          _method: 'delete'
+          ids: ids
+      $(event.target).hide()
+
+
     $('.transfer-fileupload').each (idx, el) =>
       @fileupload_with_dropzone el, {
         url: $(el).data('url')

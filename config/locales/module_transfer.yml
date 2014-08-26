@@ -12,6 +12,8 @@ pl:
       expires_in: "Pliki dostępne przez (dni)"
       processing: "Przetwarzanie..."
       waiting_for_upload: "Oczekuje..."
+      remove_all: "Usuń wszystkie"
+      remove_selected: "Usuń zaznaczone"
     edit_form:
       <<: *TRANFERFORM
     new:
