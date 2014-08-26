@@ -5,7 +5,7 @@ class CopyUploadedFileWorker
     @transfer_file = TransferFile.find(id)
     if File.exists?(path)
       @transfer_file.update_attributes(object: File.open(path, 'rb'), upload_status: :done)
-      File.unlink(path)
+      File.unlink(path) if File.exists?(path)
     else
       @transfer_file.update_attributes(upload_status: :fail)
     end
