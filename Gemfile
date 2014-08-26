@@ -21,7 +21,7 @@ group :test do
   gem 'capybara-webkit'
 end
 
-# gem 'rack-mini-profiler'
+gem 'rack-mini-profiler'
 
 gem 'jquery-rails'
 gem 'jscrollpane-rails'
