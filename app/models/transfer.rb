@@ -132,7 +132,7 @@ class Transfer < ActiveRecord::Base
     recipient_count = 0
     self.recipients.try(:split, /[,\s]+/).try(:each) do |email|
       recipient_count += 1
-      unless email.match /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i
+      unless email.match(/\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i)
         self.errors.add(:recipients, :invalid)
         break
       end
@@ -146,9 +146,6 @@ class Transfer < ActiveRecord::Base
 
   def compress_files
     self.object = create_object_from_transfer
-    if self.object_file_name.empty?
-
-    end
     @delete_files = true
     self.done = true
     self
@@ -165,15 +162,17 @@ class Transfer < ActiveRecord::Base
   end
 
   def create_object_from_transfer
-    if files.one? and !(single_file = files.first).psd?
+    if files.uploaded.one? and !(single_file = files.uploaded.first).psd?
       return single_file.object
     end
 
     filename = Dir::Tmpname.make_tmpname("transfer-#{token}", ".zip")
     filepath = File.join(Dir::tmpdir, filename)
 
+    logger.debug "Zipping files...."
+
     Zip::File.open(filepath, Zip::File::CREATE) do |zipfile|
-      files.map do |file|
+      files.uploaded.map do |file|
         name = file.name
         ext = File.extname(name)
         basename = File.basename(name, ext)
@@ -182,11 +181,15 @@ class Transfer < ActiveRecord::Base
           name = "#{basename}.#{it}#{ext}"
           it += 1
         end
+        logger.debug "File: #{name}..."
         zipfile.add(name, file.object.path) { true }
+        logger.debug "File: #{name}...done"
       end
     end
 
     self.object.instance_write :file_name,  file_name_from_title
+    logger.debug "Zipping files....done"
+
     File.open(filepath)
   end
 

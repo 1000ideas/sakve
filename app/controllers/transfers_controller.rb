@@ -42,6 +42,8 @@ class TransfersController < ApplicationController
     @transfer = Transfer.find_by_token(params[:token])
 
     respond_to do |format|
+      head(:not_found) and return if @transfer.nil?
+
       format.html do
         @download = true
         @bodycover = true
@@ -56,6 +58,7 @@ class TransfersController < ApplicationController
 
   def file_download
     @transfer = Transfer.find_by_token(params[:token])
+    head(:not_found) and return if @transfer.nil?
     head(:gone) and return if @transfer.expired?
     @transfer.statistics.create(client_ip: request.remote_ip, browser: request.user_agent)
     send_file @transfer.object.path, filename: @transfer.object_file_name, x_sendfile: true
@@ -84,7 +87,7 @@ class TransfersController < ApplicationController
     respond_to do |format|
       format.js
     end
-   end
+  end
 
   # POST /transfers
   # POST /transfers.xml

@@ -45,7 +45,7 @@
   </div>
   <% if f.object.new_record? %>
   <div class="uploaded-files">
-    <%= render f.object.files %>
+    <%= render f.object.files.valid %>
   </div>
   <% end %>
 <% end %>

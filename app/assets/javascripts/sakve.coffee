@@ -170,7 +170,8 @@ class Sakve
 
     ping_func = =>
       @ping_timeout_id = null
-      $.ajax('/ping')
+      @user_auth_token ?= $('#user_auth_token').val()
+      $.ajax(url: '/ping', headers: {'X-Auth-Token': @user_auth_token})
       @start_ping()
 
     @ping_timeout_id = setTimeout(ping_func, 5000)
@@ -363,9 +364,10 @@ class Sakve
         stop: (event, data) =>
           @stop_ping()
         fail: (event, data) ->
-          data
-            .context
-            .replaceWith(data.jqXHR.responseJSON.context)
+          if data.jqXHR.responseJSON?
+            data
+              .context
+              .replaceWith(data.jqXHR.responseJSON.context)
           $(event.target.form).foundation(alert: {animation: 'slideUp'})
 
       }
@@ -455,18 +457,24 @@ class Sakve
             @stop_ping()
           # $("input[type=submit], button", data.form).prop('disabled', false)
         fail: (event, data) ->
-          _content = $(data.jqXHR.responseJSON.context)
-          data
-            .context
-            .replaceWith(_content)
-          data.context = _content
-            .find 'a.remove'
-            .on 'click', (event) ->
-              event.preventDefault()
-              $(event.target)
-                .closest('.progress-info')
-                .slideUp ->
-                  $(this).remove()
+          if data.jqXHR.responseJSON?
+            _content = $(data.jqXHR.responseJSON.context)
+            data
+              .context
+              .replaceWith(_content)
+            data.context = _content
+              .find 'a.remove'
+              .on 'click', (event) ->
+                event.preventDefault()
+                $(event.target)
+                  .closest('.progress-info')
+                  .slideUp ->
+                    $(this).remove()
+          else
+            data
+              .context
+              .slideUp ->
+                    $(this).remove()
       }
 
   _init_drag_drop: ->
