@@ -425,26 +425,26 @@ class Sakve
 
     $('.uploaded-files-panel .remove-all').click (event) ->
       event.preventDefault()
-      ids = $('.uploaded-files .transfer-file[data-fid]').slideUp().map( (idx, el) -> $(el).data('fid') ).toArray()
+      ids = $('.uploaded-files .transfer-file[data-fid]').slideUp( -> $(this).remove() ).map( (idx, el) -> $(el).data('fid') ).toArray()
       $.ajax
         url: $(event.target).attr('href')
         type: 'POST'
         data:
           _method: 'delete'
           ids: ids
-      $(event.target).hide()
+      $(event.target).hide().next().hide()
 
 
     $('.uploaded-files-panel .remove-selected').hide().click (event) ->
       event.preventDefault()
-      ids = $('.uploaded-files .selected.transfer-file[data-fid]').slideUp().map( (idx, el) -> $(el).data('fid') ).toArray()
+      ids = $('.uploaded-files .selected.transfer-file[data-fid]').slideUp( -> $(this).remove() ).map( (idx, el) -> $(el).data('fid') ).toArray()
       $.ajax
         url: $(event.target).attr('href')
         type: 'POST'
         data:
           _method: 'delete'
           ids: ids
-      $(event.target).hide()
+      $(event.target).hide().prev().toggle $('.uploaded-files .transfer-file[data-fid]:not(.selected)').length > 0
 
 
     $('.transfer-fileupload').each (idx, el) =>
@@ -473,6 +473,7 @@ class Sakve
           true
         always: (event, data) ->
           sakve.create_transfer_after_upload()
+          $('.uploaded-files-panel .remove-all').toggle( $('.uploaded-files .transfer-file[data-fid]').length > 0 )
         done: (event, data) =>
           result = data.result
           uploaded = @views

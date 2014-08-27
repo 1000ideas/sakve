@@ -46,7 +46,7 @@
   <% if f.object.new_record? %>
   <div class="uploaded-files">
     <div class="uploaded-files-panel">
-      <%= link_to t('.remove_all'), bulk_destroy_files_path, class: 'remove-all' %>
+      <%= link_to t('.remove_all'), bulk_destroy_files_path, class: "remove-all", style: ("display: none;" if f.object.files.valid.empty?) %>
       <%= link_to t('.remove_selected'), bulk_destroy_files_path, class: 'remove-selected' %>
     </div>
     <%= render f.object.files.valid %>

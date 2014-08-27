@@ -122,9 +122,13 @@ label.custom-check-box {
 }
 
 div.uploaded-files-panel {
-  padding: .5rem 2rem;
   font-size: .8rem;
   text-align: right;
+  a {
+    display: inline-block;
+    padding: .5rem 2rem;
+  }
+
 }
 
 .progress-info {
