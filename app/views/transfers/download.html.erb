@@ -12,7 +12,7 @@
       <h3>Zawartość</h3>
       <ul class="scroll-pane v-only">
       <% @transfer.content.each do |name| %>
-      <li><%= name %></li>
+      <li><%= name.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') %></li>
       <% end %>
       </ul>
       <% end %>

@@ -52,6 +52,12 @@ class TransferFilesController < ApplicationController
     end
   end
 
+  def bulk_destroy
+    ids = params[:ids] || []
+    TransferFile.where(id: ids).where(user_id: current_user.try(:id)).delete_all
+    head :ok
+  end
+
   private
 
   def skip_timeout_logout

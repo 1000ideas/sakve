@@ -1,3 +1,5 @@
 $('.transfer-file[data-fid=<%= @file.id %>]').slideUp(function() {
   $(this).remove();
+  $('.uploaded-files-panel .remove-all').toggle( $('.uploaded-files .transfer-file[data-fid]').length > 0 );
+  $('.uploaded-files-panel .remove-selected').toggle( $('.uploaded-files .selected.transfer-file[data-fid]').length > 0 );
 });

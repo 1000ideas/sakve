@@ -121,21 +121,43 @@ label.custom-check-box {
   }
 }
 
+div.uploaded-files-panel {
+  font-size: .8rem;
+  text-align: right;
+  a {
+    display: inline-block;
+    padding: .5rem 2rem;
+  }
+
+}
+
 .progress-info {
   font-size: 0.85rem;
-  margin: 0 2em;
-  padding: 1.5em 0;
+  margin: 0;
+  padding: 1.5em 2em;
   position: relative;
+
+  &.selected {
+    background: $primary-color;
+    color: #ddd;
+
+    a,
+    > i.fa {
+      color: #ddd;
+    }
+  }
+
   > i.fa {
     position: absolute;
     color: $primary-color;
     vertical-align: middle;
-    left: 0;
+    left: 2rem;
     top:  50%;
     margin-top: -0.5em;
     height: 1em;
 
   }
+
 
   > .file-progress {
     display: inline-block;
