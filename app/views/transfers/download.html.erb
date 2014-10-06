@@ -9,12 +9,17 @@
       <p>Plik nie jest już dostepny</p>
     <% else %>
       <% cache([:content, @transfer]) do %>
-      <h3>Zawartość</h3>
-      <ul class="scroll-pane v-only">
-      <% @transfer.content.each do |name| %>
-      <li><%= name.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') %></li>
-      <% end %>
-      </ul>
+        <h3>Zawartość</h3>
+        <ul class="scroll-pane v-only">
+        <% @transfer.content[0...100].each do |name| %>
+        <li><%= name.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') %></li>
+        <% end %>
+        </ul>
+
+        <% if @transfer.content.length > 100 %>
+          <%= t(".and_more", count: @transfer.content.length - 100) %>
+          <br /><br />
+        <% end %>
       <% end %>
       <% unless @transfer.forever? %>
       <h3 title="<%= l @transfer.expires_at, format: :long %>">Plik jest jeszcze dostępny przez: <%= @transfer.expiration_distance %></h3>
