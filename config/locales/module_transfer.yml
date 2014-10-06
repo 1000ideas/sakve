@@ -31,6 +31,7 @@ pl:
     download:
       download: "Zapisz plik"
       save: "Zapisz w Sakve"
+      and_more: "oraz %{count} więcej plików"
     save:
       submit: "Zapisz"
       cancel: "Anuluj"
