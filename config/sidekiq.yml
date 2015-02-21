@@ -3,3 +3,6 @@
 :daemon: true
 :logfile: ./log/sidekiq.log
 :pidfile: ./tmp/pids/sidekiq.pid
+development:
+  :daemon: false
+  :logfile: false
