@@ -7,9 +7,7 @@ class UsersController < ApplicationController
 
   def index
     authorize! :read, User
-    @users = User
-      .paginate params.slice(:page, :per_page).reverse_merge(page: 1)
-
+    @users = User.find(:all)
   end
 
   def show
