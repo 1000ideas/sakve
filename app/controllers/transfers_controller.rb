@@ -43,6 +43,7 @@ class TransfersController < ApplicationController
 
     respond_to do |format|
       head(:not_found) and return if @transfer.nil?
+      @transfer.archive if not @transfer.archived? and @transfer.expired?
 
       format.html do
         @download = true
@@ -51,7 +52,7 @@ class TransfersController < ApplicationController
       format.zip do
         head(:gone) and return if @transfer.expired?
         @transfer.statistics.create(client_ip: request.remote_ip, browser: request.user_agent)
-        send_file @transfer.object.path, filename: @transfer.object_file_name, x_sendfile: true
+        send_file @transfer.object.path, filename: @transfer.object_file_name, x_sendfile: true, type: @transfer.object_content_type
       end
     end
   end

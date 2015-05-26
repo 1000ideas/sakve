@@ -98,7 +98,6 @@ Sakve::Application.routes.draw do
       }
 
 
-
     match 'collaborators(.:format)', to: 'application#collaborators', as: :collaborators
 
 

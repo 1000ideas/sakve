@@ -1,9 +1,9 @@
 namespace :sakve do
   namespace :transfer do
-    desc "Clean up expired transfers"
+    desc "Archive expired transfers"
     task clean: :environment do
-		transfers = Transfer.delete_expired
-		puts "Destroyed #{transfers.length} transfers"
+		transfers = Transfer.archive_expired
+		puts "Archived #{transfers.length} transfers"
     end
 
     desc "Clean up transfers left in a uploads dir due to wrong permissions"

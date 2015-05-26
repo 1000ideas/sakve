@@ -14,7 +14,7 @@ class Transfer < ActiveRecord::Base
   attr_accessor :empty, :expires_in_infinity
   attr_accessible :expires_in, :name, :object,
     :recipients, :token, :user_id, :user, :group_token,
-    :empty, :done, :expires_in_infinity
+    :empty, :done, :expires_in_infinity, :expired
 
 
   #before_validation :compress_files
@@ -89,8 +89,8 @@ class Transfer < ActiveRecord::Base
     TransferFile.where(token: group_token)
   end
 
-  def self.delete_expired
-    self.expired.each(&:destroy)
+  def self.archive_expired
+    self.expired.each(&:archive)
   end
 
   def recipients_list
@@ -115,6 +115,15 @@ class Transfer < ActiveRecord::Base
     else
       I18n.t('transfers.index.infinite')
     end
+  end
+
+  def archive
+    self.expired = true
+    self.save
+  end
+
+  def archived?
+    self.expired
   end
 
   private
@@ -211,7 +220,6 @@ class Transfer < ActiveRecord::Base
       self.expires_at = nil
     elsif expires_in.to_i > 0
       self.expires_at = DateTime.now + expires_in.to_i.days
-
     end
   end
 
@@ -223,6 +231,5 @@ class Transfer < ActiveRecord::Base
       self.name = "Quicktransfer #{t}"
     end
   end
-
 
 end

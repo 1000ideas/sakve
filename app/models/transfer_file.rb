@@ -6,7 +6,6 @@ class TransferFile < ActiveRecord::Base
 
   attr_accessible :object, :token, :user_id, :user, :object_file_name, :upload_status
 
-
   scope :uploaded, lambda { where(upload_status: upload_statuses.last) }
   scope :unfinished, lambda { where(upload_status: upload_statuses.first) }
   scope :valid, lambda { where(upload_status: [upload_statuses.first, upload_statuses.last]) }

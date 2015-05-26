@@ -5,9 +5,10 @@
     <h1><small>Pobieranie pliku:</small> <%= @transfer.name %></h1>
     <% if !@transfer.object? %>
       <p>Plik jest jeszcze przetwarzany</p>
-    <% elsif @transfer.expired? %>
-      <p>Plik nie jest już dostepny</p>
     <% else %>
+      <% if @transfer.expired? %>
+        <p>Plik nie jest już dostepny</p>
+      <% end %>
       <% cache([:content, @transfer]) do %>
         <h3>Zawartość</h3>
         <ul class="scroll-pane v-only">
@@ -21,9 +22,13 @@
           <br /><br />
         <% end %>
       <% end %>
-      <% unless @transfer.forever? %>
+      <% unless @transfer.forever? or @transfer.expired? %>
       <h3 title="<%= l @transfer.expires_at, format: :long %>">Plik jest jeszcze dostępny przez: <%= @transfer.expiration_distance %></h3>
       <% end %>
+      <% if @transfer.expired? %>
+        <h3>Plik wygasł: <%= @transfer.expires_at.strftime('%d-%m-%Y, %H:%M:%S') %></h3>
+      <% end %>
+      <% unless @transfer.expired? %>
       <div class="buttons row collapse <%= 'double' if current_user %>">
       <%#= link_to fa_icon('cloud-download', text: t('.download')), download_transfer_path(token: @transfer.token, format: :zip), class: [:button, :secondary, :expand] %>
       <div class="columns download-button">
@@ -35,6 +40,7 @@
       </div>
       <% end %>
       </div>
+      <% end %>
     <% end %>
   </div>
 </div>

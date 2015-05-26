@@ -10,7 +10,13 @@
       </span>
     </div>
     <div class="size columns small-2 text-center"><%= number_to_human_size transfer.object_file_size %></div>
-    <div title="<%= l(transfer.expires_at, format: :long) unless transfer.forever? %>" class="columns small-3 text-center date"> <%= transfer.expiration_distance %></div>
+    <div title="<%= l(transfer.expires_at, format: :long) unless transfer.forever? %>" class="columns small-3 text-center date"> 
+      <% if transfer.expired? or transfer.forever? %> 
+        Transfer wygasł
+      <% else %>
+        <%= transfer.expiration_distance %>
+      <% end %>
+    </div>
 
   <a href="" data-context-button><%= fa_icon('ellipsis-h') %></a>
   <div class="actions" data-context-target="true">
