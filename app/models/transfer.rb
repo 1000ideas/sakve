@@ -33,6 +33,8 @@ class Transfer < ActiveRecord::Base
   validates :object, attachment_presence: true, on: :update
   validates :object, attachment_content_type: { content_type: /.*/i }
 
+  alias :tid :id
+
   def initialize(*args)
     super
     if read_attribute(:group_token).blank?
@@ -40,7 +42,6 @@ class Transfer < ActiveRecord::Base
     end
   end
 
-  alias :tid :id
   def size; object_file_size; end
   def date
     expires_at || (Time.now + 1000.years)

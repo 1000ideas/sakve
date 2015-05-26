@@ -61,7 +61,7 @@ class TransfersController < ApplicationController
     head(:not_found) and return if @transfer.nil?
     head(:gone) and return if @transfer.expired?
     @transfer.statistics.create(client_ip: request.remote_ip, browser: request.user_agent)
-    send_file @transfer.object.path, filename: @transfer.object_file_name, x_sendfile: true
+    send_file @transfer.object.path, filename: @transfer.object_file_name, x_sendfile: true, type: @transfer.object_content_type
   end
 
   def save

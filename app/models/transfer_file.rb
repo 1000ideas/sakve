@@ -4,8 +4,7 @@ class TransferFile < ActiveRecord::Base
   @@upload_statuses = [:new, :fail, :done]
   cattr_reader :upload_statuses
 
-  attr_accessible :object, :token, :user_id, :user, :object_file_name,
-    :upload_status
+  attr_accessible :object, :token, :user_id, :user, :object_file_name, :upload_status
 
 
   scope :uploaded, lambda { where(upload_status: upload_statuses.last) }

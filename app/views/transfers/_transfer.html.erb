@@ -13,11 +13,11 @@
     <div title="<%= l(transfer.expires_at, format: :long) unless transfer.forever? %>" class="columns small-3 text-center date"> <%= transfer.expiration_distance %></div>
 
   <a href="" data-context-button><%= fa_icon('ellipsis-h') %></a>
-  <!-- <div class="actions" data-context-target="true">
+  <div class="actions" data-context-target="true">
     <%= link_to t('.download'), download_transfer_path(token: transfer.token), target: '_blank' %>
     <%= link_to t('.stats'), transfer_path(transfer, format: :js), data: {remote: true} %>
     <%= link_to t('.clipboard'), '#', data: {clipboard_text: download_transfer_url(token: transfer.token)} %>
     <%= link_to t('.save'), save_transfer_path(transfer, format: :js), data: {remote: true} %>
     <%= link_to t('.destroy'), transfer, class: "destroy", data: { confirm: t('.sure'), method: :delete, remote: true } %>
-  </div> -->
+  </div>
 </li>
