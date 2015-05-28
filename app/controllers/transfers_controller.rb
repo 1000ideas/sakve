@@ -1,5 +1,4 @@
 class TransfersController < ApplicationController
-
   # GET /transfers
   # GET /transfers.xml
   def index
@@ -40,6 +39,7 @@ class TransfersController < ApplicationController
 
   def download
     @transfer = Transfer.find_by_token(params[:token])
+    @transfer.check_infos_hash
 
     respond_to do |format|
       head(:not_found) and return if @transfer.nil?

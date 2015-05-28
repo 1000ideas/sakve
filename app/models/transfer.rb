@@ -14,14 +14,16 @@ class Transfer < ActiveRecord::Base
   attr_accessor :empty, :expires_in_infinity
   attr_accessible :expires_in, :name, :object,
     :recipients, :token, :user_id, :user, :group_token,
-    :empty, :done, :expires_in_infinity, :expired
+    :empty, :done, :expires_in_infinity, :expired, :infos_hash
 
+  serialize :infos_hash, Hash
 
   #before_validation :compress_files
   before_validation :generate_token, :set_default_name, on: :create
   before_validation :setup_exires_at
   after_commit :delete_transfer_files, :send_mail_to_recipients, on: :create
   after_commit :delete_transfer_files, :send_mail_to_recipients, on: :update
+  after_commit :check_infos_hash, on: :create
   after_commit :async_compress_files, unless: proc {done? or empty}
 
   validates :token, uniqueness: true
@@ -62,14 +64,14 @@ class Transfer < ActiveRecord::Base
   end
 
   def content
-    if zip?
-      Zip::File.open(object.path) do |f|
-        f.entries.map do |entry|
-          entry.name.force_encoding('utf-8')
-        end
-      end
+    self.infos_hash
+  end
+
+  def zip_content
+    if !self.expired? and self.infos_hash[:files][0].nil?
+      self.infos_hash[:files].drop(1)   
     else
-      [object_file_name]
+      self.infos_hash[:files]
     end
   end
 
@@ -119,11 +121,38 @@ class Transfer < ActiveRecord::Base
 
   def archive
     self.expired = true
-    self.save
+    self.object.destroy
   end
 
   def archived?
     self.expired
+  end
+
+  def generate_infos_hash
+    info_hash = Hash.new
+    info_hash[:name] = self.object_file_name
+    info_hash[:size] = self.object_file_size
+    info_hash[:type] = self.object_content_type
+    if self.object.path and self.zip?
+      info_hash[:files] = Array.new
+      i = 1
+      Zip::File.open(self.object.path) do |f|
+        f.entries.each do |entry|
+          info_hash[:files][i] = Hash.new
+          info_hash[:files][i][:name] = entry.name.force_encoding('utf-8')
+          info_hash[:files][i][:size] = entry.size
+          i = i + 1
+        end
+      end
+    end
+    self.infos_hash = info_hash
+    self.save
+  end
+
+  def check_infos_hash 
+    if self.done? and self.infos_hash == {} and self.object.exists?
+      self.generate_infos_hash
+    end
   end
 
   private
