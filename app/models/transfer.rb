@@ -155,6 +155,18 @@ class Transfer < ActiveRecord::Base
     end
   end
 
+  def download_name
+    if self.zip?
+      name = "Sakve #{self.created_at_formatted}.zip"
+    else
+      name = self.object_file_name
+    end
+  end
+
+  def created_at_formatted
+    self.created_at.strftime('%d-%m-%Y, %H:%M:%S')
+  end
+
   private
 
   def last_user_group_token
@@ -192,7 +204,7 @@ class Transfer < ActiveRecord::Base
 
   def file_name_from_title(ext = :zip)
     name = self.name.try(:parameterize)
-    name = "quicktransfer-#{token || group_token}" if name.blank?
+    name = "Sakve quicktransfer #{self.created_at.strftime('%d-%m-%Y, %H:%M:%S')}" if name.blank?
     "#{name}.#{ext}"
   end
 
@@ -205,7 +217,7 @@ class Transfer < ActiveRecord::Base
       return single_file.object
     end
 
-    filename = Dir::Tmpname.make_tmpname("transfer-#{token}", ".zip")
+    filename = Dir::Tmpname.make_tmpname("Sakve #{self.created_at.strftime('%d-%m-%Y, %H:%M:%S')}", ".zip")
     filepath = File.join(Dir::tmpdir, filename)
 
     logger.debug "Zipping files...."
@@ -226,7 +238,7 @@ class Transfer < ActiveRecord::Base
       end
     end
 
-    self.object.instance_write :file_name,  file_name_from_title
+    self.object.instance_write :file_name, filename
     logger.debug "Zipping files....done"
 
     File.open(filepath)
@@ -257,7 +269,7 @@ class Transfer < ActiveRecord::Base
       self.name = File.basename(files.first.object_file_name, '.*').titleize
     elsif name.blank?
       t = (token || group_token).first(5)
-      self.name = "Quicktransfer #{t}"
+      self.name = "Sakve #{Time.now.strftime('%d-%m-%Y, %H:%M:%S')}"
     end
   end
 
