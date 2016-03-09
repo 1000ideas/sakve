@@ -2,6 +2,8 @@ Użytkownik <%= @transfer.user.name %> przesyła Ci pliki.
 
 Nazwa transferu: <%= @transfer.name %>
 
+Wiadomość: <%= @transfer.message %>
+
 Aby pobrać plik, kliknij poniższy link
 
 <%= t_url(token: @transfer.token) %>

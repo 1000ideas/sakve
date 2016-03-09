@@ -14,7 +14,7 @@ class Transfer < ActiveRecord::Base
   attr_accessor :empty, :expires_in_infinity
   attr_accessible :expires_in, :name, :object,
     :recipients, :token, :user_id, :user, :group_token,
-    :empty, :done, :expires_in_infinity
+    :empty, :done, :expires_in_infinity, :message
 
 
   #before_validation :compress_files
