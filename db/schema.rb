@@ -148,6 +148,8 @@ ActiveRecord::Schema.define(:version => 20160309142357) do
     t.string   "group_token",         :limit => 16
     t.integer  "statistics_count",                  :default => 0
     t.integer  "folders_count",                     :default => 0
+    t.boolean  "expired",                           :default => false
+    t.text     "infos_hash"
     t.string   "message"
   end
 

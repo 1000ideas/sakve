@@ -12,7 +12,7 @@
         <h3>Zawartość</h3>
         <ul class="scroll-pane v-only">
         <% @transfer.content[0...100].each do |name| %>
-        <li><%= name.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') %></li>
+        <li><%= link_to name, single_file_download_path(token: params[:token], name: name), target: '_blank' %></li>
         <% end %>
         </ul>
 

@@ -116,7 +116,33 @@ class Transfer < ActiveRecord::Base
     end
   end
 
+  def directory
+    object.path.rpartition('/').first(2).join
+  end
+
+  def extract(name)
+    return false unless zip?
+    Zip::File.open(object.path) do |zipfile|
+      file = zipfile.find { |f| f.name == name }
+      file.extract(directory + file.name)
+    end
+  end
+
+  def include?(filename)
+    if zip? && file_in_zip?(filename)
+      true
+    else
+      false
+    end
+  end
+
   private
+
+  def file_in_zip?(filename)
+    Zip::File.open(object.path) do |zipfile|
+      return zipfile.any? { |f| f.name == filename }
+    end
+  end
 
   def last_user_group_token
     TransferFile.loose.where(transfer_files: {user_id: user_id}).first.try(:token) || SecureRandom.hex(8)

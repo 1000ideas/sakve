@@ -64,6 +64,17 @@ class TransfersController < ApplicationController
     send_file @transfer.object.path, filename: @transfer.object_file_name, x_sendfile: true
   end
 
+  def single_file_download
+    @transfer = Transfer.find_by_token(params[:token])
+    filename = "#{params[:name]}.#{params[:format]}"
+    head(:not_found) && return if @transfer.nil? ||
+                                  !@transfer.include?(filename)
+    head(:gone) && return if @transfer.expired?
+    filepath = @transfer.directory + filename
+    @transfer.extract(filename) unless File.exist?(filepath)
+    send_file filepath, filename: filename, x_sendfile: true
+  end
+
   def save
     @transfer = Transfer.find(params[:id])
     authorize! :read, @transfer
