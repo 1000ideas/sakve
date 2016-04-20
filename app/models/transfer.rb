@@ -6,15 +6,16 @@ class Transfer < ActiveRecord::Base
   scope :expired, lambda { where('`expires_at` IS NOT NULL AND `expires_at` < ?', DateTime.now) }
   scope :active, lambda { where('`expires_at` IS NULL OR `expires_at` >= ?', DateTime.now) }
   scope :for_user, lambda { |user| user.admin? ? where(true) : where(user_id: user.id) }
+  scope :extracted, where(extracted: true)
 
   has_attached_file :object,
     path: ':partition/:class/:id/:filename'
 
   attr_writer :expires_in
   attr_accessor :empty, :expires_in_infinity
-  attr_accessible :expires_in, :name, :object,
-    :recipients, :token, :user_id, :user, :group_token,
-    :empty, :done, :expires_in_infinity, :message
+  attr_accessible :expires_in, :name, :object, :recipients, :token,
+                  :user_id, :user, :group_token, :empty, :done,
+                  :expires_in_infinity, :message
 
 
   #before_validation :compress_files
@@ -92,6 +93,10 @@ class Transfer < ActiveRecord::Base
     self.expired.each(&:destroy)
   end
 
+  def self.delete_extracted
+    extracted.each(&:clean_extracted_files)
+  end
+
   def recipients_list
     if recipients.kind_of?(String)
       recipients.split(/[,\s]+/).sort
@@ -126,6 +131,7 @@ class Transfer < ActiveRecord::Base
       file = zipfile.find { |f| f.name == name }
       file.extract(directory + file.name)
     end
+    update_attribute(:extracted, true)
   end
 
   def include?(filename)
@@ -134,6 +140,14 @@ class Transfer < ActiveRecord::Base
     else
       false
     end
+  end
+
+  def clean_extracted_files
+    Dir.foreach(directory) do |item|
+      next if item.ends_with?('.zip') || item == '.' || item == '..'
+      File.delete(directory + item)
+    end
+    update_attribute(:extracted, false)
   end
 
   private

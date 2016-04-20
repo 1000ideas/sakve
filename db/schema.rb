@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160309142357) do
+ActiveRecord::Schema.define(:version => 20160420080858) do
 
   create_table "attachments", :force => true do |t|
     t.string   "upload_file_name"
@@ -148,9 +148,8 @@ ActiveRecord::Schema.define(:version => 20160309142357) do
     t.string   "group_token",         :limit => 16
     t.integer  "statistics_count",                  :default => 0
     t.integer  "folders_count",                     :default => 0
-    t.boolean  "expired",                           :default => false
-    t.text     "infos_hash"
     t.string   "message"
+    t.boolean  "extracted",                         :default => false
   end
 
   create_table "user_groups", :force => true do |t|
