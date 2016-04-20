@@ -13,6 +13,11 @@
           <div class="columns small-6 text-right">
             <%= link_to fa_icon('fw folder-open', text: t('.new_folder')), '#', class: [:button, :tiny, :secondary, :round], data: {:'reveal-id' => 'new-folder-modal'} if can?(:create, @folder) %>
             <%= link_to fa_icon('fw cloud-upload', text: t('.upload')), '#', class: [:button, :tiny, :secondary, :round], data: {:'reveal-id' => 'multiupload-files-modal'} if can? :create, @item  %>
+            <% if params.has_key?(:history) and params[:history] == 'true' %>
+              <%= link_to fa_icon('fw calendar', text: 'Pokaż tylko aktywne transfery'), url_for(:folder => :transfers, :history => false), class: [:button, :tiny, :secondary, :round] %>
+            <% else %>
+              <%= link_to fa_icon('fw calendar', text: 'Pokaż historię tranferów'), url_for(:folder => :transfers, :history => true), class: [:button, :tiny, :secondary, :round] %>
+              <% end %>
           </div>
         </div>
         <div class="for-selection">

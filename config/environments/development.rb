@@ -1,23 +1,12 @@
 Sakve::Application.configure do
   config.action_mailer.raise_delivery_errors = true
 
-  # config.action_mailer.default_url_options = { :host => 'localhost:3000' }
-  #
-  # config.action_mailer.delivery_method = :smtp
-  #
-  # config.action_mailer.smtp_settings = {
-  #   :address              => "mail.1000i.pl",
-  #   :port                 => 587,
-  #   :domain               => "1000i.pl",
-  #   :user_name            => "test@1000i.pl",
-  #   :password             => "7IDmzEPn",
-  #   :authentication       => "plain",
-  #   :enable_starttls_auto => false
-  # }
-  #
-  # config.action_mailer.perform_deliveries = false;
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
+
+  config.action_mailer.perform_deliveries = false;
+
+  config.assets.enabled = true
 
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -51,6 +40,12 @@ Sakve::Application.configure do
 
   # Do not compress assets
   config.assets.compress = false
+
+  config.assets.compile = true
+
+  config.assets.digest = false
+
+  config.serve_static_assets = true
 
   # Expands the lines which load the assets
   config.assets.debug = true

@@ -150,6 +150,8 @@ ActiveRecord::Schema.define(:version => 20160420080858) do
     t.integer  "folders_count",                     :default => 0
     t.string   "message"
     t.boolean  "extracted",                         :default => false
+    t.boolean  "expired",                           :default => false
+    t.text     "infos_hash"
   end
 
   create_table "user_groups", :force => true do |t|

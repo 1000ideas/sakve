@@ -1,5 +1,4 @@
 class TransfersController < ApplicationController
-
   # GET /transfers
   # GET /transfers.xml
   def index
@@ -40,9 +39,11 @@ class TransfersController < ApplicationController
 
   def download
     @transfer = Transfer.find_by_token(params[:token])
+    @transfer.check_infos_hash
 
     respond_to do |format|
       head(:not_found) and return if @transfer.nil?
+      @transfer.archive if not @transfer.archived? and @transfer.expired?
 
       format.html do
         @download = true
@@ -51,7 +52,7 @@ class TransfersController < ApplicationController
       format.zip do
         head(:gone) and return if @transfer.expired?
         @transfer.statistics.create(client_ip: request.remote_ip, browser: request.user_agent)
-        send_file @transfer.object.path, filename: @transfer.object_file_name, x_sendfile: true
+        send_file @transfer.object.path, filename: @transfer.download_name, x_sendfile: true, type: @transfer.object_content_type
       end
     end
   end
@@ -61,7 +62,7 @@ class TransfersController < ApplicationController
     head(:not_found) and return if @transfer.nil?
     head(:gone) and return if @transfer.expired?
     @transfer.statistics.create(client_ip: request.remote_ip, browser: request.user_agent)
-    send_file @transfer.object.path, filename: @transfer.object_file_name, x_sendfile: true
+    send_file @transfer.object.path, filename: @transfer.download_name, x_sendfile: true, type: @transfer.object_content_type
   end
 
   def single_file_download
