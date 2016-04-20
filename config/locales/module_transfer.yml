@@ -7,6 +7,8 @@ pl:
       or_drop: "upuść tutaj"
       subject: "Nazwa dla przesyłanych plików"
       recipients: "Chcę wysłać maila (możesz wpisać kilka maili oddzielając je przecinkiem)"
+      recipients_placeholder: 'Lista odbiorców'
+      message_placeholder: 'Wiadomość do odbiorców'
       infinity: 'Zawsze dostępnne'
       fileupload: Dodaj pliki
       expires_in: "Pliki dostępne przez (dni)"
@@ -86,4 +88,3 @@ pl:
               wrong_length: "musi mieć długość %{count} znaków"
             object:
               spoofed_media_type: 'wydaje się podejrzany! Spróbuj wgrać go jeszcze raz lub skontaktuj sie z administratorem.'
-

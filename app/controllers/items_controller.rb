@@ -30,7 +30,11 @@ class ItemsController < ApplicationController
       @items = Item.shared_for(current_user)
     elsif @current_folder_id == :transfers
       @subfolders = []
-      @items = current_user.transfers.active
+      if params.has_key?(:history) and params[:history] == 'true'
+        @items = current_user.transfers
+      else
+        @items = current_user.transfers.active
+      end
     end
 
     @empty_list = (@subfolders + @items).size == 0
