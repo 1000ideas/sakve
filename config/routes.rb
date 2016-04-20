@@ -97,6 +97,13 @@ Sakve::Application.routes.draw do
         token: /[0-9a-f]{10,64}/i
       }
 
+    match 'transfers/:token/download/file/:name',
+      to: 'transfers#single_file_download',
+      via: :get,
+      as: :single_file_download,
+      constraints: {
+        token: /[0-9a-f]{10,64}/i
+      }
 
 
     match 'collaborators(.:format)', to: 'application#collaborators', as: :collaborators

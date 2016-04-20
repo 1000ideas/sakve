@@ -15,7 +15,8 @@
         <% end %>
         <%= t('.recipients') %>
       <% end %>
-      <%= f.text_field :recipients, style: 'display: none;'  %>
+      <%= f.text_field :recipients, placeholder: t('.recipients_placeholder'), style: 'display: none;'  %>
+      <%= f.text_area :message, rows: 3, placeholder: t('.message_placeholder'), style: 'display: none;' %>
     </div>
     <div class="field expires-in-field">
       <%= f.label :expires_in, t('.expires_in') %>

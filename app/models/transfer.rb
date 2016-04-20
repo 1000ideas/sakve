@@ -6,22 +6,25 @@ class Transfer < ActiveRecord::Base
   scope :expired, lambda { where('`expires_at` IS NOT NULL AND `expires_at` < ?', DateTime.now) }
   scope :active, lambda { where('`expires_at` IS NULL OR `expires_at` >= ?', DateTime.now) }
   scope :for_user, lambda { |user| user.admin? ? where(true) : where(user_id: user.id) }
+  scope :extracted, where(extracted: true)
 
   has_attached_file :object,
     path: ':partition/:class/:id/:filename'
 
   attr_writer :expires_in
   attr_accessor :empty, :expires_in_infinity
-  attr_accessible :expires_in, :name, :object,
-    :recipients, :token, :user_id, :user, :group_token,
-    :empty, :done, :expires_in_infinity
+  attr_accessible :expires_in, :name, :object, :recipients, :token,
+                  :user_id, :user, :group_token, :empty, :done,
+                  :expires_in_infinity, :message, :expired, :infos_hash
 
+  serialize :infos_hash, Hash
 
   #before_validation :compress_files
   before_validation :generate_token, :set_default_name, on: :create
   before_validation :setup_exires_at
   after_commit :delete_transfer_files, :send_mail_to_recipients, on: :create
   after_commit :delete_transfer_files, :send_mail_to_recipients, on: :update
+  after_commit :check_infos_hash, on: :create
   after_commit :async_compress_files, unless: proc {done? or empty}
 
   validates :token, uniqueness: true
@@ -32,6 +35,8 @@ class Transfer < ActiveRecord::Base
   validates :files, length: {minimum: 1}, unless: proc {done? or empty}
   validates :object, attachment_presence: true, on: :update
   validates :object, attachment_content_type: { content_type: /.*/i }
+
+  alias :tid :id
 
   def initialize(*args)
     super
@@ -61,14 +66,14 @@ class Transfer < ActiveRecord::Base
   end
 
   def content
-    if zip?
-      Zip::File.open(object.path) do |f|
-        f.entries.map do |entry|
-          entry.name.force_encoding('utf-8')
-        end
-      end
+    self.infos_hash
+  end
+
+  def zip_content
+    if !self.expired? and self.infos_hash[:files][0].nil?
+      self.infos_hash[:files].drop(1)
     else
-      [object_file_name]
+      self.infos_hash[:files]
     end
   end
 
@@ -88,8 +93,16 @@ class Transfer < ActiveRecord::Base
     TransferFile.where(token: group_token)
   end
 
+  def self.archive_expired
+    expired.each(&:archive)
+  end
+
+  def self.delete_extracted
+    extracted.each(&:clean_extracted_files)
+  end
+
   def self.delete_expired
-    self.expired.each(&:destroy)
+    expired.each(&:destroy)
   end
 
   def recipients_list
@@ -116,7 +129,91 @@ class Transfer < ActiveRecord::Base
     end
   end
 
+  def archive
+    self.expired = true
+    self.object.destroy
+  end
+
+  def archived?
+    self.expired
+  end
+
+  def generate_infos_hash
+    info_hash = Hash.new
+    info_hash[:name] = self.object_file_name
+    info_hash[:size] = self.object_file_size
+    info_hash[:type] = self.object_content_type
+    if self.object.path and self.zip?
+      info_hash[:files] = Array.new
+      i = 1
+      Zip::File.open(self.object.path) do |f|
+        f.entries.each do |entry|
+          info_hash[:files][i] = Hash.new
+          info_hash[:files][i][:name] = entry.name.force_encoding('utf-8')
+          info_hash[:files][i][:size] = entry.size
+          i = i + 1
+        end
+      end
+    end
+    self.infos_hash = info_hash
+    self.save
+  end
+
+  def check_infos_hash
+    if self.done? and self.infos_hash == {} and self.object.exists?
+      self.generate_infos_hash
+    end
+  end
+
+  def download_name
+    if self.zip?
+      name = "Sakve #{self.created_at_formatted}.zip"
+    else
+      name = self.object_file_name
+    end
+  end
+
+  def created_at_formatted
+    self.created_at.strftime('%d-%m-%Y, %H:%M:%S')
+  end
+
+  def directory
+    object.path.rpartition('/').first(2).join
+  end
+
+  def extract(name)
+    return false unless zip?
+    Zip::File.open(object.path) do |zipfile|
+      file = zipfile.find { |f| f.name == name }
+      file.extract(directory + file.name)
+    end
+    update_attribute(:extracted, true)
+  end
+
+  def include?(filename)
+    if zip? && file_in_zip?(filename)
+      true
+    else
+      false
+    end
+  end
+
+  def clean_extracted_files
+    return false unless zip?
+    Dir.foreach(directory) do |item|
+      next if item.ends_with?('.zip') || item == '.' || item == '..'
+      File.delete(directory + item)
+    end
+    update_attribute(:extracted, false)
+  end
+
   private
+
+  def file_in_zip?(filename)
+    Zip::File.open(object.path) do |zipfile|
+      return zipfile.any? { |f| f.name == filename }
+    end
+  end
 
   def last_user_group_token
     TransferFile.loose.where(transfer_files: {user_id: user_id}).first.try(:token) || SecureRandom.hex(8)
@@ -153,7 +250,7 @@ class Transfer < ActiveRecord::Base
 
   def file_name_from_title(ext = :zip)
     name = self.name.try(:parameterize)
-    name = "quicktransfer-#{token || group_token}" if name.blank?
+    name = "Sakve quicktransfer #{self.created_at.strftime('%d-%m-%Y, %H:%M:%S')}" if name.blank?
     "#{name}.#{ext}"
   end
 
@@ -166,7 +263,7 @@ class Transfer < ActiveRecord::Base
       return single_file.object
     end
 
-    filename = Dir::Tmpname.make_tmpname("transfer-#{token}", ".zip")
+    filename = Dir::Tmpname.make_tmpname("Sakve #{self.created_at.strftime('%d-%m-%Y, %H:%M:%S')}", ".zip")
     filepath = File.join(Dir::tmpdir, filename)
 
     logger.debug "Zipping files...."
@@ -187,7 +284,7 @@ class Transfer < ActiveRecord::Base
       end
     end
 
-    self.object.instance_write :file_name,  file_name_from_title
+    self.object.instance_write :file_name, filename
     logger.debug "Zipping files....done"
 
     File.open(filepath)
@@ -210,7 +307,6 @@ class Transfer < ActiveRecord::Base
       self.expires_at = nil
     elsif expires_in.to_i > 0
       self.expires_at = DateTime.now + expires_in.to_i.days
-
     end
   end
 
@@ -219,9 +315,8 @@ class Transfer < ActiveRecord::Base
       self.name = File.basename(files.first.object_file_name, '.*').titleize
     elsif name.blank?
       t = (token || group_token).first(5)
-      self.name = "Quicktransfer #{t}"
+      self.name = "Sakve #{Time.now.strftime('%d-%m-%Y, %H:%M:%S')}"
     end
   end
-
 
 end

@@ -402,9 +402,11 @@ class Sakve
 
     $('input#show_recipients').change (event) ->
       if $(event.currentTarget).is(':checked')
-        $('#transfer_recipients').slideDown()
+        $('#transfer_recipients').slideDown 300, ->
+          $('#transfer_message').slideDown 300
       else
-        $('#transfer_recipients').slideUp()
+        $('#transfer_message').slideUp 300,  ->
+          $('#transfer_recipients').slideUp 300
 
     $('button', $('.transfer-fileupload').prop('form') ).click (event) ->
       if $('.transfer-fileupload').data('blueimp-fileupload')._active > 0

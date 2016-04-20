@@ -29,11 +29,11 @@ class ApplicationController < ActionController::Base
 
   def context
     if selection_count == 1
-      if selection[:ids].size > 0
+      if selection.has_key?(:ids) && selection[:ids].size > 0
         @item = Item.find(selection[:ids].first)
-      elsif  selection[:fids].size > 0
+      elsif selection.has_key?(:fids) && selection[:fids].size > 0
         @item = Folder.find(selection[:fids].first)
-      else
+      elsif selection.has_key?(:tids) && selection[:tids].size > 0
         @item = Transfer.find(selection[:tids].first)
       end
     else
@@ -173,15 +173,20 @@ class ApplicationController < ActionController::Base
   end
 
   def selection
-    (params[:selection] || {}).tap do |selection|
-      selection[:ids] ||= []
-      selection[:fids] ||= []
-      selection[:tids] ||= []
+    selection ||= Hash.new
+    params[:selection].each do |key, value|
+      selection[key.to_sym] ||= Array.new
+      value.each { |id| selection[key.to_sym].push(id) }
     end
+    selection
   end
 
   def selection_count
-    selection[:fids].size + selection[:ids].size + selection[:tids].size
+    count = 0
+    selection.each do |key, value|
+      count = count + value.size
+    end
+    count
   end
   helper_method :selection
 
