@@ -1,4 +1,3 @@
-require 'pry'
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.16'
@@ -49,9 +48,9 @@ gem 'public_activity'
 gem 'paranoia'
 
 
-# gem 'debugger'
-# group :development do
-#   gem 'quiet_assets'
-#   gem 'guard-passenger'
-#   gem 'guard-sidekiq'
-# end
+gem 'debugger'
+group :development do
+  gem 'quiet_assets'
+  gem 'guard-passenger'
+  gem 'guard-sidekiq'
+end
