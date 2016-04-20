@@ -252,11 +252,11 @@ DEPENDENCIES
   cancan
   capybara
   capybara-webkit
-  coffee-rails (~> 3.2.1)
-  compass-rails (~> 1.1.0)
+  coffee-rails (= 3.2.2)
+  compass-rails (= 1.1.7)
   devise
-  font-awesome-rails (~> 4.1.0.0)
-  foundation-rails (~> 5.2.0)
+  font-awesome-rails (= 4.1.0.0)
+  foundation-rails (= 5.2.3.0)
   globalize (~> 3.0.0)
   i18n-js!
   jquery-mousewheel-rails
@@ -272,7 +272,8 @@ DEPENDENCIES
   rails (= 3.2.16)
   rails-i18n
   rubyzip (~> 1.1.1)
-  sass-rails (~> 3.2.3)
+  sass (= 3.2.19)
+  sass-rails (= 3.2.6)
   sidekiq
   sinatra (>= 1.3.0)
   sqlite3
