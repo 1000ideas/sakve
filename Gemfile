@@ -10,13 +10,12 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem 'sass', '3.2.19'
-gem 'sass-rails',   '3.2.6'
-gem 'coffee-rails', '3.2.2'
-gem 'compass-rails', '1.1.7'
+gem 'sass-rails',   '~> 3.2.3'
+gem 'coffee-rails', '~> 3.2.1'
+gem 'compass-rails', '~> 1.1.0'
+gem 'foundation-rails', '~> 5.2.0'
+gem 'font-awesome-rails', '~> 4.1.0.0'
 gem 'therubyracer'
-gem 'foundation-rails', '5.2.3.0'
-gem 'font-awesome-rails', '4.1.0.0'
 
 group :test do
   gem 'capybara'
