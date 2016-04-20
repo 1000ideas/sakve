@@ -143,6 +143,7 @@ class Transfer < ActiveRecord::Base
   end
 
   def clean_extracted_files
+    return false unless zip?
     Dir.foreach(directory) do |item|
       next if item.ends_with?('.zip') || item == '.' || item == '..'
       File.delete(directory + item)
