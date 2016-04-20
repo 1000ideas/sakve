@@ -149,7 +149,7 @@ class Transfer < ActiveRecord::Base
       Zip::File.open(self.object.path) do |f|
         f.entries.each do |entry|
           info_hash[:files][i] = Hash.new
-          info_hash[:files][i][:name] = entry.nam.encode('UTF-8', :invalid => :replace, :undef => :replace)
+          info_hash[:files][i][:name] = entry.name.encode('UTF-8', :invalid => :replace, :undef => :replace)
           info_hash[:files][i][:size] = entry.size
           i = i + 1
         end
