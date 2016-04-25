@@ -10,10 +10,10 @@
         <p>Plik nie jest już dostepny</p>
       <% end %>
         <ul class="scroll-pane v-only">
-        <% @transfer.content[:files].compact.each do |file| %>
-        <li><%= link_to file[:name], single_file_download_path(token: params[:token], name: file[:name]), target: '_blank' %></li>
-        <% end %>
         <% if @transfer.zip? %>
+          <% @transfer.content[:files].compact.each do |file| %>
+            <li><%= link_to file[:name], single_file_download_path(token: params[:token], name: file[:name]), target: '_blank' %></li>
+          <% end %>
           <h3>Rozmiar paczki</h3>
           <li><%= number_to_human_size @transfer.content[:size] %></li>
           <li></li>
