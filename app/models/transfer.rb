@@ -83,7 +83,8 @@ class Transfer < ActiveRecord::Base
 
   def zip?
     if object?
-      !!object.content_type.match(%r{application/zip})
+      !!object.content_type.match(%r{application/zip}) &&
+        !object_file_name.ends_with?('.fla')
     else
       make_archive?
     end
@@ -255,11 +256,11 @@ class Transfer < ActiveRecord::Base
   end
 
   def make_archive?
-    !files.one? or files.first.psd?
+    !files.one? || files.first.psd?
   end
 
   def create_object_from_transfer
-    if files.uploaded.one? and !(single_file = files.uploaded.first).psd?
+    if files.uploaded.one? && !(single_file = files.uploaded.first).psd?
       return single_file.object
     end
 
