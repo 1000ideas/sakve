@@ -22,8 +22,8 @@ class Transfer < ActiveRecord::Base
   #before_validation :compress_files
   before_validation :generate_token, :set_default_name, on: :create
   before_validation :setup_exires_at
-  after_commit :delete_transfer_files, :send_mail_to_recipients, on: :create
-  after_commit :delete_transfer_files, :send_mail_to_recipients, on: :update
+  after_commit :delete_transfer_files, :send_mail_to_recipients, only: [:create, :update]
+  # after_commit :delete_transfer_files, :send_mail_to_recipients, on: :update
   after_commit :check_infos_hash, on: :create
   after_commit :async_compress_files, unless: proc {done? or empty}
 
@@ -78,7 +78,7 @@ class Transfer < ActiveRecord::Base
   end
 
   def last_downloaded_at
-    self.statistics.first.created_at
+    self.statistics.first.try(:created_at)
   end
 
   def zip?
@@ -319,5 +319,4 @@ class Transfer < ActiveRecord::Base
       self.name = "Sakve #{Time.now.strftime('%d-%m-%Y, %H:%M:%S')}"
     end
   end
-
 end

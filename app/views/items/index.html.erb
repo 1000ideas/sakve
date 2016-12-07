@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="row sortbar">
-      <div class="small-7 medium-7 large-7 columns">
+      <div class="<%= @current_folder_id == :transfers ? 'small-5 medium-5 large-5' : 'small-7 medium-7 large-7' %> columns">
         <div class="list-icon">
           <%= label_tag nil, class: :'custom-check-box', id: :'select-all' do %>
             <i></i>
@@ -33,6 +33,11 @@
         </div>
         <%= sort_link :name, t('.sort.name') %>
       </div>
+      <% if @current_folder_id == :transfers %>
+      <div class="small-2 medium-2 large-2 columns text-center">
+        <%= sort_link :last_download, t('.sort.last_download') %>
+      </div>
+      <% end %>
       <div class="small-2 medium-2 large-2 columns text-center">
         <%= sort_link :size, t('.sort.size') %>
       </div>
@@ -48,7 +53,7 @@
 
     <% else %>
       <%= form_for :selection do |f| %>
-      <ul class="file-list scroll-pane" id="items-list">
+      <ul class="file-list scroll-panel" id="items-list">
         <% @subfolders.each do |folder| %>
           <%= render 'folders/list_folder', folder: folder, f: f %>
         <% end %>
