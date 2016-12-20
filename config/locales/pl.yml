@@ -400,6 +400,7 @@ pl:
             password:
               blank: " jest wymagane."
               confirmation: "i powtórzenie hasła nie są zgodne."
+              complexity: "musi zawierać przynajmniej jedną wielką literę, jedną małą i jedną liczbę"
         l/page:
           attributes:
             title:

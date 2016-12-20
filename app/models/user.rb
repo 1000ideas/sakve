@@ -28,12 +28,13 @@ class User < ActiveRecord::Base
 
   after_create :create_private_folder
 
-  validates :email, :presence => true
-  validates :email, :uniqueness => true
-  validates :email, :format => { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i }
-  validates :password, :presence => true, :confirmation => true, :length => {:minimum => 5}, :on => :create
-  validates :password, :allow_blank => true, :confirmation => true, :length => {:minimum => 5}, :on => :update
+  validates :email, presence: true
+  validates :email, uniqueness: true
+  validates :email, format: { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i }
+  validates :password, presence: true, confirmation: true, length: { minimum: 8 }, on: :create
+  validates :password, allow_blank: true, confirmation: true, length: { :minimum => 8 }, on: :update
   validates :first_name, :last_name, presence: true
+  validate :password_complexity
 
   def auth_token
     read_attribute(:auth_token) || begin
@@ -146,4 +147,11 @@ protected
     super && !updated_by_admin?
   end
 
+  def password_complexity
+    if password.present?
+      if !password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}/)
+        errors.add :password, :complexity
+      end
+    end
+  end
 end
