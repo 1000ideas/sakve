@@ -168,14 +168,14 @@ class Transfer < ActiveRecord::Base
 
   def download_name
     if self.zip?
-      name = "Sakve #{self.created_at_formatted}.zip"
+      name = "Sakve_#{self.created_at_formatted}.zip"
     else
       name = self.object_file_name
     end
   end
 
   def created_at_formatted
-    self.created_at.strftime('%d-%m-%Y, %H:%M:%S')
+    self.created_at.strftime('%d-%m-%Y_%H:%M:%S')
   end
 
   def directory
@@ -251,7 +251,7 @@ class Transfer < ActiveRecord::Base
 
   def file_name_from_title(ext = :zip)
     name = self.name.try(:parameterize)
-    name = "Sakve quicktransfer #{self.created_at.strftime('%d-%m-%Y, %H:%M:%S')}" if name.blank?
+    name = "Sakve_quicktransfer_#{self.created_at_formatted}" if name.blank?
     "#{name}.#{ext}"
   end
 
@@ -264,7 +264,7 @@ class Transfer < ActiveRecord::Base
       return single_file.object
     end
 
-    filename = Dir::Tmpname.make_tmpname("Sakve #{self.created_at.strftime('%d-%m-%Y, %H:%M:%S')}", ".zip")
+    filename = Dir::Tmpname.make_tmpname("Sakve_#{self.created_at_formatted}", ".zip")
     filepath = File.join(Dir::tmpdir, filename)
 
     logger.debug "Zipping files...."
@@ -312,7 +312,7 @@ class Transfer < ActiveRecord::Base
   end
 
   def set_default_name
-    if name.blank? and !make_archive?
+    if name.blank? && files.one?
       self.name = File.basename(files.first.object_file_name, '.*').titleize
     elsif name.blank?
       t = (token || group_token).first(5)
