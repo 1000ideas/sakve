@@ -256,7 +256,7 @@ class Transfer < ActiveRecord::Base
   end
 
   def make_archive?
-    !files.one? || files.first.psd?
+    content[:files] && (!files.one? || files.first.psd?)
   end
 
   def create_object_from_transfer

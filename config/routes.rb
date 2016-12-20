@@ -68,18 +68,6 @@ Sakve::Application.routes.draw do
 
     resources :tags, only: :index
 
-    resources :transfers, except: [:new], id: /\d+/ do
-      collection do
-        resources :files, controller: :transfer_files, only: [:create, :destroy] do
-          delete :bulk_destroy, action: :bulk_destroy, on: :collection
-        end
-      end
-      member do
-        get :status
-        get :save
-        post :save
-      end
-    end
 
     match 'transfers/:token/download',
       to: 'transfers#file_download',
@@ -105,6 +93,18 @@ Sakve::Application.routes.draw do
         token: /[0-9a-f]{10,64}/i
       }
 
+    resources :transfers, except: [:new], id: /\d+/ do
+      collection do
+        resources :files, controller: :transfer_files, only: [:create, :destroy] do
+          delete :bulk_destroy, action: :bulk_destroy, on: :collection
+        end
+      end
+      member do
+        get :status
+        get :save
+        post :save
+      end
+    end
 
     match 'collaborators(.:format)', to: 'application#collaborators', as: :collaborators
 
