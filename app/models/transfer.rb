@@ -15,7 +15,8 @@ class Transfer < ActiveRecord::Base
   attr_accessor :empty, :expires_in_infinity
   attr_accessible :expires_in, :name, :object, :recipients, :token,
                   :user_id, :user, :group_token, :empty, :done,
-                  :expires_in_infinity, :message, :expired, :infos_hash
+                  :expires_in_infinity, :message, :expired, :infos_hash,
+                  :email_sent
 
   serialize :infos_hash, Hash
 
@@ -47,22 +48,23 @@ class Transfer < ActiveRecord::Base
 
   alias :tid :id
   def size; object_file_size; end
+
   def date
     expires_at || (Time.now + 1000.years)
   end
 
   def expires_in
     @expires_in || if expires_at.present?
-      ((expires_at - Time.now)/1.day).ceil
+      ((expires_at - Time.now) / 1.day).ceil
     else
       7
     end
   end
 
   def saved
-    if folders_count > 0
-      folders.where(user_id: user.id).first
-    end
+    return unless folders_count > 0
+
+    folders.where(user_id: user.id).first
   end
 
   def content
@@ -70,7 +72,7 @@ class Transfer < ActiveRecord::Base
   end
 
   def zip_content
-    if !self.expired? and self.infos_hash[:files][0].nil?
+    if !self.expired? && self.infos_hash[:files][0].nil?
       self.infos_hash[:files].drop(1)
     else
       self.infos_hash[:files]
@@ -115,11 +117,11 @@ class Transfer < ActiveRecord::Base
   end
 
   def forever?
-    persisted? and expires_at.nil?
+    persisted? && expires_at.nil?
   end
 
   def expired?
-    expires_at.present? and expires_at < DateTime.now
+    expires_at.present? && expires_at < DateTime.now
   end
 
   def expiration_distance
@@ -140,12 +142,12 @@ class Transfer < ActiveRecord::Base
   end
 
   def generate_infos_hash
-    info_hash = Hash.new
+    info_hash = {}
     info_hash[:name] = self.object_file_name
     info_hash[:size] = self.object_file_size
     info_hash[:type] = self.object_content_type
-    if self.object.path and self.zip?
-      info_hash[:files] = Array.new
+    if self.object.path && self.zip?
+      info_hash[:files] = []
       i = 1
       Zip::File.open(self.object.path) do |f|
         f.entries.each do |entry|
@@ -161,7 +163,7 @@ class Transfer < ActiveRecord::Base
   end
 
   def check_infos_hash
-    if self.done? and self.infos_hash == {} and self.object.exists?
+    if self.done? && self.infos_hash == {} && self.object.exists?
       self.generate_infos_hash
     end
   end
@@ -217,7 +219,7 @@ class Transfer < ActiveRecord::Base
   end
 
   def last_user_group_token
-    TransferFile.loose.where(transfer_files: {user_id: user_id}).first.try(:token) || SecureRandom.hex(8)
+    TransferFile.loose.where(transfer_files: { user_id: user_id }).first.try(:token) || SecureRandom.hex(8)
   end
 
   def generate_token
@@ -292,15 +294,16 @@ class Transfer < ActiveRecord::Base
   end
 
   def delete_transfer_files
-    if @delete_files and done?
-      self.files.each(&:destroy)
-    end
+    return unless @delete_files && done?
+
+    self.files.each(&:destroy)
   end
 
   def send_mail_to_recipients
-    if recipients_list.any? and done?
-      TransferMailer.after_create(self).deliver
-    end
+    return unless recipients_list.any? && done? && !email_sent?
+
+    TransferMailer.after_create(self).deliver
+    update_attributes(email_sent: true)
   end
 
   def setup_exires_at

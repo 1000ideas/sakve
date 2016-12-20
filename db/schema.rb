@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160420080858) do
+ActiveRecord::Schema.define(:version => 20161220152807) do
 
   create_table "attachments", :force => true do |t|
     t.string   "upload_file_name"
@@ -152,6 +152,7 @@ ActiveRecord::Schema.define(:version => 20160420080858) do
     t.text     "infos_hash"
     t.string   "message"
     t.boolean  "extracted",                         :default => false
+    t.boolean  "email_sent",                        :default => false
   end
 
   create_table "user_groups", :force => true do |t|
