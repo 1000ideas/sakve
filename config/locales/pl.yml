@@ -1,4 +1,5 @@
 pl:
+  drop_anywhere: 'Upuść pliki w dowolnym miejscu na ekranie, aby je dodać'
   onbeforeunload: 'Czy na pewno chcesz przerwać wgrywanie plików i opuścić tę stronę?'
   partials:
     search:

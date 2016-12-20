@@ -77,11 +77,14 @@ class Sakve
       $(event.currentTarget).data('dragCount', dragCount)
 
       $(event.currentTarget).toggleClass('file-drop-over', dragCount > 0)
+      $(event.currentTarget).find('div.draggable-background').toggle()
 
     $(document).on 'drop', (event) ->
       $('body')
         .data('dragCount', 0)
         .removeClass('file-drop-over')
+        .find('div.draggable-background')
+        .hide()
 
 
     $(window)
@@ -448,7 +451,6 @@ class Sakve
           ids: ids
       $(event.target).hide().prev().toggle $('.uploaded-files .transfer-file[data-fid]:not(.selected)').length > 0
 
-
     $('.transfer-fileupload').each (idx, el) =>
       @fileupload_with_dropzone el, {
         url: $(el).data('url')
@@ -554,7 +556,7 @@ class Sakve
     $(element).fileupload $.extend({
         singleFileUploads: true
         dataType: 'json'
-        dropZone: $(element).parents('.fileupload-dropzone')
+        dropZone: $(element).parents('body')
       }, options)
 
   defaults:

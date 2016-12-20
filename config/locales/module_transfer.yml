@@ -4,7 +4,7 @@ pl:
       new: Dodaj Transfer
       index: Lista transfers
     form: &TRANFERFORM
-      or_drop: "upuść tutaj"
+      or_drop: "lub upuść w dowolnym miejscu na ekranie"
       subject: "Nazwa dla przesyłanych plików"
       recipients: "Chcę wysłać maila (możesz wpisać kilka maili oddzielając je przecinkiem)"
       recipients_placeholder: 'Lista odbiorców'
