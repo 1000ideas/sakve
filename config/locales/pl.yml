@@ -6,6 +6,7 @@ pl:
       placeholder: 'Szukaj plików'
     menu:
       items: 'Foldery'
+      transfers: 'Przesłane pliki'
       transfer: 'Prześlij plik'
       groups: 'Grupy'
       users: 'Użytkownicy'
