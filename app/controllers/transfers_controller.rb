@@ -62,6 +62,7 @@ class TransfersController < ApplicationController
     head(:not_found) and return if @transfer.nil?
     head(:gone) and return if @transfer.expired?
     @transfer.statistics.create(client_ip: request.remote_ip, browser: request.user_agent)
+    response.headers['Content-Length'] = @transfer.object_file_size.to_s
     send_file @transfer.object.path, filename: @transfer.download_name, x_sendfile: true, type: @transfer.object_content_type
   end
 
