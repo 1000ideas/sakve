@@ -18,6 +18,8 @@ class ItemsController < ApplicationController
       @global_folder
     end
 
+    authorize!(:read, @global_folder) if @current_folder == @global_folder
+
     @current_folder_id = @current_folder_id.to_sym if @current_folder.nil? and @current_folder_id.present?
 
     @item = Item.new(folder: @current_folder, user: current_user)

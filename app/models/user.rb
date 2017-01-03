@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
   attr_accessor :updated_by
   attr_accessible :first_name, :last_name, :name, :email,
     :password, :password_confirmation, :remember_me, :group_ids,
-    :reset_password_sent_at, :reset_password_token
+    :reset_password_sent_at, :reset_password_token, :max_upload_size
 
   after_create :create_private_folder
 
@@ -34,6 +34,7 @@ class User < ActiveRecord::Base
   validates :password, presence: true, confirmation: true, length: { minimum: 8 }, on: :create
   validates :password, allow_blank: true, confirmation: true, length: { :minimum => 8 }, on: :update
   validates :first_name, :last_name, presence: true
+  validates :max_upload_size, numericality: true, allow_nil: true
   validate :password_complexity
 
   def auth_token
@@ -66,11 +67,15 @@ class User < ActiveRecord::Base
   end
 
   def belongs_to_group? name
-    groups.any? {|g| g.name === name }
+    groups.any? { |g| g.name === name }
   end
 
   def admin?
     belongs_to_group? :admin
+  end
+
+  def client?
+    belongs_to_group? :client
   end
 
   def has_shared_items?
@@ -131,6 +136,14 @@ class User < ActiveRecord::Base
     else
       self.class.human_attribute_name(field)
     end
+  end
+
+  def max_upload
+    max_upload_size.gigabytes
+  end
+
+  def files_uploaded_size
+    transfers.sum(&:object_file_size)
   end
 
 protected

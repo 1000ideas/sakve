@@ -4,7 +4,7 @@ class CopyUploadedFileWorker
   def perform(id, path)
     @transfer_file = TransferFile.find(id)
     file = File.open(path, 'rb')
-    @transfer_file.update_attributes(object: file, upload_status: :done)
+    @transfer_file.update_attributes(object: file, upload_status: :done, tmp_size: nil)
     File.unlink(path) if File.exists?(path)
   rescue Errno::ENOENT
     logger.error "File '#{path}' doesn't exists. Mark upload as failed!"

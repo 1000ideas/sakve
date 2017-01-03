@@ -9,7 +9,8 @@ class TransferFilesController < ApplicationController
     @file = TransferFile.new(
       object_file_name: params[:object].original_filename,
       token: params[:transfer].try(:[], :group_token),
-      user: current_user
+      user: current_user,
+      tmp_size: params[:object].size
     )
 
     authorize! :create, @file

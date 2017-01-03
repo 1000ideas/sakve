@@ -54,7 +54,6 @@ Sakve::Application.routes.draw do
       end
     end
 
-
     resources :folders, only: [:create, :update, :destroy] do
       member do
         get :rename, action: :edit, subaction: :rename
@@ -67,7 +66,6 @@ Sakve::Application.routes.draw do
     end
 
     resources :tags, only: :index
-
 
     match 'transfers/:token/download',
       to: 'transfers#file_download',
@@ -107,7 +105,6 @@ Sakve::Application.routes.draw do
     end
 
     match 'collaborators(.:format)', to: 'application#collaborators', as: :collaborators
-
 
     # resources :groups
     resources :users do

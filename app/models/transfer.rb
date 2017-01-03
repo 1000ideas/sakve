@@ -30,12 +30,15 @@ class Transfer < ActiveRecord::Base
 
   validates :token, uniqueness: true
   # validates :name, presence: true
-  validates :group_token, presence: true, length: {is: 16}, unless: :done?
-  validates :token, presence: true, length: {minimum: 10, maximum: 64}
+  validates :group_token, presence: true, length: { is: 16 }, unless: :done?
+  validates :token, presence: true, length: { minimum: 10, maximum: 64 }
   validate :valid_recipients
   validates :files, length: {minimum: 1}, unless: proc {done? or empty}
   validates :object, attachment_presence: true, on: :update
   validates :object, attachment_content_type: { content_type: /.*/i }
+  validate :max_uploaded_size
+  validate :not_logged_user_max_upload_size
+  validate :not_logged_user_max_upload_time
 
   alias :tid :id
 
@@ -320,6 +323,30 @@ class Transfer < ActiveRecord::Base
     elsif name.blank?
       t = (token || group_token).first(5)
       self.name = "Sakve #{Time.now.strftime('%d-%m-%Y, %H:%M:%S')}"
+    end
+  end
+
+  def max_uploaded_size
+    return if user_id.blank?
+
+    user = User.find(user_id)
+    if (user.files_uploaded_size + files.sum(&:tmp_size)) > user.max_upload
+      errors.add :transfer, "suma wszystkich Twoich plików i transferów nie może przekraczać #{user.max_uploaded_size} GB"
+      files.destroy_all
+    end
+  end
+
+  def not_logged_user_max_upload_size
+    if user_id.nil? && files.sum(&:tmp_size) > 2.gigabytes
+      errors.add :transfer, 'nie może przekraczać 2 GB'
+      files.destroy_all
+    end
+  end
+
+  def not_logged_user_max_upload_time
+    if user_id.nil? && expires_in.to_i > 14
+      errors.add :transfer, 'może mieć maksymalną ważność 14 dni'
+      files.destroy_all
     end
   end
 end

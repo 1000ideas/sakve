@@ -28,9 +28,7 @@
       </div>
     <% end %>
 
-    <% unless current_user.nil? or @download %>
-      <%= render 'partials/menu' %>
-    <% end %>
+    <%= render 'partials/menu' %>
 
     <%= yield %>
 

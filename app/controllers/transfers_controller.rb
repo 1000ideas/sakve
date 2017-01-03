@@ -107,6 +107,7 @@ class TransfersController < ApplicationController
   def create
     authorize! :create, Transfer
     @transfer = Transfer.new(params[:transfer])
+
     @transfer.user = current_user
 
     respond_to do |format|

@@ -9,6 +9,7 @@ pl:
       transfers: 'Przesłane pliki'
       transfer: 'Prześlij plik'
       groups: 'Grupy'
+      login: 'Zaloguj'
       users: 'Użytkownicy'
       logout: 'Wyloguj się'
   transfer_mailer:
@@ -367,6 +368,7 @@ pl:
         set_role: "Wybierz uprawnienia"
         role : Uprawnienia
         groups: "Grupy"
+        max_upload_size: Maksymalny rozmiar plików (w gigabajtach)
       l/news:
         content: Treść
         title: Tytuł
