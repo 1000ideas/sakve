@@ -326,18 +326,24 @@ class Transfer < ActiveRecord::Base
     end
   end
 
+  def sum_files_size
+    files.sum { |f| f.object_file_size.to_i }
+  end
+
   def max_uploaded_size
     return if user_id.blank?
 
     user = User.find(user_id)
-    if (user.files_uploaded_size + files.sum(&:tmp_size)) > user.max_upload
-      errors.add :transfer, "suma wszystkich Twoich plików i transferów nie może przekraczać #{user.max_uploaded_size} GB"
+    return if user.max_upload.nil?
+
+    if (user.files_uploaded_size + sum_files_size) > user.max_upload
+      errors.add :transfer, "wraz z sumą dotychczas przesłanych plików nie może przekraczać #{user.max_upload_size} GB"
       files.destroy_all
     end
   end
 
   def not_logged_user_max_upload_size
-    if user_id.nil? && files.sum(&:tmp_size) > 2.gigabytes
+    if user_id.nil? && sum_files_size > 2.gigabytes
       errors.add :transfer, 'nie może przekraczać 2 GB'
       files.destroy_all
     end

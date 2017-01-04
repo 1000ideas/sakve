@@ -156,7 +156,7 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     access_page, session[:access_page] = session[:access_page], nil
-    access_page || root_path
+    access_page || transfers_path
   end
 
   def after_sign_out_path_for(resource)

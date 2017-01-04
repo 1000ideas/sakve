@@ -10,14 +10,14 @@ Sakve::Application.routes.draw do
     end
 
     devise_for :users,
-      path: "",
+      path: '',
       path_names: {
-        :sign_in => 'login',
-        :sign_out => 'logout',
-        :sign_up => 'create',
-        :password => 'reset_password',
-        :confirmation => 'confirm_user',
-        :registration => 'account'
+        sign_in: 'login',
+        sign_out: 'logout',
+        sign_up: 'create',
+        password: 'reset_password',
+        confirmation: 'confirm_user',
+        registration: 'account'
       }
 
     get 'items(-:folder)(.:format)',
@@ -122,7 +122,12 @@ Sakve::Application.routes.draw do
       post :context
       get :search
     end
-    root to: 'transfers#index'
+
+    devise_scope :user do
+      root to: 'devise/sessions#new'
+    end
+
+    # root to: 'transfers#index'
   end
 
   get 't/:token(.:format)', to: 'transfers#download', as: :t,

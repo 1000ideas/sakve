@@ -18,7 +18,7 @@ class ItemsController < ApplicationController
       @global_folder
     end
 
-    authorize!(:read, @global_folder) if @current_folder == @global_folder
+    authorize!(:download, @global_folder) if @current_folder == @global_folder
 
     @current_folder_id = @current_folder_id.to_sym if @current_folder.nil? and @current_folder_id.present?
 
@@ -137,7 +137,7 @@ class ItemsController < ApplicationController
     authorize! :create, @item
 
     respond_to do |format|
-      if @item.save
+      if @item.check_user_limit(current_user) && @item.save
         format.html { redirect_to(items_path, notice: I18n.t('create.success') ) }
         format.json { render action: :create, status: :ok, location: @item }
       else
@@ -246,7 +246,6 @@ class ItemsController < ApplicationController
       .accessible_by(current_ability, :update)
       .where( id: selection[:ids] )
 
-
     respond_to do |format|
       format.js
     end
@@ -269,8 +268,6 @@ class ItemsController < ApplicationController
     respond_to do |format|
       format.js
     end
-
-
   end
 
   def bulk_destroy
@@ -291,9 +288,4 @@ class ItemsController < ApplicationController
       format.js
     end
   end
-
-  private
-
-
-
 end

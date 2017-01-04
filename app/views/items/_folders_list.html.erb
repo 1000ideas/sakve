@@ -18,7 +18,7 @@
         </ul>
       </li>
     <% end %>
-    <% if can? :read, @global_folder %>
+    <% if can? :download, @global_folder %>
       <li class="<%= folder_classes(@global_folder) %>">
         <h3 class="<%= current_user.admin? ? "droppable" : "" %>" id="folder-<%= @global_folder.id %>">
           <%= link_to items_path(folder: :global) do %>

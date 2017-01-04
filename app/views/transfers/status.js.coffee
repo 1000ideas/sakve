@@ -1,5 +1,5 @@
 $('#transfer-processing-status')
-  .text('<%= t("transfers.create.#{@transfer.done? ? :done : :processing }") %>')
+  .text('<%= t("transfers.create.#{@transfer.done? ? :done : :processing}") %>')
 
 <% unless @transfer.done? %>
 call_again = ->

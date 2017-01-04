@@ -143,10 +143,11 @@ class User < ActiveRecord::Base
   end
 
   def files_uploaded_size
-    transfers.sum(&:object_file_size)
+    transfers.active.sum { |t| t.object_file_size.to_i } +
+      items.sum { |t| t.object_file_size.to_i }
   end
 
-protected
+  protected
 
   def create_private_folder
     Folder.create!(user_id: self.id, global: false)

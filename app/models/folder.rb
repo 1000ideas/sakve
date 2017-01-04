@@ -109,7 +109,7 @@ class Folder < ActiveRecord::Base
   end
 
   def shared_for? user
-    users.exists? (user) || user.groups.map {|g| groups.exists?(g) }.inject{|a,b| a || b }
+    users.exists? (user) || user.groups.map { |g| groups.exists?(g) }.inject { |a, b| a || b }
   end
 
   def allowed_for? user

@@ -14,10 +14,6 @@ class Ability
         can :read, Group
       end
 
-      unless user.client?
-        can :read, Item, folder: { global: true }
-      end
-
       can :create, Item, folder: { user_id: user.id }, user_id: user.id
       can :read, Item, user_id: user.id
       can :read, Item do |item|
@@ -41,6 +37,10 @@ class Ability
       can [:update, :destroy], Transfer, user_id: user.id
 
       can :read, Tag
+
+      if user.client?
+        cannot :download, Folder, global: true
+      end
     else
       can [:read, :create], Transfer
       can :update, Transfer, user_id: nil

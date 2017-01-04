@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(:version => 20170102152920) do
   add_index "folders", ["transfer_id"], :name => "index_folders_on_transfer_id"
 
   create_table "group_translations", :force => true do |t|
-    t.integer  "group_id",    :null => false
+    t.integer  "group_id"
     t.string   "locale",      :null => false
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
@@ -164,16 +164,16 @@ ActiveRecord::Schema.define(:version => 20170102152920) do
   end
 
   create_table "users", :force => true do |t|
-    t.string   "email",                                                               :default => "", :null => false
-    t.string   "encrypted_password",                                                  :default => "", :null => false
+    t.string   "email",                                :default => "",   :null => false
+    t.string   "encrypted_password",                   :default => "",   :null => false
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                                                       :default => 0
+    t.integer  "sign_in_count",                        :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at",                                                                          :null => false
-    t.datetime "updated_at",                                                                          :null => false
+    t.datetime "created_at",                                             :null => false
+    t.datetime "updated_at",                                             :null => false
     t.string   "first_name"
     t.string   "last_name"
     t.datetime "reset_password_sent_at"
@@ -181,7 +181,7 @@ ActiveRecord::Schema.define(:version => 20170102152920) do
     t.datetime "banned_at"
     t.datetime "activated_at"
     t.string   "auth_token",             :limit => 32
-    t.decimal  "max_upload_size",                      :precision => 10, :scale => 0, :default => 10
+    t.float    "max_upload_size",                      :default => 10.0
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

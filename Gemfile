@@ -7,15 +7,14 @@ gem "rubyzip", '~> 1.1.1'
 
 group :assets do
   gem 'uglifier', '>= 1.0.3'
-
 	gem 'sass-rails',   '~> 3.2.3'
-	gem 'coffee-rails', '~> 3.2.1'
-	gem 'compass-rails', '~> 1.1.0'
-	gem 'foundation-rails', '~> 5.2.0'
-	gem 'font-awesome-rails', '~> 4.1.0.0'
-	gem 'therubyracer'
+  gem 'compass-rails', '~> 1.1.0'
+  gem 'foundation-rails', '~> 5.2.0'
+  gem 'therubyracer'
 end
 
+gem 'coffee-rails', '~> 3.2.1'
+gem 'font-awesome-rails', '~> 4.1.0.0'
 
 group :test do
   gem 'capybara'

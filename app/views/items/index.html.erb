@@ -24,6 +24,13 @@
         </div>
       </div>
     </div>
+    <% unless current_user.max_upload_size.nil? %>
+      <div class="row">
+        <div class="columns small-12">
+          <p>Wykorzystujesz <%= number_to_human_size(current_user.files_uploaded_size) %> z <%= number_to_human_size(current_user.max_upload_size.gigabytes) %> dostępnych</p>
+        </div>
+      </div>
+    <% end %>
     <div class="row sortbar">
       <div class="<%= @current_folder_id == :transfers ? 'small-5 medium-5 large-5' : 'small-7 medium-7 large-7' %> columns">
         <div class="list-icon">
