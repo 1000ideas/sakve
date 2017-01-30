@@ -79,8 +79,8 @@ class User < ActiveRecord::Base
   end
 
   def has_shared_items?
-    self.groups.inject( self.shared_items.any? ) do |memo, group|
-      memo || group.shared_items.any?
+    self.groups.inject(RUBY_VERSION >= '2.2.0' ? !self.shared_items.compact.empty? : self.shared_items.any?) do |memo, group|
+      memo || (RUBY_VERSION >= '2.2.0' ? !group.shared_items.compact.empty? : group.shared_items.any?) # some issues with 'any?' in ruby 2.2.5
     end
   end
 
