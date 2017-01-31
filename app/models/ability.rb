@@ -9,6 +9,7 @@ class Ability
         can :create, Item, folder: { global: true }
         can [:update, :destroy], Item
         can [:create, :update, :destroy], Folder
+        can :manage, Background
       else
         can :read, User
         can :read, Group

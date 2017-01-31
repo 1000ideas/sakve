@@ -58,7 +58,7 @@ class Sakve
 
     for module in ['tags', 'multiupload', 'drag_drop',
       'share', 'folders', 'selection', 'body_cover',
-      'clipboard', 'scrollpane']
+      'clipboard', 'scrollpane', 'backgrounds_files']
       @["_init_#{module}"]()
 
     @last_selected = null
@@ -110,6 +110,14 @@ class Sakve
           $(event.target).blur()
           $('input#user_remember_me').get(0).focus()
 
+
+  _init_backgrounds_files: ->
+    $('#bg-manage .fileupload-button input').change ->
+      names = []
+      for f in @.files
+        names.push(f.name)
+
+      $('#bg-manage .added-files').text(names.join(', '))
 
   _init_scrollpane: ->
     $('.scroll-pane')

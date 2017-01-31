@@ -19,7 +19,11 @@
   </head>
   <body class="<%= controller_name %> <%= action_name %>">
     <% if @bodycover %>
-    <div class="cover" data-cover="<%= image_path("transfer/cover-#{(1..7).to_a.shuffle.first}.jpg") %>"></div>
+      <% if custom_backgrounds? %>
+        <div class="cover" data-cover="<%= image_path(random_bg) %>"></div>
+      <% else %>
+        <div class="cover" data-cover="<%= image_path("transfer/cover-#{(1..7).to_a.shuffle.first}.jpg") %>"></div>
+      <% end %>
     <% end %>
 
     <% if controller_name.to_s == 'transfers' && action_name.to_s == 'index' %>

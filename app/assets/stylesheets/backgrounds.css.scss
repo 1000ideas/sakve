@@ -1,0 +1,38 @@
+// Place all the styles related to the Backgrounds controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#bg-manage {
+  form {
+    margin-bottom: 5em;
+
+    .row {
+      margin-bottom: 0.5em;
+    }
+
+    .columns {
+      text-align: center;
+    }
+  }
+
+  #bg-show {
+    .row {
+      padding-bottom: 1em;
+      text-align: center;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+    }
+
+    .odd {
+      background-color: #f2f2f2;
+    }
+  }
+}
+

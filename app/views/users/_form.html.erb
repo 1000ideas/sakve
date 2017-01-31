@@ -26,7 +26,7 @@
       <%= f.label :groups %>
       <% Group.sorted_with_translation.each do |group| %>
         <%= f.label :"group_ids_#{group.id}", class: 'selectable-checkbox' do %>
-          <%= f.check_box :group_ids, {multiple: true, checked: f.object.belongs_to_group?(group.name)}, group.id, nil  %>
+          <%= f.check_box :group_ids, { multiple: true, checked: f.object.belongs_to_group?(group.name) }, group.id, nil  %>
           <span><%= group.title %></span>
         <% end %>
 

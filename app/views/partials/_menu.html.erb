@@ -14,6 +14,7 @@
                 --><%= content_tag :li, link_to(t('.transfers'), items_path(folder: :transfers)) if can? :read, Item %><!--
                 --><%= content_tag :li, link_to(t('.items'), items_path, class: cp(controller: :items)) if can? :read, Item %><!--
                 --><%= content_tag :li, link_to(t('.users'), users_path, class: cp(users_path)) if can? :manage, User %><!--
+                --><%= content_tag :li, link_to(t('.backgrounds'), backgrounds_path, class: cp(backgrounds_path)) if can? :manage, Background %><!--
               --></ul>
             </nav>
             <nav class="hide-for-small medium-5 large-5 columns text-right user-menu">

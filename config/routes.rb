@@ -117,6 +117,8 @@ Sakve::Application.routes.draw do
 
     match 'change_folder', to: 'items#change_folder', via: :post
 
+    resources :backgrounds, only: [:index, :create, :destroy]
+
     scope controller: :application do
       get 'switch_lang/:lang', action: :switch_lang, as:  :switch_lang, lang: locale_regex
       post :context

@@ -189,7 +189,6 @@ class ApplicationController < ActionController::Base
     @bodycover = devise_controller?
   end
 
-
   def set_language_from_header
   end
 end

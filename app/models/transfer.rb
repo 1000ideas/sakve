@@ -1,5 +1,4 @@
 class Transfer < ActiveRecord::Base
-
   belongs_to :user
   has_many :folders
   has_many :statistics, class_name: 'TransferStat', order: 'created_at DESC'
@@ -334,7 +333,7 @@ class Transfer < ActiveRecord::Base
     return if user_id.blank?
 
     user = User.find(user_id)
-    return if user.max_upload.nil?
+    return if user.max_upload_size.nil?
 
     if (user.files_uploaded_size + sum_files_size) > user.max_upload
       errors.add :transfer, "wraz z sumą dotychczas przesłanych plików nie może przekraczać #{user.max_upload_size} GB"

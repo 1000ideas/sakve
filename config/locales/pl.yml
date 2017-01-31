@@ -8,9 +8,10 @@ pl:
       items: 'Foldery'
       transfers: 'Przesłane pliki'
       transfer: 'Prześlij plik'
+      users: 'Użytkownicy'
+      backgrounds: 'Tła'
       groups: 'Grupy'
       login: 'Zaloguj'
-      users: 'Użytkownicy'
       logout: 'Wyloguj się'
   transfer_mailer:
     after_create:

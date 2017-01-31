@@ -1,0 +1,76 @@
+<div id="bg-manage">
+  <% if can? :create, @background %>
+    <div class="row">
+      <%= form_for @background, html: { multipart: true, class: 'columns small-6 small-offset-3 center' } do |f| %>
+        <div class="row">
+          <center><h5>Załaduj obrazek</h5></center>
+          <div class="columns small-12 center">
+            <div class="button round fileupload-button">
+              <%= f.file_field(:image, data: { value: t('.fileupload', default: 'Select files'), file_upload: true }) %>
+              <span><%= t('.fileupload', default: 'Select files') %></span>
+            </div>
+            <div>
+              <span>Dodany plik: </span><span class="added-files"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <center><h5>Wybierz, w którym miejscach tło ma być dostepne</h5></center>
+          <div class="columns small-12 field">
+            <%= f.label :upload, class: 'custom-check-box' do %>
+              <%= f.check_box :upload %><i></i>
+            <% end %>
+            <%= f.label :upload, class: 'for-check-box' %>
+          </div>
+          <div class="columns small-12 field">
+            <%= f.label :download, class: 'custom-check-box' do %>
+              <%= f.check_box :download %><i></i>
+            <% end %>
+            <%= f.label :download, class: 'for-check-box' %>
+          </div>
+        </div>
+        <div class="row">
+          <center><h5>Wybierz dla których użytkowników tło ma być dostępne</h5></center>
+          <div class="columns small-12">
+            <% User.all.each do |user| %>
+              <%= f.label :"user_ids_#{user.id}", class: 'selectable-checkbox' do %>
+                <%= f.check_box :user_ids, { multiple: true, checked: false }, user.id, nil  %>
+                <span><%= user.name %></span>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="columns small-6 small-offset-3 center">
+            <%= f.submit 'Dodaj', class: 'button round' %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if can? :read, Background %>
+    <div id="bg-show">
+      <div class="row">
+        <div class="columns small-2">Miniaturka</div>
+        <div class="columns small-1">Przy przesyłaniu</div>
+        <div class="columns small-1">Przy pobieraniu</div>
+        <div class="columns small-7">Dostępne dla</div>
+        <div class="columns small-1">Usuń</div>
+      </div>
+      <% @backgrounds.each_with_index do |bg, i| %>
+        <div class="row<%= i.odd? ? ' odd' : '' %>">
+          <div class="columns small-2"><%= image_tag bg.image.url(:thumbnail) %></div>
+          <div class="columns small-1"><%= bg.upload ? 'Tak' : 'Nie' %></div>
+          <div class="columns small-1"><%= bg.download ? 'Tak' : 'Nie' %></div>
+          <div class="columns small-7">
+            <% bg.users.each do |user| %>
+              <%= user.name + (user != bg.users.last ? ', ' : '') %>
+            <% end %>
+          </div>
+          <div class="columns small-1"><%= link_to fa_icon('times'), background_path(bg), method: :delete %></div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>
