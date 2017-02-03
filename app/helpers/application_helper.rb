@@ -85,13 +85,4 @@ module ApplicationHelper
       list
     end
   end
-
-  def custom_backgrounds?
-    current_user && UserBackground.where(user_id: current_user.id).any?
-  end
-
-  def random_bg()
-    where = controller_name == 'transfers' && action_name == 'index' ? 'upload' : 'download'
-    UserBackground.where(user_id: current_user.id).collect(&:background).to_a.select { |bg| bg.send(where) }.sample.image.url
-  end
 end

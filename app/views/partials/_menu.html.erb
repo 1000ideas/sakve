@@ -1,38 +1,37 @@
-  <header>
-    <div class="row collapse" data-equalizer>
-      <hgroup class="logo-column columns" data-equalizer-watch>
-        <h1>
-          <%= logo_tag %>
-        </h1>
-      </hgroup>
-      <div class="menu-column columns" data-equalizer-watch>
-        <div class="row">
-          <% unless current_user.nil? or @download %>
-            <nav class="small-12 medium-7 large-7 columns main-menu">
-              <ul><!--
-                --><%= content_tag :li, link_to(t('.transfer'), transfers_path, class: cp(controller: :transfers, action: :index)) if can? :create, Transfer %><!--
-                --><%= content_tag :li, link_to(t('.transfers'), items_path(folder: :transfers)) if can? :read, Item %><!--
-                --><%= content_tag :li, link_to(t('.items'), items_path, class: cp(controller: :items)) if can? :read, Item %><!--
-                --><%= content_tag :li, link_to(t('.users'), users_path, class: cp(users_path)) if can? :manage, User %><!--
-                --><%= content_tag :li, link_to(t('.backgrounds'), backgrounds_path, class: cp(backgrounds_path)) if can? :manage, Background %><!--
-              --></ul>
-            </nav>
-            <nav class="hide-for-small medium-5 large-5 columns text-right user-menu">
-              <ul><!--
-                --><%= content_tag :li, link_to(current_user.email, edit_user_registration_path) if current_user %><!--
-                --><%= content_tag :li, link_to(t('.logout'), destroy_user_session_path, method: :delete) if current_user %><!--
-              --></ul>
-            </nav>
-          <% end %>
-          <% if current_user.nil? %>
-            <nav class="small-12 medium-7 large-7 columns main-menu">
-              <ul>
-                <%= content_tag :li, link_to(t('.transfer'), transfers_path, class: cp(controller: :transfers, action: :index)) if can? :create, Transfer %>
-                <%= content_tag :li, link_to(t('.login'), new_user_session_path, class: cp(controller: :sessions, action: :new)) %>
-              </ul>
-            </nav>
-          <% end %>
-        </div>
+<header>
+  <div class="row collapse" data-equalizer>
+    <hgroup class="logo-column columns" data-equalizer-watch>
+      <h1>
+        <%= logo_tag %>
+      </h1>
+    </hgroup>
+    <div class="menu-column columns" data-equalizer-watch>
+      <div class="row">
+        <% if current_user.nil? %>
+          <nav class="small-12 medium-7 large-7 columns main-menu">
+            <ul>
+              <%= content_tag :li, link_to(t('.transfer'), transfers_path, class: cp(controller: :transfers, action: :index)) if can? :create, Transfer %>
+              <%= content_tag :li, link_to(t('.login'), new_user_session_path, class: cp(controller: :sessions, action: :new)) %>
+            </ul>
+          </nav>
+        <% else %>
+          <nav class="small-12 medium-7 large-7 columns main-menu">
+            <ul><!--
+              --><%= content_tag :li, link_to(t('.transfer'), transfers_path, class: cp(controller: :transfers, action: :index)) if can? :create, Transfer %><!--
+              --><%= content_tag :li, link_to(t('.transfers'), items_path(folder: :transfers)) if can? :read, Item %><!--
+              --><%= content_tag :li, link_to(t('.items'), items_path, class: cp(controller: :items)) if can? :read, Item %><!--
+              --><%= content_tag :li, link_to(t('.users'), users_path, class: cp(users_path)) if can? :manage, User %><!--
+              --><%= content_tag :li, link_to(t('.backgrounds'), backgrounds_path, class: cp(backgrounds_path)) if can? :manage, Background %><!--
+            --></ul>
+          </nav>
+          <nav class="hide-for-small medium-5 large-5 columns text-right user-menu">
+            <ul><!--
+              --><%= content_tag :li, link_to(current_user.email, edit_user_registration_path) if current_user %><!--
+              --><%= content_tag :li, link_to(t('.logout'), destroy_user_session_path, method: :delete) if current_user %><!--
+            --></ul>
+          </nav>
+        <% end %>
       </div>
     </div>
-  </header>
+  </div>
+</header>

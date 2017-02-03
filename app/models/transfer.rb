@@ -342,15 +342,15 @@ class Transfer < ActiveRecord::Base
   end
 
   def not_logged_user_max_upload_size
-    if user_id.nil? && sum_files_size > 2.gigabytes
-      errors.add :transfer, 'nie może przekraczać 2 GB'
+    if user_id.nil? && sum_files_size > Sakve::Application.config.max_upload_size
+      errors.add :transfer, 'nie może przekraczać 2 GB' # you must correct it yourself if you change config file
       files.destroy_all
     end
   end
 
   def not_logged_user_max_upload_time
-    if user_id.nil? && expires_in.to_i > 14
-      errors.add :transfer, 'może mieć maksymalną ważność 14 dni'
+    if user_id.nil? && expires_in.to_i > Sakve::Application.config.max_upload_time
+      errors.add :transfer, 'może mieć maksymalną ważność 14 dni' # you must correct it yourself if you change config file
       files.destroy_all
     end
   end

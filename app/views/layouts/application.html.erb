@@ -19,10 +19,12 @@
   </head>
   <body class="<%= controller_name %> <%= action_name %>">
     <% if @bodycover %>
-      <% if custom_backgrounds? %>
-        <div class="cover" data-cover="<%= image_path(random_bg) %>"></div>
-      <% else %>
-        <div class="cover" data-cover="<%= image_path("transfer/cover-#{(1..7).to_a.shuffle.first}.jpg") %>"></div>
+      <% if @bg && !@bg.link.nil? %>
+        <%= link_to @bg.link do %>
+          <div class="cover" data-cover="<%= image_path(@bg.image.url) %>"></div>
+        <% end %>
+      <% elsif @bg %>
+        <div class="cover" data-cover="<%= image_path(@bg.image.url) %>"></div>
       <% end %>
     <% end %>
 
@@ -32,7 +34,9 @@
       </div>
     <% end %>
 
-    <%= render 'partials/menu' %>
+    <% unless @download %>
+      <%= render 'partials/menu' %>
+    <% end %>
 
     <%= yield %>
 

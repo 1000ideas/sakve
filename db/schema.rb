@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20170104155440) do
+ActiveRecord::Schema.define(:version => 20170104133035) do
 
   create_table "attachments", :force => true do |t|
     t.string   "upload_file_name"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(:version => 20170104155440) do
   create_table "backgrounds", :force => true do |t|
     t.boolean  "upload"
     t.boolean  "download"
+    t.string   "link"
     t.string   "image_file_name"
     t.string   "image_content_type"
     t.integer  "image_file_size"
@@ -165,13 +166,6 @@ ActiveRecord::Schema.define(:version => 20170104155440) do
     t.string   "message"
     t.boolean  "extracted",                         :default => false
     t.boolean  "email_sent",                        :default => false
-  end
-
-  create_table "user_backgrounds", :force => true do |t|
-    t.integer  "user_id"
-    t.integer  "background_id"
-    t.datetime "created_at",    :null => false
-    t.datetime "updated_at",    :null => false
   end
 
   create_table "user_groups", :force => true do |t|

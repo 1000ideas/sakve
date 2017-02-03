@@ -12,8 +12,6 @@ class User < ActiveRecord::Base
   has_many :selection_downloads
   # has_many :shared_folders, through: :shares, source: :resource, source_type: 'Folder'
   has_many :transfers
-  has_many :user_backgrounds, dependent: :destroy
-  has_many :backgrounds, through: :user_backgrounds
 
   scope :starts_with, lambda { |query|
     where('`first_name` like :q OR `last_name` LIKE :q OR `email` LIKE :q', q: "#{query}%")

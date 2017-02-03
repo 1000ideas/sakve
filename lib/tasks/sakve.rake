@@ -23,4 +23,24 @@ namespace :sakve do
       puts "Cleaned after #{counter} transfers"
     end
   end
+
+  namespace :backgrounds do
+    desc 'Add old backgrounds to db'
+    task add_old: :environment do
+      (1..7).each do |i|
+        bg = Background.new(
+          image: File.new("public/assets/transfer/cover-#{i}.jpg", 'r'),
+          upload: true,
+          download: true,
+          link: nil
+        )
+
+        if bg.save
+          puts "Pomyślnie dodano cover-#{i}"
+        else
+          puts "Wystąpił błąd podczas dodawania cover-#{i}"
+        end
+      end
+    end
+  end
 end

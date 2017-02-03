@@ -1,8 +1,5 @@
 class Background < ActiveRecord::Base
-  attr_accessible :download, :upload, :image, :user_ids
-
-  has_many :user_backgrounds, dependent: :destroy
-  has_many :users, through: :user_backgrounds
+  attr_accessible :download, :upload, :link, :image
 
   has_attached_file :image, styles: { thumbnail: "200x200" }
 
