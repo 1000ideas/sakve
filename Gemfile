@@ -42,6 +42,7 @@ gem "nokogiri", '1.5.9'
 
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'sidekiq'
+gem 'sidetiq'
 gem 'devise'
 gem 'public_activity'
 gem 'paranoia'
