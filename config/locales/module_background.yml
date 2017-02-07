@@ -1,0 +1,49 @@
+pl:
+  backgrounds:
+    index:
+      add_new: Dodaj nowe
+      mini: Miniaturka
+      upload: Przy przesyłaniu
+      download: Przy pobieraniu
+      link: Link
+      edit: Edytuj
+      delete: Usuń
+      yes_text: Tak
+      no_text: Nie
+    new:
+      load_img: Załaduj obrazek
+      fileupload: Wybierz plik
+      added_file: Dodany plik
+      where_allowed: Wybierz, w którym miejscach tło ma być dostepne
+      link_bg: Podlinkuj tło
+      add: Dodaj
+    edit:
+      where_allowed: Wybierz, w którym miejscach tło ma być dostepne
+      link_bg: Podlinkuj tło
+      save: Zapisz
+      back: Powrót
+
+en:
+  backgrounds:
+    index:
+      add_new: Add new
+      mini: Thumbnail
+      upload: On upload
+      download: On download
+      link: Link
+      edit: Edit
+      delete: Delete
+      yes_text: "Yes"
+      no_text: "No"
+    new:
+      load_img: Load image
+      fileupload: Select file
+      added_file: Added file
+      where_allowed: Choose where background will be available
+      link_bg: Link it
+      add: Add
+    edit:
+      where_allowed: Choose where background will be available
+      link_bg: Link it
+      save: Save
+      back: Back

@@ -2,19 +2,19 @@
 <div class="row">
   <%= form_for @background, html: { multipart: true, class: 'columns small-6 small-offset-3 center' } do |f| %>
     <div class="row">
-      <center><h5>Załaduj obrazek</h5></center>
+      <center><h5><%= t('.load_img') %></h5></center>
       <div class="columns small-12 center">
         <div class="button round fileupload-button">
-          <%= f.file_field(:image, data: { value: t('.fileupload', default: 'Select files'), file_upload: true }) %>
+          <%= f.file_field(:image, data: { value: t('.fileupload', default: 'Select file'), file_upload: true }) %>
           <span><%= t('.fileupload', default: 'Select files') %></span>
         </div>
         <div>
-          <span>Dodany plik: </span><span class="added-files"></span>
+          <span><%= t('.added_file') %>: </span><span class="added-files"></span>
         </div>
       </div>
     </div>
     <div class="row">
-      <center><h5>Wybierz, w którym miejscach tło ma być dostepne</h5></center>
+      <center><h5><%= t('.where_allowed') %></h5></center>
       <div class="columns small-12 field">
         <%= f.label :upload, class: 'custom-check-box' do %>
           <%= f.check_box :upload %><i></i>
@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="row">
-      <center><h5>Podlinkuj tło</h5></center>
+      <center><h5><%= t('.link_bg') %></h5></center>
       <div class="columns small-12">
         <%= f.label :link %>
         <%= f.text_field :link %>
@@ -37,7 +37,7 @@
     </div>
     <div class="row">
       <div class="columns small-6 small-offset-3 center">
-        <%= f.submit 'Dodaj', class: 'button round' %>
+        <%= f.submit t('.add'), class: 'button round' %>
       </div>
     </div>
   <% end %>

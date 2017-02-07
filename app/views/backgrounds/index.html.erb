@@ -2,7 +2,7 @@
   <% if can? :create, Background %>
     <div class="row text-center">
       <div class="columns small-12">
-        <h4><%= link_to 'Dodaj nowe', new_background_path %></h4>
+        <h4><%= link_to t('.add_new'), new_background_path %></h4>
       </div>
     </div>
   <% end %>
@@ -10,18 +10,18 @@
   <% if can? :read, Background %>
     <div id="bg-show">
       <div class="row">
-        <div class="columns small-3">Miniaturka</div>
-        <div class="columns small-1">Przy przesyłaniu</div>
-        <div class="columns small-1">Przy pobieraniu</div>
-        <div class="columns small-5">Link</div>
-        <div class="columns small-1">Edytuj</div>
-        <div class="columns small-1">Usuń</div>
+        <div class="columns small-3"><%= t('.mini') %></div>
+        <div class="columns small-1"><%= t('.upload') %></div>
+        <div class="columns small-1"><%= t('.download') %></div>
+        <div class="columns small-5"><%= t('.link') %></div>
+        <div class="columns small-1"><%= t('.edit') %></div>
+        <div class="columns small-1"><%= t('.delete') %></div>
       </div>
       <% @backgrounds.each_with_index do |bg, i| %>
         <div class="row<%= i.odd? ? ' odd' : '' %>">
           <div class="columns small-3"><%= image_tag bg.image.url(:thumbnail) %></div>
-          <div class="columns small-1"><%= bg.upload ? 'Tak' : 'Nie' %></div>
-          <div class="columns small-1"><%= bg.download ? 'Tak' : 'Nie' %></div>
+          <div class="columns small-1"><%= bg.upload ? t('.yes_text') : t('.no_text') %></div>
+          <div class="columns small-1"><%= bg.download ? t('.yes_text') : t('.no_text') %></div>
           <div class="columns small-5"><%= bg.link.nil? ? '' : link_to(bg.link, bg.link) %></div>
           <div class="columns small-1"><%= link_to fa_icon('pencil'), edit_background_path(bg) %></div>
           <div class="columns small-1"><%= link_to fa_icon('times'), background_path(bg), method: :delete %></div>
