@@ -1,10 +1,12 @@
 <% title "1000ideas Sakve - #{@transfer.name}" %>
 <div class="row download">
-  <div class="columns small-centered">
+  <div id="download-container" class="columns small-centered" data-id="<%= @transfer.id %>">
     <%= logo_tag %>
     <h1><small>Pobieranie pliku:</small> <%= @transfer.name %></h1>
     <% if !@transfer.expired? && !@transfer.object? %>
       <p>Plik jest jeszcze przetwarzany</p>
+      <%= check_box_tag :notify_me, class: 'custom-checkbox' %>
+      <%= label_tag :notify_me, 'Przenieś mnie na tę kartę, gdy przetwarzanie się skończy' %>
     <% else %>
       <% if @transfer.expired? %>
         <p>Plik nie jest już dostepny</p>
@@ -35,12 +37,11 @@
     <% end %>
     <% if @transfer.expired? %>
       <h3>Plik wygasł: <%= @transfer.expires_at.strftime('%d-%m-%Y, %H:%M:%S') %></h3>
-    <% end %>
-    <% unless @transfer.expired? %>
+    <% elsif @transfer.done? %>
       <div class="buttons row collapse <%= 'double' if current_user %>">
       <%#= link_to fa_icon('cloud-download', text: t('.download')), download_transfer_path(token: @transfer.token, format: :zip), class: [:button, :secondary, :expand] %>
       <div class="columns download-button">
-        <%= link_to fa_icon('cloud-download', text: content_tag(:span, t('.download'))), file_download_transfer_path(token: @transfer.token), class: [:button, :secondary, :expand, :round] %>
+        <%= link_to fa_icon('cloud-download', text: content_tag(:span, t('.download'))), file_download_transfer_path(token: @transfer.token), class: [:disable, :button, :secondary, :expand, :round] %>
       </div>
       <% if current_user %>
         <div class="columns save-button">

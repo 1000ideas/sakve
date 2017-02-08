@@ -35,6 +35,7 @@ class TransfersController < ApplicationController
 
     respond_to do |format|
       format.js
+      format.json { render json: @transfer.done? }
     end
   end
 

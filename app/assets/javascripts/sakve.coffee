@@ -58,7 +58,7 @@ class Sakve
 
     for module in ['tags', 'multiupload', 'drag_drop',
       'share', 'folders', 'selection', 'body_cover',
-      'clipboard', 'scrollpane', 'backgrounds_files']
+      'clipboard', 'scrollpane', 'backgrounds_files', 'download_page']
       @["_init_#{module}"]()
 
     @last_selected = null
@@ -554,6 +554,27 @@ class Sakve
       event.preventDefault()
       $(event.target).closest('li').slideUp ->
         $(this).remove()
+
+  _init_download_page: ->
+    title = document.title
+    $(window).on 'focus', ->
+      document.title = title
+
+    @.update_status()
+
+  update_status: =>
+    $.ajax(
+      url: "/transfers/#{$('#download-container').data('id')}/status",
+      dataType: 'json'
+    ).done (data) =>
+      if data == true
+        $('.download #download-container').load("#{location.href} #download-container>*", '')
+        if !document.hasFocus()
+          document.title = 'Przetworzono pliki!'
+          if document.getElementById('notify_me').checked
+            alert 'Przetworzono pliki!'
+      else
+        setTimeout(@.update_status, 1500)
 
   fileupload_with_dropzone: (element, options = {}) ->
     value = $(element).data('value')
