@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.16'
 gem 'sqlite3'
-gem "mysql2"
+gem "mysql2", '~> 0.3.18'
 gem "rubyzip", '~> 1.1.1'
 
 group :assets do

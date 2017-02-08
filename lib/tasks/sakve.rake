@@ -43,7 +43,7 @@ namespace :sakve do
     task add_old: :environment do
       (1..7).each do |i|
         bg = Background.new(
-          image: File.new("public/assets/transfer/cover-#{i}.jpg", 'r'),
+          image: File.new("app/assets/images/transfer/cover-#{i}.jpg", 'r'),
           upload: true,
           download: true,
           link: nil
