@@ -6,20 +6,25 @@ pl:
       upload: Przy przesyłaniu
       download: Przy pobieraniu
       link: Link
+      active: Aktywne
       edit: Edytuj
       delete: Usuń
       yes_text: Tak
       no_text: Nie
+      activate: Aktywuj
+      deactivate: Dezaktywuj
     new:
       load_img: Załaduj obrazek
       fileupload: Wybierz plik
       added_file: Dodany plik
       where_allowed: Wybierz, w którym miejscach tło ma być dostepne
       link_bg: Podlinkuj tło
+      is_active: Czy tło ma być aktywne
       add: Dodaj
     edit:
       where_allowed: Wybierz, w którym miejscach tło ma być dostepne
       link_bg: Podlinkuj tło
+      is_active: Czy tło ma być aktywne
       save: Zapisz
       back: Powrót
 
@@ -31,19 +36,24 @@ en:
       upload: On upload
       download: On download
       link: Link
+      active: Active
       edit: Edit
       delete: Delete
       yes_text: "Yes"
       no_text: "No"
+      activate: Activate
+      deactivate: Deactivate
     new:
       load_img: Load image
       fileupload: Select file
       added_file: Added file
       where_allowed: Choose where background will be available
       link_bg: Link it
+      is_active: Choose whether background is active or not
       add: Add
     edit:
       where_allowed: Choose where background will be available
       link_bg: Link it
+      is_active: Choose whether background is active or not
       save: Save
       back: Back

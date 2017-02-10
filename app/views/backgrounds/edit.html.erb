@@ -25,6 +25,14 @@
         </div>
       </div>
       <div class="row">
+        <center><h5><%= t('.is_active') %></h5></center>
+        <div class="columns small-12">
+          <%= f.label :active, class: 'custom-check-box' do %>
+              <%= f.check_box :active %><i></i>
+          <% end %>
+        </div>
+      </div>
+      <div class="row">
         <div class="columns small-6 small-offset-3 center">
           <%= f.submit t('.save'), class: 'button round' %>
           <%= link_to t('.back'), backgrounds_path, class: 'button round' %>

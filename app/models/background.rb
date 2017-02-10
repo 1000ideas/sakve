@@ -1,5 +1,5 @@
 class Background < ActiveRecord::Base
-  attr_accessible :download, :upload, :link, :image
+  attr_accessible :download, :upload, :link, :image, :active
 
   has_attached_file :image, styles: { thumbnail: "200x200" }
 

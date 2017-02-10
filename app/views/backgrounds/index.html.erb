@@ -13,7 +13,8 @@
         <div class="columns small-3"><%= t('.mini') %></div>
         <div class="columns small-1"><%= t('.upload') %></div>
         <div class="columns small-1"><%= t('.download') %></div>
-        <div class="columns small-5"><%= t('.link') %></div>
+        <div class="columns small-4"><%= t('.link') %></div>
+        <div class="columns small-1"><%= t('.active') %></div>
         <div class="columns small-1"><%= t('.edit') %></div>
         <div class="columns small-1"><%= t('.delete') %></div>
       </div>
@@ -22,7 +23,14 @@
           <div class="columns small-3"><%= image_tag bg.image.url(:thumbnail) %></div>
           <div class="columns small-1"><%= bg.upload ? t('.yes_text') : t('.no_text') %></div>
           <div class="columns small-1"><%= bg.download ? t('.yes_text') : t('.no_text') %></div>
-          <div class="columns small-5"><%= bg.link.nil? ? '' : link_to(bg.link, bg.link) %></div>
+          <div class="columns small-4"><%= bg.link.nil? ? '' : link_to(bg.link, bg.link) %></div>
+          <div class="columns small-1">
+            <span><%= bg.active ? t('.yes_text') : t('.no_text') %></span>
+            <%= form_for bg, class: 'change-active' do |f| %>
+              <%= f.hidden_field :active, value: !bg.active %>
+              <%= f.submit "(#{bg.active ? t('.deactivate') : t('.activate')})" %>
+            <% end %>
+          </div>
           <div class="columns small-1"><%= link_to fa_icon('pencil'), edit_background_path(bg) %></div>
           <div class="columns small-1"><%= link_to fa_icon('times'), background_path(bg), method: :delete %></div>
         </div>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20170209141959) do
+ActiveRecord::Schema.define(:version => 20170210140031) do
 
   create_table "attachments", :force => true do |t|
     t.string   "upload_file_name"
@@ -30,8 +30,9 @@ ActiveRecord::Schema.define(:version => 20170209141959) do
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
-    t.datetime "created_at",         :null => false
-    t.datetime "updated_at",         :null => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+    t.boolean  "active",             :default => true
   end
 
   create_table "folders", :force => true do |t|

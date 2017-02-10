@@ -34,6 +34,23 @@
     .odd {
       background-color: #f2f2f2;
     }
+
+    form {
+      margin: 0;
+
+      &.change-active {
+        font-size: 0.8em;
+        display: block;
+      }
+
+      input[type="submit"] {
+        padding: 0;
+        margin: 0;
+        border: 0;
+        background: transparent;
+        cursor: pointer;
+      }
+    }
   }
 }
 

@@ -3,7 +3,7 @@ class TransfersController < ApplicationController
   # GET /transfers.xml
   def index
     @bodycover = true
-    @bg = Background.where(upload: true).to_a.sample
+    @bg = Background.where(upload: true, active: true).to_a.sample
     authorize! :read, Transfer
     @transfer = Transfer.new(user: current_user)
 
@@ -41,7 +41,7 @@ class TransfersController < ApplicationController
 
   def download
     @transfer = Transfer.find_by_token(params[:token])
-    @bg = Background.where(download: true).to_a.sample
+    @bg = Background.where(download: true, active: true).to_a.sample
 
     respond_to do |format|
       head(:not_found) and return if @transfer.nil?

@@ -187,7 +187,7 @@ class ApplicationController < ActionController::Base
 
   def set_body_cover
     @bodycover = devise_controller?
-    @bg = Background.all.sample
+    @bg = Background.where(active: true).to_a.sample
   end
 
   def set_language_from_header
