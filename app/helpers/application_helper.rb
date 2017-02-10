@@ -85,4 +85,17 @@ module ApplicationHelper
       list
     end
   end
+
+  def space_used_percent(user)
+    return 0 if user.max_upload_size.nil?
+
+    ((user.files_uploaded_size.to_f / user.max_upload.to_f * 100.0).round(-1) / 10).to_s
+  end
+
+  def allowed_upload_size(user)
+    return (user.max_upload - user.files_uploaded_size) if user.max_transfer_size.nil?
+    return user.max_transfer if user.max_upload_size.nil?
+
+    [user.max_upload - user.files_uploaded_size, user.max_transfer].min
+  end
 end

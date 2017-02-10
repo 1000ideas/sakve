@@ -24,7 +24,8 @@ class User < ActiveRecord::Base
   attr_accessor :updated_by
   attr_accessible :first_name, :last_name, :name, :email,
     :password, :password_confirmation, :remember_me, :group_ids,
-    :reset_password_sent_at, :reset_password_token, :max_upload_size
+    :reset_password_sent_at, :reset_password_token, :max_upload_size,
+    :max_transfer_size
 
   after_create :create_private_folder
 
@@ -145,6 +146,10 @@ class User < ActiveRecord::Base
   def files_uploaded_size
     transfers.active.sum { |t| t.object_file_size.to_i } +
       items.sum { |t| t.object_file_size.to_i }
+  end
+
+  def max_transfer
+    max_transfer_size.gigabytes
   end
 
   protected

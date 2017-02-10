@@ -370,6 +370,7 @@ pl:
         role : Uprawnienia
         groups: "Grupy"
         max_upload_size: Maksymalny rozmiar plików (w gigabajtach)
+        max_transfer_size: Maksymalny rozmiar pojedynczego transferu (w gigabajtach)
       l/news:
         content: Treść
         title: Tytuł

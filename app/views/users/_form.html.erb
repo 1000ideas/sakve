@@ -23,6 +23,10 @@
       <%= f.number_field :max_upload_size, step: 0.1 %>
     </div>
     <div class="field">
+      <%= f.label :max_transfer_size %>
+      <%= f.number_field :max_transfer_size, step: 0.1 %>
+    </div>
+    <div class="field">
       <%= f.label :groups %>
       <% Group.sorted_with_translation.each do |group| %>
         <%= f.label :"group_ids_#{group.id}", class: 'selectable-checkbox' do %>

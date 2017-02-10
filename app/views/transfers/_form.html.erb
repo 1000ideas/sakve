@@ -45,11 +45,11 @@
     </div>
     <% end %>
   </div>
-  <div class="row text-center upload-info">
+  <div id="upload-info" class="row text-center upload-info">
     <div class="columns small-12">
       <span class="">
-        <% if current_user && current_user.max_upload_size? %>
-          Maksymalny rozmiar transferu to <%= number_to_human_size(current_user.max_upload_size.gigabytes - current_user.files_uploaded_size) %>
+        <% if current_user && (current_user.max_upload_size? || current_user.max_transfer_size?) %>
+          Maksymalny rozmiar transferu to <%= number_to_human_size(allowed_upload_size(current_user)) %>
         <% elsif current_user.nil? %>
           Maksymalny rozmiar transferu: <%= number_to_human_size(Sakve::Application.config.max_upload_size) %>
         <% end %>

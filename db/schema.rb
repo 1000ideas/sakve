@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20170104133035) do
+ActiveRecord::Schema.define(:version => 20170209141959) do
 
   create_table "attachments", :force => true do |t|
     t.string   "upload_file_name"
@@ -194,6 +194,7 @@ ActiveRecord::Schema.define(:version => 20170104133035) do
     t.datetime "activated_at"
     t.string   "auth_token",             :limit => 32
     t.float    "max_upload_size",                      :default => 10.0
+    t.float    "max_transfer_size",                    :default => 10.0
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true

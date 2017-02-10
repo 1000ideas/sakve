@@ -1,12 +1,15 @@
 <li class="row <%= 'inactive' unless user.active? %>" data-uid="<%= user.id %>" data-context>
-  <div class="name columns small-6">
+  <div class="name columns small-5">
     <% if user.banned? %>
       <%= fa_icon 'ban fw', text: user.name %>
     <% else %>
       <%= fa_icon 'user fw', text: user.name %>
     <% end %>
   </div>
-  <div class="groups columns small-6">
+  <div id="used-space" class="columns small-3">
+    <div id="progress-bar" class="p<%= space_used_percent(user) %>"></div>
+  </div>
+  <div class="groups columns small-4">
     <%= user.groups.join(', ') %>
   </div>
   <a href="" data-context-button><%= fa_icon('ellipsis-h') %></a>

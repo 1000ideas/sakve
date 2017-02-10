@@ -56,9 +56,9 @@ class Sakve
     # console.profile('Setup');
     $(document).foundation();
 
-    for module in ['tags', 'multiupload', 'drag_drop',
-      'share', 'folders', 'selection', 'body_cover',
-      'clipboard', 'scrollpane', 'backgrounds_files', 'download_page']
+    for module in ['tags', 'multiupload', 'drag_drop', 'share', 'folders',
+      'selection', 'body_cover', 'clipboard', 'scrollpane',
+      'backgrounds_files', 'download_page']
       @["_init_#{module}"]()
 
     @last_selected = null

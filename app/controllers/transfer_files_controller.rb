@@ -20,13 +20,11 @@ class TransferFilesController < ApplicationController
       status: :unprocessable_entity
     }
 
-
     if @file.save
       # current_tmpname = tmpname(@file.token)
 
       # FileUtils.ln params[:object].tempfile.path, current_tmpname
       current_tmpname = params[:object].tempfile.path
-
 
       CopyUploadedFileWorker.perform_async(@file.id, current_tmpname)
       options.merge!(status: :created, location: file_path(@file, format: :js))

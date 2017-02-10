@@ -36,6 +36,7 @@ class Transfer < ActiveRecord::Base
   validates :object, attachment_presence: true, on: :update
   validates :object, attachment_content_type: { content_type: /.*/i }
   validate :max_uploaded_size
+  validate :max_transfer_size
   validate :not_logged_user_max_upload_size
   validate :not_logged_user_max_upload_time
 
@@ -326,7 +327,7 @@ class Transfer < ActiveRecord::Base
   end
 
   def sum_files_size
-    files.sum { |f| f.object_file_size.to_i }
+    files.sum { |f| (f.object_file_size || f.tmp_size).to_i }
   end
 
   def max_uploaded_size
@@ -341,16 +342,28 @@ class Transfer < ActiveRecord::Base
     end
   end
 
+  def max_transfer_size
+    return if user_id.blank?
+
+    user = User.find(user_id)
+    return if user.max_transfer_size.nil?
+
+    if sum_files_size > user.max_transfer
+      errors.add :transfer, "nie może przekraczać #{user.max_transfer_size} GB"
+      files.destroy_all
+    end
+  end
+
   def not_logged_user_max_upload_size
     if user_id.nil? && sum_files_size > Sakve::Application.config.max_upload_size
-      errors.add :transfer, 'nie może przekraczać 2 GB' # you must correct it yourself if you change config file
+      errors.add :transfer, 'nie może przekraczać 2 GB' # you must correct this by yourself if you change config file
       files.destroy_all
     end
   end
 
   def not_logged_user_max_upload_time
     if user_id.nil? && expires_in.to_i > Sakve::Application.config.max_upload_time
-      errors.add :transfer, 'może mieć maksymalną ważność 14 dni' # you must correct it yourself if you change config file
+      errors.add :transfer, 'może mieć maksymalną ważność 14 dni' # you must correct this by yourself if you change config file
       files.destroy_all
     end
   end
