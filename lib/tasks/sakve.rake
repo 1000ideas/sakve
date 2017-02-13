@@ -2,24 +2,7 @@ namespace :sakve do
   namespace :transfer do
     desc 'Clean up expired transfers'
     task clean: :environment do
-      transfers = Transfer.archive_expired
-      cleaned = Transfer.delete_extracted
-      puts "Archived #{transfers.length} transfers"
-      puts "Cleaned #{cleaned.length} extracted transfers"
-
-      path = Rails.root.join('upload_tmp')
-      counter = 0
-      Dir.foreach(path) do |item|
-        next if item == '.' || item == '..'
-        next if File.mtime(path.join(item)) > Time.now - Sakve::Application.config.delete_tmp_after.days
-
-        unless Transfer.where(id: item).exists?
-          exec `sudo rm -rf #{File.join(path, item)}` rescue puts "Error: #{File.join(path, item)}"
-          counter += 1
-        end
-      end
-
-      puts "Cleaned #{counter} temp files"
+      CleanUpWorker.perform_async
     end
 
     desc 'Clean up transfers left in a uploads dir due to wrong permissions'
@@ -30,7 +13,7 @@ namespace :sakve do
         next if item == '.' || item == '..'
 
         unless Transfer.where(id: item).exists?
-          exec `sudo rm -rf #{File.join(path, item)}` rescue puts "Error: #{File.join(path, item)}"
+          `sudo rm -rf #{File.join(path, item)}` rescue puts "Error: #{File.join(path, item)}"
           counter += 1
         end
       end
