@@ -12,5 +12,4 @@ class CopyUploadedFileWorker
   rescue ActiveRecord::RecordNotFound
     logger.error "TransferFile##{id} doesn't exists. Skip upload."
   end
-
 end

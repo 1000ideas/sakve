@@ -248,7 +248,9 @@ class Transfer < ActiveRecord::Base
   end
 
   def compress_files
-    self.object = create_object_from_transfer
+    path = create_object_from_transfer
+    self.object = File.open(path)
+    File.delete(path)
     @delete_files = true
     self.done = true
     self
@@ -293,7 +295,7 @@ class Transfer < ActiveRecord::Base
     self.object.instance_write :file_name, filename
     logger.debug "Zipping files....done"
 
-    File.open(filepath)
+    filepath
   end
 
   def delete_transfer_files
@@ -327,7 +329,7 @@ class Transfer < ActiveRecord::Base
   end
 
   def sum_files_size
-    files.sum { |f| (f.object_file_size || f.tmp_size).to_i }
+    files.reject { |f| f.upload_status == :fail }.sum { |f| (f.object_file_size || f.tmp_size).to_i }
   end
 
   def max_uploaded_size
