@@ -13,3 +13,4 @@ class CopyUploadedFileWorker
     logger.error "TransferFile##{id} doesn't exists. Skip upload."
   end
 end
+#bc9110224253733b9994d218c1b2f8c820170213-7696-pf9cz0
