@@ -13,6 +13,8 @@
       &:hover, &.jspActive, &.jspHover {
         background-color: #555;
       }
+
+      min-height: 10px;
     }
   }
 
@@ -23,7 +25,6 @@
     }
   }
 
-
   .jspVerticalBar { width: 10px; }
   .jspHorizontalBar { width: 10px; }
 
@@ -33,7 +34,6 @@
         background: #f2f2f2;
         border-color: #ddd;
       }
-
     }
   }
 }

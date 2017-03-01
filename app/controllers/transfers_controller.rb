@@ -3,6 +3,7 @@ class TransfersController < ApplicationController
   # GET /transfers.xml
   def index
     @bodycover = true
+    @bg = Background.where(upload: true, active: true).to_a.sample
     authorize! :read, Transfer
     @transfer = Transfer.new(user: current_user)
 
@@ -34,15 +35,17 @@ class TransfersController < ApplicationController
 
     respond_to do |format|
       format.js
+      format.json { render json: @transfer.done? }
     end
   end
 
   def download
     @transfer = Transfer.find_by_token(params[:token])
-    @transfer.check_infos_hash
+    @bg = Background.where(download: true, active: true).to_a.sample
 
     respond_to do |format|
       head(:not_found) and return if @transfer.nil?
+      @transfer.check_infos_hash
       @transfer.archive if not @transfer.archived? and @transfer.expired?
 
       format.html do
@@ -62,6 +65,7 @@ class TransfersController < ApplicationController
     head(:not_found) and return if @transfer.nil?
     head(:gone) and return if @transfer.expired?
     @transfer.statistics.create(client_ip: request.remote_ip, browser: request.user_agent)
+    response.headers['Content-Length'] = @transfer.object_file_size.to_s
     send_file @transfer.object.path, filename: @transfer.download_name, x_sendfile: true, type: @transfer.object_content_type
   end
 
@@ -106,6 +110,7 @@ class TransfersController < ApplicationController
   def create
     authorize! :create, Transfer
     @transfer = Transfer.new(params[:transfer])
+
     @transfer.user = current_user
 
     respond_to do |format|

@@ -19,10 +19,18 @@
       <%= f.password_field :password_confirmation %>
     </div>
     <div class="field">
+      <%= f.label :max_upload_size %>
+      <%= f.number_field :max_upload_size, step: 0.1 %>
+    </div>
+    <div class="field">
+      <%= f.label :max_transfer_size %>
+      <%= f.number_field :max_transfer_size, step: 0.1 %>
+    </div>
+    <div class="field">
       <%= f.label :groups %>
       <% Group.sorted_with_translation.each do |group| %>
         <%= f.label :"group_ids_#{group.id}", class: 'selectable-checkbox' do %>
-          <%= f.check_box :group_ids, {multiple: true, checked: f.object.belongs_to_group?(group.name)}, group.id, nil  %>
+          <%= f.check_box :group_ids, { multiple: true, checked: f.object.belongs_to_group?(group.name) }, group.id, nil  %>
           <span><%= group.title %></span>
         <% end %>
 

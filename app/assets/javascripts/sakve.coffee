@@ -56,9 +56,9 @@ class Sakve
     # console.profile('Setup');
     $(document).foundation();
 
-    for module in ['tags', 'multiupload', 'drag_drop',
-      'share', 'folders', 'selection', 'body_cover',
-      'clipboard', 'scrollpane']
+    for module in ['tags', 'multiupload', 'drag_drop', 'share', 'folders',
+      'selection', 'body_cover', 'clipboard', 'scrollpane',
+      'backgrounds_files', 'download_page']
       @["_init_#{module}"]()
 
     @last_selected = null
@@ -77,11 +77,14 @@ class Sakve
       $(event.currentTarget).data('dragCount', dragCount)
 
       $(event.currentTarget).toggleClass('file-drop-over', dragCount > 0)
+      $(event.currentTarget).find('div.draggable-background').toggle()
 
     $(document).on 'drop', (event) ->
       $('body')
         .data('dragCount', 0)
         .removeClass('file-drop-over')
+        .find('div.draggable-background')
+        .hide()
 
 
     $(window)
@@ -107,6 +110,14 @@ class Sakve
           $(event.target).blur()
           $('input#user_remember_me').get(0).focus()
 
+
+  _init_backgrounds_files: ->
+    $('#bg-manage .fileupload-button input').change ->
+      names = []
+      for f in @.files
+        names.push(f.name)
+
+      $('#bg-manage .added-files').text(names.join(', '))
 
   _init_scrollpane: ->
     $('.scroll-pane')
@@ -448,7 +459,6 @@ class Sakve
           ids: ids
       $(event.target).hide().prev().toggle $('.uploaded-files .transfer-file[data-fid]:not(.selected)').length > 0
 
-
     $('.transfer-fileupload').each (idx, el) =>
       @fileupload_with_dropzone el, {
         url: $(el).data('url')
@@ -545,6 +555,27 @@ class Sakve
       $(event.target).closest('li').slideUp ->
         $(this).remove()
 
+  _init_download_page: ->
+    title = document.title
+    $(window).on 'focus', ->
+      document.title = title
+
+    @.update_status()
+
+  update_status: =>
+    $.ajax(
+      url: "/transfers/#{$('#download-container').data('id')}/status",
+      dataType: 'json'
+    ).done (data) =>
+      if data == true
+        $('.download #download-container').load("#{location.href} #download-container>*", '')
+        if !document.hasFocus()
+          document.title = 'Przetworzono pliki!'
+          if document.getElementById('notify_me').checked
+            alert 'Przetworzono pliki!'
+      else
+        setTimeout(@.update_status, 1500)
+
   fileupload_with_dropzone: (element, options = {}) ->
     value = $(element).data('value')
     # $(element).wrap $('<div>').addClass('fileupload-dropzone')
@@ -554,7 +585,7 @@ class Sakve
     $(element).fileupload $.extend({
         singleFileUploads: true
         dataType: 'json'
-        dropZone: $(element).parents('.fileupload-dropzone')
+        dropZone: $(element).parents('body')
       }, options)
 
   defaults:

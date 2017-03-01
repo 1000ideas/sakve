@@ -21,7 +21,6 @@ class ApplicationController < ActionController::Base
     render action: '404', status: 404
   end
 
-
   protect_from_forgery
   before_filter :set_locale
 
@@ -105,7 +104,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-
   def ping
     unless current_user
       head :forbidden
@@ -113,8 +111,6 @@ class ApplicationController < ActionController::Base
       head :ok
     end
   end
-
-
 
   protected
   include L::FilterHelper
@@ -158,10 +154,9 @@ class ApplicationController < ActionController::Base
     { locale:  I18n.locale }
   end
 
-
   def after_sign_in_path_for(resource)
     access_page, session[:access_page] = session[:access_page], nil
-    access_page || root_path
+    access_page || transfers_path
   end
 
   def after_sign_out_path_for(resource)
@@ -192,12 +187,9 @@ class ApplicationController < ActionController::Base
 
   def set_body_cover
     @bodycover = devise_controller?
+    @bg = Background.where(active: true).to_a.sample
   end
-
 
   def set_language_from_header
-
   end
-
-
 end

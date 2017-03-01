@@ -5,8 +5,14 @@
 <div class="row collapse">
   <section class="columns small-12">
     <ul class="file-list" id="users-list">
-      <% @users.each do |user| %>
-        <%= render(user) %>
+      <%= render @users %>
+
+      <% unless @users.next_page.nil? %>
+        <li class="row show-more">
+          <div class="columns small-12 text-center">
+            <%= link_to t('.more'), url_for(params.merge(page: @users.next_page)), data: {remote: true, type: :script, disable_with: t('.wait', default: "Loading...")} %>
+          </div>
+        </li>
       <% end %>
     </ul>
   </section>

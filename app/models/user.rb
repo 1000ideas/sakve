@@ -24,16 +24,19 @@ class User < ActiveRecord::Base
   attr_accessor :updated_by
   attr_accessible :first_name, :last_name, :name, :email,
     :password, :password_confirmation, :remember_me, :group_ids,
-    :reset_password_sent_at, :reset_password_token
+    :reset_password_sent_at, :reset_password_token, :max_upload_size,
+    :max_transfer_size
 
   after_create :create_private_folder
 
-  validates :email, :presence => true
-  validates :email, :uniqueness => true
-  validates :email, :format => { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i }
-  validates :password, :presence => true, :confirmation => true, :length => {:minimum => 5}, :on => :create
-  validates :password, :allow_blank => true, :confirmation => true, :length => {:minimum => 5}, :on => :update
+  validates :email, presence: true
+  validates :email, uniqueness: true
+  validates :email, format: { :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i }
+  validates :password, presence: true, confirmation: true, length: { minimum: 8 }, on: :create
+  validates :password, allow_blank: true, confirmation: true, length: { :minimum => 8 }, on: :update
   validates :first_name, :last_name, presence: true
+  validates :max_upload_size, numericality: true, allow_nil: true
+  validate :password_complexity
 
   def auth_token
     read_attribute(:auth_token) || begin
@@ -65,16 +68,20 @@ class User < ActiveRecord::Base
   end
 
   def belongs_to_group? name
-    groups.any? {|g| g.name === name }
+    groups.any? { |g| g.name === name }
   end
 
   def admin?
     belongs_to_group? :admin
   end
 
+  def client?
+    belongs_to_group? :client
+  end
+
   def has_shared_items?
-    self.groups.inject( self.shared_items.any? ) do |memo, group|
-      memo || group.shared_items.any?
+    self.groups.inject(RUBY_VERSION >= '2.2.0' ? !self.shared_items.compact.empty? : self.shared_items.any?) do |memo, group|
+      memo || (RUBY_VERSION >= '2.2.0' ? !group.shared_items.compact.empty? : group.shared_items.any?) # some issues with 'any?' in ruby 2.2.5
     end
   end
 
@@ -132,7 +139,20 @@ class User < ActiveRecord::Base
     end
   end
 
-protected
+  def max_upload
+    max_upload_size.gigabytes
+  end
+
+  def files_uploaded_size
+    transfers.active.sum { |t| t.object_file_size.to_i } +
+      items.sum { |t| t.object_file_size.to_i }
+  end
+
+  def max_transfer
+    max_transfer_size.gigabytes
+  end
+
+  protected
 
   def create_private_folder
     Folder.create!(user_id: self.id, global: false)
@@ -146,4 +166,11 @@ protected
     super && !updated_by_admin?
   end
 
+  def password_complexity
+    if password.present?
+      if !password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}/)
+        errors.add :password, :complexity
+      end
+    end
+  end
 end

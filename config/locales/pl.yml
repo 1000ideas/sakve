@@ -1,13 +1,17 @@
 pl:
+  drop_anywhere: 'Upuść pliki w dowolnym miejscu na ekranie, aby je dodać'
   onbeforeunload: 'Czy na pewno chcesz przerwać wgrywanie plików i opuścić tę stronę?'
   partials:
     search:
       placeholder: 'Szukaj plików'
     menu:
       items: 'Foldery'
+      transfers: 'Przesłane pliki'
       transfer: 'Prześlij plik'
-      groups: 'Grupy'
       users: 'Użytkownicy'
+      backgrounds: 'Tła'
+      groups: 'Grupy'
+      login: 'Zaloguj'
       logout: 'Wyloguj się'
   transfer_mailer:
     after_create:
@@ -365,6 +369,8 @@ pl:
         set_role: "Wybierz uprawnienia"
         role : Uprawnienia
         groups: "Grupy"
+        max_upload_size: Maksymalny rozmiar plików (w gigabajtach)
+        max_transfer_size: Maksymalny rozmiar pojedynczego transferu (w gigabajtach)
       l/news:
         content: Treść
         title: Tytuł
@@ -400,6 +406,7 @@ pl:
             password:
               blank: " jest wymagane."
               confirmation: "i powtórzenie hasła nie są zgodne."
+              complexity: "musi zawierać przynajmniej jedną wielką literę, jedną małą i jedną liczbę"
         l/page:
           attributes:
             title:

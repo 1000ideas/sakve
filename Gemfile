@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '3.2.16'
 gem 'sqlite3'
-gem "mysql2"
+gem "mysql2", '~> 0.3.18'
 gem "rubyzip", '~> 1.1.1'
 gem "thin"
 
@@ -16,7 +16,7 @@ gem 'coffee-rails', '3.2.2'
 gem 'compass-rails', '1.1.7'
 gem 'foundation-rails', '5.2.3.0'
 gem 'font-awesome-rails', '4.1.0.0'
-#gem 'therubyracer'
+gem 'therubyracer'
 
 group :test do
   gem 'capybara'
@@ -45,6 +45,7 @@ gem "nokogiri", '1.5.9'
 
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'sidekiq'
+gem 'sidetiq'
 gem 'devise'
 gem 'public_activity'
 gem 'paranoia'

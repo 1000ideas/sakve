@@ -10,7 +10,7 @@
         </ul>
       </li>
     <% end %>
-    <% if @shared_folders.any? || current_user.has_shared_items?  %>
+    <% if @shared_folders.any? || current_user.has_shared_items? %>
       <li class="folder not-empty <%= 'open' if @current_folder.try(:shared_for?,current_user) %> <%= 'current' if @current_folder_id == :shared %>">
         <h3><%= link_to fa_icon('caret', text: t('.shared')), items_path(folder: :shared) %></h3>
         <ul class="folders-list" id="user-folders">
@@ -18,16 +18,18 @@
         </ul>
       </li>
     <% end %>
-    <li class="<%= folder_classes(@global_folder) %>">
-      <h3 class="<%= current_user.admin? ? "droppable" : "" %>" id="folder-<%= @global_folder.id %>">
-        <%= link_to items_path(folder: :global) do %>
-          <%= fa_icon 'caret', text: t('.public') %>
-        <% end %>
-      </h3>
-      <ul class="folders-list" id="root-folders">
-        <%= render @global_folder.subfolders %>
-      </ul>
-    </li>
+    <% if can? :download, @global_folder %>
+      <li class="<%= folder_classes(@global_folder) %>">
+        <h3 class="<%= current_user.admin? ? "droppable" : "" %>" id="folder-<%= @global_folder.id %>">
+          <%= link_to items_path(folder: :global) do %>
+            <%= fa_icon 'caret', text: t('.public') %>
+          <% end %>
+        </h3>
+        <ul class="folders-list" id="root-folders">
+          <%= render @global_folder.subfolders %>
+        </ul>
+      </li>
+    <% end %>
     <li class="folder <%= 'current' if @current_folder_id == :transfers %>">
       <h3>
         <%= link_to items_path(folder: :transfers) do %>

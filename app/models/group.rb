@@ -11,7 +11,7 @@ class Group < ActiveRecord::Base
     end
   end
 
-  @@protected_groups = %w(admin mods)
+  @@protected_groups = %w(admin mods clients)
   mattr_reader :protected_groups
 
   has_many :user_groups
@@ -57,6 +57,6 @@ class Group < ActiveRecord::Base
   private
 
   def disable_deleting_protected_group
-    ! self.protected?
+    !self.protected?
   end
 end

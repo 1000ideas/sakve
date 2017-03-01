@@ -24,8 +24,15 @@
         </div>
       </div>
     </div>
+    <% unless current_user.max_upload_size.nil? %>
+      <div class="row">
+        <div class="columns small-12">
+          <p>Wykorzystujesz <%= number_to_human_size(current_user.files_uploaded_size) %> z <%= number_to_human_size(current_user.max_upload_size.gigabytes) %> dostępnych</p>
+        </div>
+      </div>
+    <% end %>
     <div class="row sortbar">
-      <div class="small-7 medium-7 large-7 columns">
+      <div class="<%= @current_folder_id == :transfers ? 'small-5 medium-5 large-5' : 'small-7 medium-7 large-7' %> columns">
         <div class="list-icon">
           <%= label_tag nil, class: :'custom-check-box', id: :'select-all' do %>
             <i></i>
@@ -33,6 +40,11 @@
         </div>
         <%= sort_link :name, t('.sort.name') %>
       </div>
+      <% if @current_folder_id == :transfers %>
+      <div class="small-2 medium-2 large-2 columns text-center">
+        <%= sort_link :last_download, t('.sort.last_download') %>
+      </div>
+      <% end %>
       <div class="small-2 medium-2 large-2 columns text-center">
         <%= sort_link :size, t('.sort.size') %>
       </div>

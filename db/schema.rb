@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160420080858) do
+ActiveRecord::Schema.define(:version => 20170210140031) do
 
   create_table "attachments", :force => true do |t|
     t.string   "upload_file_name"
@@ -20,6 +20,19 @@ ActiveRecord::Schema.define(:version => 20160420080858) do
     t.datetime "upload_updated_at"
     t.datetime "created_at",          :null => false
     t.datetime "updated_at",          :null => false
+  end
+
+  create_table "backgrounds", :force => true do |t|
+    t.boolean  "upload"
+    t.boolean  "download"
+    t.string   "link"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+    t.boolean  "active",             :default => true
   end
 
   create_table "folders", :force => true do |t|
@@ -37,7 +50,7 @@ ActiveRecord::Schema.define(:version => 20160420080858) do
   add_index "folders", ["transfer_id"], :name => "index_folders_on_transfer_id"
 
   create_table "group_translations", :force => true do |t|
-    t.integer  "group_id",    :null => false
+    t.integer  "group_id"
     t.string   "locale",      :null => false
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
@@ -120,6 +133,7 @@ ActiveRecord::Schema.define(:version => 20160420080858) do
     t.datetime "created_at",                                           :null => false
     t.datetime "updated_at",                                           :null => false
     t.string   "upload_status",                     :default => "new", :null => false
+    t.integer  "tmp_size",            :limit => 8
   end
 
   create_table "transfer_stats", :force => true do |t|
@@ -148,10 +162,11 @@ ActiveRecord::Schema.define(:version => 20160420080858) do
     t.string   "group_token",         :limit => 16
     t.integer  "statistics_count",                  :default => 0
     t.integer  "folders_count",                     :default => 0
-    t.string   "message"
-    t.boolean  "extracted",                         :default => false
     t.boolean  "expired",                           :default => false
     t.text     "infos_hash"
+    t.string   "message"
+    t.boolean  "extracted",                         :default => false
+    t.boolean  "email_sent",                        :default => false
   end
 
   create_table "user_groups", :force => true do |t|
@@ -162,16 +177,16 @@ ActiveRecord::Schema.define(:version => 20160420080858) do
   end
 
   create_table "users", :force => true do |t|
-    t.string   "email",                                :default => "", :null => false
-    t.string   "encrypted_password",                   :default => "", :null => false
+    t.string   "email",                                :default => "",   :null => false
+    t.string   "encrypted_password",                   :default => "",   :null => false
     t.datetime "remember_created_at"
     t.integer  "sign_in_count",                        :default => 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
-    t.datetime "created_at",                                           :null => false
-    t.datetime "updated_at",                                           :null => false
+    t.datetime "created_at",                                             :null => false
+    t.datetime "updated_at",                                             :null => false
     t.string   "first_name"
     t.string   "last_name"
     t.datetime "reset_password_sent_at"
@@ -179,6 +194,8 @@ ActiveRecord::Schema.define(:version => 20160420080858) do
     t.datetime "banned_at"
     t.datetime "activated_at"
     t.string   "auth_token",             :limit => 32
+    t.float    "max_upload_size",                      :default => 10.0
+    t.float    "max_transfer_size",                    :default => 10.0
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
