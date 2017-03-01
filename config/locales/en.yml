@@ -13,3 +13,13 @@ en:
     title: 'Confirm'
     ok: 'Ok'
     cancel: 'Cancel'
+  partials:
+    menu:
+      items: 'Folders'
+      transfers: 'Sent files'
+      transfer: 'Send a file'
+      users: 'Users'
+      backgrounds: 'Backgrounds'
+      groups: 'Groups'
+      login: 'Login'
+      logout: 'Logout'

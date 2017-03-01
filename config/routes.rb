@@ -10,14 +10,14 @@ Sakve::Application.routes.draw do
     end
 
     devise_for :users,
-      path: "",
+      path: '',
       path_names: {
-        :sign_in => 'login',
-        :sign_out => 'logout',
-        :sign_up => 'create',
-        :password => 'reset_password',
-        :confirmation => 'confirm_user',
-        :registration => 'account'
+        sign_in: 'login',
+        sign_out: 'logout',
+        sign_up: 'create',
+        password: 'reset_password',
+        confirmation: 'confirm_user',
+        registration: 'account'
       }
 
     get 'items(-:folder)(.:format)',
@@ -54,7 +54,6 @@ Sakve::Application.routes.draw do
       end
     end
 
-
     resources :folders, only: [:create, :update, :destroy] do
       member do
         get :rename, action: :edit, subaction: :rename
@@ -67,19 +66,6 @@ Sakve::Application.routes.draw do
     end
 
     resources :tags, only: :index
-
-    resources :transfers, except: [:new], id: /\d+/ do
-      collection do
-        resources :files, controller: :transfer_files, only: [:create, :destroy] do
-          delete :bulk_destroy, action: :bulk_destroy, on: :collection
-        end
-      end
-      member do
-        get :status
-        get :save
-        post :save
-      end
-    end
 
     match 'transfers/:token/download',
       to: 'transfers#file_download',
@@ -105,9 +91,20 @@ Sakve::Application.routes.draw do
         token: /[0-9a-f]{10,64}/i
       }
 
+    resources :transfers, except: [:new], id: /\d+/ do
+      collection do
+        resources :files, controller: :transfer_files, only: [:create, :destroy] do
+          delete :bulk_destroy, action: :bulk_destroy, on: :collection
+        end
+      end
+      member do
+        get :status
+        get :save
+        post :save
+      end
+    end
 
     match 'collaborators(.:format)', to: 'application#collaborators', as: :collaborators
-
 
     # resources :groups
     resources :users do
@@ -120,12 +117,19 @@ Sakve::Application.routes.draw do
 
     match 'change_folder', to: 'items#change_folder', via: :post
 
+    resources :backgrounds, only: [:index, :new, :create, :edit, :update, :destroy]
+
     scope controller: :application do
       get 'switch_lang/:lang', action: :switch_lang, as:  :switch_lang, lang: locale_regex
       post :context
       get :search
     end
-    root to: 'transfers#index'
+
+    devise_scope :user do
+      root to: 'devise/sessions#new'
+    end
+
+    # root to: 'transfers#index'
   end
 
   get 't/:token(.:format)', to: 'transfers#download', as: :t,

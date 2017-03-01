@@ -1,0 +1,52 @@
+<div id="bg-manage">
+<div class="row">
+  <%= form_for @background, html: { multipart: true, class: 'columns small-6 small-offset-3 center' } do |f| %>
+    <div class="row">
+      <center><h5><%= t('.load_img') %></h5></center>
+      <div class="columns small-12 center">
+        <div class="button round fileupload-button">
+          <%= f.file_field(:image, data: { value: t('.fileupload', default: 'Select file'), file_upload: true }) %>
+          <span><%= t('.fileupload', default: 'Select files') %></span>
+        </div>
+        <div>
+          <span><%= t('.added_file') %>: </span><span class="added-files"></span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <center><h5><%= t('.where_allowed') %></h5></center>
+      <div class="columns small-12 field">
+        <%= f.label :upload, class: 'custom-check-box' do %>
+          <%= f.check_box :upload %><i></i>
+        <% end %>
+        <%= f.label :upload, class: 'for-check-box' %>
+      </div>
+      <div class="columns small-12 field">
+        <%= f.label :download, class: 'custom-check-box' do %>
+          <%= f.check_box :download %><i></i>
+        <% end %>
+        <%= f.label :download, class: 'for-check-box' %>
+      </div>
+    </div>
+    <div class="row">
+      <center><h5><%= t('.link_bg') %></h5></center>
+      <div class="columns small-12">
+        <%= f.label :link %>
+        <%= f.text_field :link %>
+      </div>
+    </div>
+    <div class="row">
+      <center><h5><%= t('.is_active') %></h5></center>
+      <div class="columns small-12">
+        <%= f.label :active, class: 'custom-check-box' do %>
+            <%= f.check_box :active %><i></i>
+        <% end %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="columns small-6 small-offset-3 center">
+        <%= f.submit t('.add'), class: 'button round' %>
+      </div>
+    </div>
+  <% end %>
+</div>

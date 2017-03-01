@@ -1,13 +1,12 @@
 class UsersController < ApplicationController
-
   respond_to :html, only: :index
-  respond_to :js, except: [:index]
+  respond_to :js
 
   layout 'application'
 
   def index
     authorize! :read, User
-    @users = User.find(:all)
+    @users = User.paginate(page: params[:page], per_page: 20)
   end
 
   def show

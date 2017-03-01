@@ -45,5 +45,7 @@ form.find('.uploaded-files').text('');
 form.find('.alert-box').slideUp(function() {
   $(this).remove();
 });
+
+$('#upload-info').load(location.href + ' #upload-info>*', '')
 <% end %>
 

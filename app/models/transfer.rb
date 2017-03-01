@@ -1,5 +1,4 @@
 class Transfer < ActiveRecord::Base
-
   belongs_to :user
   has_many :folders
   has_many :statistics, class_name: 'TransferStat', order: 'created_at DESC'
@@ -15,26 +14,31 @@ class Transfer < ActiveRecord::Base
   attr_accessor :empty, :expires_in_infinity
   attr_accessible :expires_in, :name, :object, :recipients, :token,
                   :user_id, :user, :group_token, :empty, :done,
-                  :expires_in_infinity, :message, :expired, :infos_hash
+                  :expires_in_infinity, :message, :expired, :infos_hash,
+                  :email_sent
 
   serialize :infos_hash, Hash
 
   #before_validation :compress_files
   before_validation :generate_token, :set_default_name, on: :create
   before_validation :setup_exires_at
-  after_commit :delete_transfer_files, :send_mail_to_recipients, on: :create
-  after_commit :delete_transfer_files, :send_mail_to_recipients, on: :update
+  after_commit :delete_transfer_files, :send_mail_to_recipients, only: [:create, :update]
+  # after_commit :delete_transfer_files, :send_mail_to_recipients, on: :update
   after_commit :check_infos_hash, on: :create
   after_commit :async_compress_files, unless: proc {done? or empty}
 
   validates :token, uniqueness: true
   # validates :name, presence: true
-  validates :group_token, presence: true, length: {is: 16}, unless: :done?
-  validates :token, presence: true, length: {minimum: 10, maximum: 64}
+  validates :group_token, presence: true, length: { is: 16 }, unless: :done?
+  validates :token, presence: true, length: { minimum: 10, maximum: 64 }
   validate :valid_recipients
   validates :files, length: {minimum: 1}, unless: proc {done? or empty}
   validates :object, attachment_presence: true, on: :update
   validates :object, attachment_content_type: { content_type: /.*/i }
+  validate :max_uploaded_size
+  validate :max_transfer_size
+  validate :not_logged_user_max_upload_size
+  validate :not_logged_user_max_upload_time
 
   alias :tid :id
 
@@ -47,22 +51,23 @@ class Transfer < ActiveRecord::Base
 
   alias :tid :id
   def size; object_file_size; end
+
   def date
     expires_at || (Time.now + 1000.years)
   end
 
   def expires_in
     @expires_in || if expires_at.present?
-      ((expires_at - Time.now)/1.day).ceil
+      ((expires_at - Time.now) / 1.day).ceil
     else
       7
     end
   end
 
   def saved
-    if folders_count > 0
-      folders.where(user_id: user.id).first
-    end
+    return unless folders_count > 0
+
+    folders.where(user_id: user.id).first
   end
 
   def content
@@ -70,7 +75,7 @@ class Transfer < ActiveRecord::Base
   end
 
   def zip_content
-    if !self.expired? and self.infos_hash[:files][0].nil?
+    if !self.expired? && self.infos_hash[:files][0].nil?
       self.infos_hash[:files].drop(1)
     else
       self.infos_hash[:files]
@@ -78,7 +83,7 @@ class Transfer < ActiveRecord::Base
   end
 
   def last_downloaded_at
-    self.statistics.first.created_at
+    self.statistics.first.try(:created_at)
   end
 
   def zip?
@@ -115,11 +120,11 @@ class Transfer < ActiveRecord::Base
   end
 
   def forever?
-    persisted? and expires_at.nil?
+    persisted? && expires_at.nil?
   end
 
   def expired?
-    expires_at.present? and expires_at < DateTime.now
+    expires_at.present? && expires_at < DateTime.now
   end
 
   def expiration_distance
@@ -140,12 +145,12 @@ class Transfer < ActiveRecord::Base
   end
 
   def generate_infos_hash
-    info_hash = Hash.new
+    info_hash = {}
     info_hash[:name] = self.object_file_name
     info_hash[:size] = self.object_file_size
     info_hash[:type] = self.object_content_type
-    if self.object.path and self.zip?
-      info_hash[:files] = Array.new
+    if self.object.path && self.zip?
+      info_hash[:files] = []
       i = 1
       Zip::File.open(self.object.path) do |f|
         f.entries.each do |entry|
@@ -161,21 +166,21 @@ class Transfer < ActiveRecord::Base
   end
 
   def check_infos_hash
-    if self.done? and self.infos_hash == {} and self.object.exists?
+    if self.done? && self.infos_hash == {} && self.object.exists?
       self.generate_infos_hash
     end
   end
 
   def download_name
     if self.zip?
-      name = "Sakve #{self.created_at_formatted}.zip"
+      name = "Sakve_#{self.created_at_formatted}.zip"
     else
       name = self.object_file_name
     end
   end
 
   def created_at_formatted
-    self.created_at.strftime('%d-%m-%Y, %H:%M:%S')
+    self.created_at.strftime('%d-%m-%Y_%H:%M:%S')
   end
 
   def directory
@@ -217,7 +222,7 @@ class Transfer < ActiveRecord::Base
   end
 
   def last_user_group_token
-    TransferFile.loose.where(transfer_files: {user_id: user_id}).first.try(:token) || SecureRandom.hex(8)
+    TransferFile.loose.where(transfer_files: { user_id: user_id }).first.try(:token) || SecureRandom.hex(8)
   end
 
   def generate_token
@@ -243,7 +248,9 @@ class Transfer < ActiveRecord::Base
   end
 
   def compress_files
-    self.object = create_object_from_transfer
+    path = create_object_from_transfer
+    self.object = File.open(path)
+    File.delete(path)
     @delete_files = true
     self.done = true
     self
@@ -251,12 +258,12 @@ class Transfer < ActiveRecord::Base
 
   def file_name_from_title(ext = :zip)
     name = self.name.try(:parameterize)
-    name = "Sakve quicktransfer #{self.created_at.strftime('%d-%m-%Y, %H:%M:%S')}" if name.blank?
+    name = "Sakve_quicktransfer_#{self.created_at_formatted}" if name.blank?
     "#{name}.#{ext}"
   end
 
   def make_archive?
-    !files.one? || files.first.psd?
+    content[:files] && (!files.one? || files.first.psd?)
   end
 
   def create_object_from_transfer
@@ -264,7 +271,7 @@ class Transfer < ActiveRecord::Base
       return single_file.object
     end
 
-    filename = Dir::Tmpname.make_tmpname("Sakve #{self.created_at.strftime('%d-%m-%Y, %H:%M:%S')}", ".zip")
+    filename = Dir::Tmpname.make_tmpname("Sakve_#{self.created_at_formatted}", ".zip")
     filepath = File.join(Dir::tmpdir, filename)
 
     logger.debug "Zipping files...."
@@ -288,19 +295,20 @@ class Transfer < ActiveRecord::Base
     self.object.instance_write :file_name, filename
     logger.debug "Zipping files....done"
 
-    File.open(filepath)
+    filepath
   end
 
   def delete_transfer_files
-    if @delete_files and done?
-      self.files.each(&:destroy)
-    end
+    return unless @delete_files && done?
+
+    self.files.each(&:destroy)
   end
 
   def send_mail_to_recipients
-    if recipients_list.any? and done?
-      TransferMailer.after_create(self).deliver
-    end
+    return unless recipients_list.any? && done? && !email_sent?
+
+    TransferMailer.after_create(self).deliver
+    update_attributes(email_sent: true)
   end
 
   def setup_exires_at
@@ -312,7 +320,7 @@ class Transfer < ActiveRecord::Base
   end
 
   def set_default_name
-    if name.blank? and !make_archive?
+    if name.blank? && files.one?
       self.name = File.basename(files.first.object_file_name, '.*').titleize
     elsif name.blank?
       t = (token || group_token).first(5)
@@ -320,4 +328,45 @@ class Transfer < ActiveRecord::Base
     end
   end
 
+  def sum_files_size
+    files.reject { |f| f.upload_status == :fail }.sum { |f| (f.object_file_size || f.tmp_size).to_i }
+  end
+
+  def max_uploaded_size
+    return if user_id.blank?
+
+    user = User.find(user_id)
+    return if user.max_upload_size.nil?
+
+    if (user.files_uploaded_size + sum_files_size) > user.max_upload
+      errors.add :transfer, "wraz z sumą dotychczas przesłanych plików nie może przekraczać #{user.max_upload_size} GB"
+      files.destroy_all
+    end
+  end
+
+  def max_transfer_size
+    return if user_id.blank?
+
+    user = User.find(user_id)
+    return if user.max_transfer_size.nil?
+
+    if sum_files_size > user.max_transfer
+      errors.add :transfer, "nie może przekraczać #{user.max_transfer_size} GB"
+      files.destroy_all
+    end
+  end
+
+  def not_logged_user_max_upload_size
+    if user_id.nil? && sum_files_size > Sakve::Application.config.max_upload_size
+      errors.add :transfer, 'nie może przekraczać 2 GB' # you must correct this by yourself if you change config file
+      files.destroy_all
+    end
+  end
+
+  def not_logged_user_max_upload_time
+    if user_id.nil? && expires_in.to_i > Sakve::Application.config.max_upload_time
+      errors.add :transfer, 'może mieć maksymalną ważność 14 dni' # you must correct this by yourself if you change config file
+      files.destroy_all
+    end
+  end
 end

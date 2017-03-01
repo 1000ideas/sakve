@@ -63,3 +63,4 @@ _yardoc
 doc/
 
 upload_tmp/*
+dump.rdb

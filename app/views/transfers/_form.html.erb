@@ -7,25 +7,29 @@
       <%= f.label :name, t('.subject') %>
       <%= f.text_field :name  %>
     </div>
-    <div class="field">
-      <%= f.label :recipients do %>
-        <%= label_tag :show_recipients, class: 'custom-check-box' do %>
-          <%= check_box_tag :show_recipients %>
-          <i></i>
+    <% unless current_user.nil? %>
+      <div class="field">
+        <%= f.label :recipients do %>
+          <%= label_tag :show_recipients, class: 'custom-check-box' do %>
+            <%= check_box_tag :show_recipients %>
+            <i></i>
+          <% end %>
+          <%= t('.recipients') %>
         <% end %>
-        <%= t('.recipients') %>
-      <% end %>
-      <%= f.text_field :recipients, placeholder: t('.recipients_placeholder'), style: 'display: none;'  %>
-      <%= f.text_area :message, rows: 3, placeholder: t('.message_placeholder'), style: 'display: none;' %>
-    </div>
+        <%= f.text_field :recipients, placeholder: t('.recipients_placeholder'), style: 'display: none;'  %>
+        <%= f.text_area :message, rows: 3, placeholder: t('.message_placeholder'), style: 'display: none;' %>
+      </div>
+    <% end %>
     <div class="field expires-in-field">
       <%= f.label :expires_in, t('.expires_in') %>
       <%= f.text_field :expires_in, data: {spin_box: true}, min: 0 %>
-      <%= f.label :expires_in_infinity, class: [:gray, :button, :round, :tiny],
-        id: :transfer_expires_in_infinity_label do %>
-        <%= f.check_box :expires_in_infinity, {checked: f.object.forever?} %>
-        <i></i>
-        <span><%= t('.infinity') %></span>
+      <% unless current_user.nil? %>
+        <%= f.label :expires_in_infinity, class: [:gray, :button, :round, :tiny],
+          id: :transfer_expires_in_infinity_label do %>
+          <%= f.check_box :expires_in_infinity, {checked: f.object.forever?} %>
+          <i></i>
+          <span><%= t('.infinity') %></span>
+        <% end %>
       <% end %>
     </div>
     <% if f.object.new_record? %>
@@ -40,6 +44,17 @@
       </script>
     </div>
     <% end %>
+  </div>
+  <div id="upload-info" class="row text-center upload-info">
+    <div class="columns small-12">
+      <span class="">
+        <% if current_user && (current_user.max_upload_size? || current_user.max_transfer_size?) %>
+          Maksymalny rozmiar transferu to <%= number_to_human_size(allowed_upload_size(current_user)) %>
+        <% elsif current_user.nil? %>
+          Maksymalny rozmiar transferu: <%= number_to_human_size(Sakve::Application.config.max_upload_size) %>
+        <% end %>
+      </span>
+    </div>
   </div>
   <div class="actions text-center">
      <%= f.button nil, data: {text_send_after: t('.waiting_for_upload'), disable_with: t('.processing')}, class: [:button, :secondary, :round] %>

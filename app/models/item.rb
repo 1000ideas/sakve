@@ -152,6 +152,14 @@ class Item < ActiveRecord::Base
     "#{name.parameterize}#{".#{increment}" unless increment.nil?}.#{extension}"
   end
 
+  def check_user_limit(user)
+    return true if user.max_upload_size.nil?
+    return true if user.files_uploaded_size + object_file_size < user.max_upload
+
+    errors.add :item, 'przekroczono dostępny transfer'
+    false
+  end
+
   protected
 
   def file_for_transfer

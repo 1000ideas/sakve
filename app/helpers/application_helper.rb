@@ -1,5 +1,4 @@
 module ApplicationHelper
-
   def sort_link(name, title = nil, options = {})
     title ||= t(name, scope: :sortbar)
     direction = :asc
@@ -45,7 +44,7 @@ module ApplicationHelper
   def folder_classes(folder)
     class_name = [:folder]
     class_name << :current if @current_folder == folder
-    class_name << :'not-empty' if folder.subfolders.any?
+    class_name << :'not-empty' if (RUBY_VERSION >= '2.2.0' ? !folder.subfolders.compact.empty? : folder.subfolders.any?) # some issues with 'any?' in ruby 2.2.5
     class_name << :open if folder.ancestor?(@current_folder)
     class_name.join(' ')
   end
@@ -85,5 +84,18 @@ module ApplicationHelper
       end
       list
     end
+  end
+
+  def space_used_percent(user)
+    return 0 if user.max_upload_size.nil?
+
+    ((user.files_uploaded_size.to_f / user.max_upload.to_f * 100.0).round(-1) / 10).to_s
+  end
+
+  def allowed_upload_size(user)
+    return (user.max_upload - user.files_uploaded_size) if user.max_transfer_size.nil?
+    return user.max_transfer if user.max_upload_size.nil?
+
+    [user.max_upload - user.files_uploaded_size, user.max_transfer].min
   end
 end

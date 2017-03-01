@@ -1,5 +1,5 @@
 <li class="row transfer transfer-file-<%= transfer.id %>"  data-context="true" data-context-ajax="<%= context_path %>">
-    <div class="name columns small-7">
+    <div class="name columns small-5">
       <%= f.select_box :tid, transfer %>
       <%= fa_stacked_icon 'long-arrow-right', base: 'file-o', class: 'transfer-icon' %>
       <span>
@@ -9,9 +9,10 @@
         <% end %>
       </span>
     </div>
+    <div class="size columns small-2 text-center"><%= l(transfer.last_downloaded_at, format: :long) unless transfer.last_downloaded_at.nil? %></div>
     <div class="size columns small-2 text-center"><%= number_to_human_size transfer.object_file_size %></div>
-    <div title="<%= l(transfer.expires_at, format: :long) unless transfer.forever? %>" class="columns small-3 text-center date"> 
-      <% if transfer.expired? or transfer.forever? %> 
+    <div title="<%= l(transfer.expires_at, format: :long) unless transfer.forever? %>" class="columns small-3 text-center date">
+      <% if transfer.expired? or transfer.forever? %>
         Transfer wygasł
       <% else %>
         <%= transfer.expiration_distance %>

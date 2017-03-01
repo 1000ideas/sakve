@@ -4,7 +4,7 @@ class TransferFile < ActiveRecord::Base
   @@upload_statuses = [:new, :fail, :done]
   cattr_reader :upload_statuses
 
-  attr_accessible :object, :token, :user_id, :user, :object_file_name, :upload_status
+  attr_accessible :object, :token, :user_id, :user, :object_file_name, :upload_status, :tmp_size
 
   scope :uploaded, lambda { where(upload_status: upload_statuses.last) }
   scope :unfinished, lambda { where(upload_status: upload_statuses.first) }
@@ -17,7 +17,7 @@ class TransferFile < ActiveRecord::Base
   before_post_process :keep_file_name
 
   validates :token, length: {is: 16}
-  validates :user_id, presence: true
+  # validates :user_id, presence: true
   validates :object,
     attachment_content_type: { content_type: /.*/i }
 

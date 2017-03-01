@@ -34,6 +34,7 @@ pl:
         size: Rozmiar
         date: "Data modyfikacji"
         expires: "Ważność"
+        last_download: "Pobrane ostatnio"
     multiupload:
       or_drop: "lub upuść tutaj"
       title: 'Dodawanie plików'
