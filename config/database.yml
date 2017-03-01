@@ -22,6 +22,6 @@ production:
   username: sakve
   password: wMsf5ARwu2T2xHqb
   encoding: utf8
-  pool: 25
+  pool: 5
   timeout: 5000
   host: localhost
