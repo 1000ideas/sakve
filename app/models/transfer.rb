@@ -249,8 +249,14 @@ class Transfer < ActiveRecord::Base
 
   def compress_files
     path = create_object_from_transfer
-    self.object = File.open(path)
-    File.delete(path)
+
+    if path.is_a?(String)
+      self.object = File.open(path)
+      File.delete(path)
+    else
+      self.object = path
+    end
+
     @delete_files = true
     self.done = true
     self
