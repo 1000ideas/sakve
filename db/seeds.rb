@@ -16,10 +16,7 @@ User.set_callback(:create)
 
 admin.update_attribute :activated_at, DateTime.now
 
-
 Folder.create!(global: true, user_id: admin.id)
-
-
 
 print "Creating Test Users\n"
 20.times do |x|
@@ -38,7 +35,5 @@ print "Creating Test Users\n"
 	print "."
 end
 print "\n"
-
-
 
 print "Seeds added\n"
