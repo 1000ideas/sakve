@@ -1,23 +1,8 @@
 namespace :sakve do
   namespace :transfer do
-    desc 'Clean up expired transfers'
+    desc 'Clean up expired transfers and transfers left in a uploads dir due to wrong permissions'
     task clean: :environment do
       CleanUpWorker.perform_async
-    end
-
-    desc 'Clean up transfers left in a uploads dir due to wrong permissions'
-    task cleanup_transfers_folder: :environment do
-      path = Rails.root.join('uploads/transfers')
-      counter = 0
-      Dir.foreach(path) do |item|
-        next if item == '.' || item == '..'
-
-        unless Transfer.where(id: item).exists?
-          `sudo rm -rf #{File.join(path, item)}` rescue puts "Error: #{File.join(path, item)}"
-          counter += 1
-        end
-      end
-      puts "Cleaned after #{counter} transfers"
     end
   end
 
