@@ -5,7 +5,7 @@ end
 
 admin = User.new email: 'admin@admin.pl',
   name: "Admin 1000ideas",
-  password:  "adminadmin",
+  password:  "adminadmin", 
   password_confirmation: "adminadmin"
 
 admin.add_group :admin
