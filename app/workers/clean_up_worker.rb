@@ -11,6 +11,7 @@ class CleanUpWorker
   end
 
   def perform
+    puts 'Start: Cleaning up temporary files'
     transfers = Transfer.archive_expired
     cleaned = Transfer.delete_extracted
     puts "Archived #{transfers.length} transfers"
@@ -29,5 +30,20 @@ class CleanUpWorker
     end
 
     puts "Cleaned #{counter} temp files"
+    puts 'End: Cleaning up temporary files'
+
+    puts 'Start: Cleaning up files left in upload directory due to wrong permissions'
+    path = Rails.root.join('uploads/transfers')
+    counter = 0
+    Dir.foreach(path) do |item|
+      next if item == '.' || item == '..'
+
+      unless Transfer.where(id: item).exists?
+        `sudo rm -rf #{File.join(path, item)}` rescue puts "Error: #{File.join(path, item)}"
+        counter += 1
+      end
+    end
+    puts "Cleaned after #{counter} transfers"
+    puts 'End: Cleaning up files left in upload directory due to wrong permissions'
   end
 end

@@ -10,11 +10,22 @@ services:
       retries: 12
   web:
     build: .
+    environment:
+      JOB_WORKER_URL: "redis://redis:6379/0"
+      RAILS_ENV: 'production'
     volumes:
       - .:/sakve
     ports:
       - "3000:3000"
     command: ./docker_start.sh
     depends_on:
+      redis:
+        condition: service_healthy
       db:
         condition: service_healthy
+  redis:
+    image: 'redis:latest'
+    healthcheck:
+      test: ["CMD", "redis-cli", "-h", "127.0.0.1", "ping"]
+      timeout: 2s
+      retries: 10

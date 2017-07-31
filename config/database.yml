@@ -25,3 +25,4 @@ production:
   encoding: utf8
   pool: 25
   timeout: 5000
+  host: db
