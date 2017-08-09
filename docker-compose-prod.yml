@@ -8,6 +8,8 @@ services:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root", "-proot"]
       timeout: 3s
       retries: 12
+    volumes:
+      - ./var/db-data:/var/lib/mysql
   web:
     build: .
     environment:
