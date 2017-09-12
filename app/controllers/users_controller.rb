@@ -1,8 +1,6 @@
 class UsersController < ApplicationController
-  respond_to :html, only: :index
-  respond_to :js
-
   layout 'application'
+  respond_to :html, :js
 
   def index
     authorize! :read, User
@@ -27,14 +25,30 @@ class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
     authorize! :create, @user
-    @user.save
+    respond_to do |format|
+      if @user.save
+        format.js
+        format.html { redirect_to users_path }
+      else
+        format.js
+        format.html { render 'new' }
+      end
+    end
   end
 
   def update
     @user = User.find(params[:id])
     authorize! :update, @user
     @user.updated_by = current_user
-    @user.update_attributes(params[:user])
+    respond_to do |format|
+      if @user.update_attributes(params[:user])
+        format.js
+        format.html { redirect_to users_path }
+      else
+        format.js
+        format.html { render 'edit' }
+      end
+    end
   end
 
   def ban

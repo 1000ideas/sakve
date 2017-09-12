@@ -5,7 +5,8 @@ class TransfersController < ApplicationController
     @bodycover = true
     @bg = Background.where(upload: true, active: true).to_a.sample
     authorize! :read, Transfer
-    @transfer = Transfer.new(user: current_user)
+    tracking_code = current_user.try(:last_tracking_code)
+    @transfer = Transfer.new(user: current_user, tracking_code: tracking_code)
 
     # @transfers = Transfer.active.for_user(current_user)
 

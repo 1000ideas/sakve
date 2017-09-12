@@ -1,32 +1,32 @@
-<%= form_for(@user, remote: true) do |f| %>
+<%= form_for(@user) do |f| %>
   <h3><%= t(".title.#{f.object.new_record? ? 'new' : 'edit'}") %></h3>
   <%= render partial: 'l/partials/errors', object: @user.errors %>
-  <div class="group">
-    <div class="field">
+  <div class="row group">
+    <div class="columns small-12 field">
       <%= f.label :name %>
       <%= f.text_field :name %>
     </div>
-    <div class="field">
+    <div class="columns small-12 field">
       <%= f.label :email %>
       <%= f.text_field :email %>
     </div>
-    <div class="field">
+    <div class="columns small-12 field">
       <%= f.label :password %>
       <%= f.password_field :password %>
     </div>
-    <div class="field">
+    <div class="columns small-12 field">
       <%= f.label :password_confirmation %>
       <%= f.password_field :password_confirmation %>
     </div>
-    <div class="field">
+    <div class="columns small-12 field">
       <%= f.label :max_upload_size %>
       <%= f.number_field :max_upload_size, step: 0.1 %>
     </div>
-    <div class="field">
+    <div class="columns small-12 field">
       <%= f.label :max_transfer_size %>
       <%= f.number_field :max_transfer_size, step: 0.1 %>
     </div>
-    <div class="field">
+    <div class="columns small-12 field">
       <%= f.label :groups %>
       <% Group.sorted_with_translation.each do |group| %>
         <%= f.label :"group_ids_#{group.id}", class: 'selectable-checkbox' do %>
@@ -37,9 +37,17 @@
       <% end %>
       <%# f.collection_select :group_ids, Group.sorted_with_translation, :id, :title, {}, {multiple: true} %>
     </div>
+    <div class="columns small-12 field">
+      <%= f.label :tracking_code, class: 'custom-check-box' do %>
+        <%= f.check_box :tracking_code %><i></i>
+      <% end %>
+      <%= f.label :tracking_code, class: 'for-check-box' %>
+    </div>
   </div>
-  <div class="actions">
-    <%= f.button nil, class: [:button, :tiny, :secondary] %>
-    <%= link_to t('.cancel'), '#', data: { reveal_close: true }, class: [:button, :tiny] %>
+  <div class="row actions">
+    <div class="columns small-12">
+      <%= f.button nil, class: [:button, :tiny, :secondary] %>
+      <%= link_to t('.cancel'), users_path, data: { reveal_close: true }, class: [:button, :tiny] %>
+    </div>
   </div>
 <% end %>

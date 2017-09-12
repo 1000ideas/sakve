@@ -14,7 +14,7 @@
   </div>
   <a href="" data-context-button><%= fa_icon('ellipsis-h') %></a>
   <ul class="actions" data-context-target>
-    <li><%= link_to fa_icon('fw edit', text: t('.edit')), edit_user_path(user, format: :js), data: {remote: true} %></li>
+    <li><%= link_to fa_icon('fw edit', text: t('.edit')), edit_user_path(user) %></li>
     <%# if can?(:update, @user) %>
     <% if user.active? %>
     <li><%= link_to fa_icon('fw ban', text: t(".ban.#{!user.banned?}")), {id: user, action: :ban, ban: !user.banned?}, data: {method: :put, remote: :true} %></li>

@@ -371,6 +371,7 @@ pl:
         groups: "Grupy"
         max_upload_size: Maksymalny rozmiar plików (w gigabajtach)
         max_transfer_size: Maksymalny rozmiar pojedynczego transferu (w gigabajtach)
+        tracking_code: Kod śledzenia
       l/news:
         content: Treść
         title: Tytuł

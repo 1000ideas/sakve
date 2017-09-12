@@ -15,7 +15,7 @@ class Transfer < ActiveRecord::Base
   attr_accessible :expires_in, :name, :object, :recipients, :token,
                   :user_id, :user, :group_token, :empty, :done,
                   :expires_in_infinity, :message, :expired, :infos_hash,
-                  :email_sent
+                  :email_sent, :tracking_code
 
   serialize :infos_hash, Hash
 

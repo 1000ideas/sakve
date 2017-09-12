@@ -1,4 +1,6 @@
 @import 'overrides';
+@import "mixins";
+@import "compass/css3/opacity";
 
 ul#users-list {
   li {
@@ -61,5 +63,11 @@ ul#users-list {
         }
       }
     }
+  }
+}
+
+#edit-user form {
+  .field:last-child {
+    margin-bottom: 1em
   }
 }

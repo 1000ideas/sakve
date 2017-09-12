@@ -69,6 +69,7 @@ pl:
         object: Archiwum z plikami
         expires_at: Ważny do
         files: Pliki
+        tracking_code: Kod śledzenia
       transfer_file:
         token: Token grupujący
         object: "Plik"

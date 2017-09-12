@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
   @@_root_folders = {}
-  @@showable_attributes = %w(name email)
+  @@showable_attributes = %w[name email]
   mattr_reader :showable_attributes
 
   has_many :user_groups, include: :group
@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
   attr_accessible :first_name, :last_name, :name, :email,
     :password, :password_confirmation, :remember_me, :group_ids,
     :reset_password_sent_at, :reset_password_token, :max_upload_size,
-    :max_transfer_size
+    :max_transfer_size, :tracking_code
 
   after_create :create_private_folder
 
@@ -63,11 +63,11 @@ class User < ActiveRecord::Base
 
   def add_group(name)
     group = Group.where(name: name).first || Group.create(name: name, title: name.to_s.titleize)
-    user_groups.find_or_create_by_user_id_and_group_id(self.id, group.id)
+    user_groups.find_or_create_by_user_id_and_group_id(id, group.id)
     group
   end
 
-  def belongs_to_group? name
+  def belongs_to_group?(name)
     groups.any? { |g| g.name === name }
   end
 
@@ -101,34 +101,34 @@ class User < ActiveRecord::Base
 
   def ban!
     self.banned_at = DateTime.now
-    self.save
+    save
   end
 
   def unban!
     self.banned_at = nil
-    self.save
+    save
   end
 
   def banned?
-    self.banned_at.present?
+    banned_at.present?
   end
 
   def activate!
     self.activated_at = DateTime.now
-    self.save
+    save
   end
 
   def active?
-    self.activated_at.present?
+    activated_at.present?
   end
 
   def root_folder(unchached = false)
-    @@_root_folders.delete(self.id) if unchached
-    @@_root_folders[self.id] ||= self.folders(parent_id: nil, global: false).first
+    @@_root_folders.delete(id) if unchached
+    @@_root_folders[id] ||= self.folders(parent_id: nil, global: false).first
   end
 
   def clear_root_folder_cache!
-    @@_root_folders.delete(self.id)
+    @@_root_folders.delete(id)
   end
 
   def label_or_error(field)
@@ -152,14 +152,20 @@ class User < ActiveRecord::Base
     max_transfer_size.gigabytes
   end
 
+  def last_tracking_code
+    transfers
+      .where('tracking_code IS NOT NULL').order(id: :desc).limit(1)
+      .first.try(:tracking_code)
+  end
+
   protected
 
   def create_private_folder
-    Folder.create!(user_id: self.id, global: false)
+    Folder.create!(user_id: id, global: false)
   end
 
   def updated_by_admin?
-    updated_by.present? and updated_by.admin?
+    updated_by.present? && updated_by.admin?
   end
 
   def password_required?
@@ -167,10 +173,10 @@ class User < ActiveRecord::Base
   end
 
   def password_complexity
-    if password.present?
-      if !password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}/)
-        errors.add :password, :complexity
-      end
+    return if password.blank?
+
+    unless password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}/)
+      errors.add :password, :complexity
     end
   end
 end
