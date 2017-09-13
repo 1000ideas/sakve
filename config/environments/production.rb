@@ -6,11 +6,11 @@ config.action_mailer.default_url_options = { :host => 'sakve.1000i.pl' }
 config.action_mailer.delivery_method = :smtp
 
 config.action_mailer.smtp_settings = {
-  :address              => "mail.1000i.co",
+  :address              => "smtp.zenbox.pl",
   :port                 => 587,
-  :domain               => "1000i.co",
-  :user_name            => "no-reply@1000i.co",
-  :password             => "U4E45Amn",
+  :domain               => "1000i.pl",
+  :user_name            => "no-reply@1000i.pl",
+  :password             => "ZkXrqdf5",
   :authentication       => "plain",
   :enable_starttls_auto => false
 }
@@ -28,7 +28,7 @@ config.action_mailer.perform_deliveries = true;
   config.action_controller.perform_caching = true
 
   # Disable Rails's static asset server (Apache or nginx will already do this)
-  config.serve_static_assets = false
+  config.serve_static_assets = true
 
   # Compress JavaScripts and CSS
   config.assets.compress = true

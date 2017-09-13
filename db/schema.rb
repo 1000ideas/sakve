@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(:version => 20170210140031) do
   add_index "folders", ["transfer_id"], :name => "index_folders_on_transfer_id"
 
   create_table "group_translations", :force => true do |t|
-    t.integer  "group_id"
+    t.integer  "group_id",    :null => false
     t.string   "locale",      :null => false
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
