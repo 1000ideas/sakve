@@ -1,6 +1,6 @@
 require 'sakve'
 
-sidekiq_config = { url: ENV['JOB_WORKER_URL'] || 'redis://127.0.0.1:6379/0' }
+sidekiq_config = { url: ENV['JOB_WORKER_URL'] || 'redis://redis:6379/0', namespace: 'sakve' }
 
 Sidekiq.configure_server do |config|
   ActiveRecord::Base.logger = Sidekiq.logger

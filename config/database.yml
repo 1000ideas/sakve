@@ -24,5 +24,5 @@ production:
   password: wMsf5ARwu2T2xHqb
   encoding: utf8
   pool: 5
-  timeout: 5000
-  host: localhost
+  timeout: 9000
+  host: db 
