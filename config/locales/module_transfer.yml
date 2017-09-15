@@ -16,6 +16,7 @@ pl:
       waiting_for_upload: "Oczekuje..."
       remove_all: "Usuń wszystkie"
       remove_selected: "Usuń zaznaczone"
+      tracking_info: "Pamiętaj o znacznikach &lt;script&gt; dookoła skryptu"
     edit_form:
       <<: *TRANFERFORM
     new:

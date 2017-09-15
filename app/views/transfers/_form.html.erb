@@ -34,7 +34,7 @@
     </div>
     <% if current_user.try(:tracking_code) %>
     <div class="field">
-      <%= f.label :tracking_code %>
+      <%= f.label :tracking_code, t('activerecord.attributes.transfer.tracking_code'), style: 'display: inline-block;' %><%= raw(" <small>(#{t('.tracking_info')})</small>") %>
       <%= f.text_area :tracking_code, rows: 6 %>
     </div>
     <% end %>
