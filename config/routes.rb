@@ -130,12 +130,12 @@ Sakve::Application.routes.draw do
     end
 
     # root to: 'transfers#index'
+    get 't/:token(.:format)', to: 'transfers#download', as: :t,
+      constraints: {
+        token: /[0-9a-f]{,64}/i
+      }
   end
 
-  get 't/:token(.:format)', to: 'transfers#download', as: :t,
-    constraints: {
-      token: /[0-9a-f]{,64}/i
-    }
 
   get :ping, to: 'application#ping'
 end

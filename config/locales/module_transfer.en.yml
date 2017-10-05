@@ -1,0 +1,101 @@
+en:
+  transfers:
+    submenu:
+      new: Add transfer
+      index: Transfers list
+    form: &TRANFERFORM
+      or_drop: "or drop anywhere on the screen"
+      subject: "Name for uploaded files"
+      recipients: "I want to send mail (You can write few emails, separated by comma)"
+      recipients_placeholder: 'Recipients list'
+      message_placeholder: 'Message for reciepients'
+      infinity: 'Without expiry date'
+      fileupload: Add files
+      expires_in: "Files accessible for (days)"
+      processing: "Processing..."
+      waiting_for_upload: "Awaiting..."
+      remove_all: "Remove all"
+      remove_selected: "Remove selected"
+      tracking_info: "Remember about tags &lt;script&gt; around script"
+    edit_form:
+      <<: *TRANFERFORM
+    new:
+      title: Add transfer
+    index:
+      fileupload: Add files
+      processing: "Processing..."
+      title: Upload a file
+      new_transfer: 'Upload files'
+      infinite: 'always'
+    edit:
+      title: Edit transfer
+      processing: "Processing"
+      infinity: "Processing"
+    download:
+      file_download: 'Download file:'
+      processing_file: Processing file in progress
+      notify_me: 'Back to this tab, when processing is over'
+      transfer_expired: File is no longer available
+      transfer_size: Archive size
+      transfer_content: "Content (file count: %{count})"
+      file_info: Information about file
+      transfer_expiration_distance: "File will expiry in: %{distance}"
+      transfer_expired_at: "File expired at: %{when}"
+      download: "Download"
+      save: "Save in Sakve"
+      and_more: "and %{count} more files"
+    save:
+      submit: "Save"
+      cancel: "Cancel"
+      wait: "Processing..."
+    transfer:
+      download: "Download"
+      destroy: "Delete"
+      sure: "Delete?"
+    create:
+      done: "Processing completed!"
+      processing: "Processing in progress..."
+      copy: "Copy link"
+      copied: "Link copied to clipboard!"
+    show:
+      download_page: "To the download page"
+      downloaded: "Downloaded: %{count} times"
+      last: "Last donwload at: %{date}"
+      stats:
+        title: Download statistics
+        download_start: "Start date"
+        client_ip: "IP address"
+        browser: "Browser (UserAgent)"
+  menu:
+    transfers: Transfers
+  activerecord:
+    attributes:
+      transfer:
+        name: Transfer name
+        recipients: Recipients list
+        user: Owner
+        user_id: Owner ID
+        token: Token
+        object: Archive with files
+        expires_at: Expires at
+        files: Files
+        tracking_code: Tracking code
+      transfer_file:
+        token: Grouping token
+        object: "File"
+    errors:
+      models:
+        transfer:
+          attributes:
+            name:
+              blank: "can't be blank"
+            files:
+              too_short: 'must be chosen (at least %{count} files)'
+            recipients:
+              too_short: 'must contain at least %{count} correct email address(es)'
+        transfer_file:
+          attributes:
+            token:
+              wrong_length: "must have %{count} characters"
+            object:
+              spoofed_media_type: 'seems suspicious! Try again or contact with admin.'

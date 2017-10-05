@@ -227,7 +227,7 @@ protected
   end
 
   def valid_zip_file?
-    File.exists?(zip_file_path) and File.mtime(zip_file_path) >= updated_at
+    File.exists?(zip_file_path) && File.mtime(zip_file_path) >= updated_at
   end
 
   def recreate_zip_file

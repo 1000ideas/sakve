@@ -2,30 +2,30 @@
 <div class="row download">
   <div id="download-container" class="columns small-centered" data-id="<%= @transfer.id %>">
     <%= logo_tag %>
-    <h1><small>Pobieranie pliku:</small> <%= @transfer.name %></h1>
+    <h1><small><%= t('.file_download') %></small> <%= @transfer.name %></h1>
     <% if !@transfer.expired? && !@transfer.object? %>
-      <p>Plik jest jeszcze przetwarzany</p>
+      <p><%= t('.processing_file') %></p>
       <%= check_box_tag :notify_me, class: 'custom-checkbox' %>
-      <%= label_tag :notify_me, 'Przenieś mnie na tę kartę, gdy przetwarzanie się skończy' %>
+      <%= label_tag :notify_me, t('.notify_me') %>
     <% else %>
       <% if @transfer.expired? %>
-        <p>Plik nie jest już dostepny</p>
+        <p><%= t('.transfer_expired') %></p>
       <% end %>
         <ul class="scroll-pane v-only">
         <% if @transfer.zip? %>
           <% @transfer.content[:files].compact.each do |file| %>
             <li><%= link_to file[:name], single_file_download_path(token: params[:token], name: file[:name]), target: '_blank' %></li>
           <% end %>
-          <h3>Rozmiar paczki</h3>
+          <h3><%= t('.transfer_size') %></h3>
           <li><%= number_to_human_size @transfer.content[:size] %></li>
           <li></li>
-          <h3>Zawartość (ilość plików: <%= @transfer.zip_content.count %>)</h3>
+          <h3><%= t('.transfer_content', count: @transfer.zip_content.count) %></h3>
           <% @transfer.zip_content.each do |file| %>
             <li><%= file[:name].encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') %></li>
             <li><%= number_to_human_size file[:size] %></li>
           <% end %>
         <% else %>
-          <h3>Informacje o pliku</h3>
+          <h3><%= t('.file_info') %></h3>
           <li><%= @transfer.content[:name].encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') %></li>
           <li><%= number_to_human_size @transfer.content[:size] %></li>
           <li><%= @transfer.content[:type] %></li>
@@ -33,10 +33,10 @@
         </ul>
     <% end %>
     <% unless @transfer.forever? || @transfer.expired? %>
-      <h3 title="<%= l @transfer.expires_at, format: :long %>">Plik jest jeszcze dostępny przez: <%= @transfer.expiration_distance %></h3>
+      <h3 title="<%= l @transfer.expires_at, format: :long %>"><%= t('.transfer_expiration_distance', distance: @transfer.expiration_distance) %></h3>
     <% end %>
     <% if @transfer.expired? %>
-      <h3>Plik wygasł: <%= @transfer.expires_at.strftime('%d-%m-%Y, %H:%M:%S') %></h3>
+      <h3><%= t('.transfer_expired_at', when: @transfer.expires_at.strftime('%d-%m-%Y, %H:%M:%S')) %></h3>
     <% elsif @transfer.done? %>
       <div class="buttons row collapse <%= 'double' if current_user %>">
       <%#= link_to fa_icon('cloud-download', text: t('.download')), download_transfer_path(token: @transfer.token, format: :zip), class: [:button, :secondary, :expand] %>

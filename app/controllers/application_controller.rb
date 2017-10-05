@@ -1,19 +1,19 @@
 class ApplicationController < ActionController::Base
-
   # before_filter :miniprofiler
   before_filter :set_body_cover
 
   rescue_from CanCan::AccessDenied do |exception|
-    head 401 and return if request.format != :html
-    unless current_user
+    (head(401) && return) if request.format != :html
+
+    if current_user
+      render action: '401', status: 401
+    else
       session[:access_page] = request.path
-      if ['/', *I18n.available_locales.map{|l| "/#{l}" }].include?(request.path)
+      if ['/', *I18n.available_locales.map { |l| "/#{l}" }].include?(request.path)
         redirect_to new_user_session_url
       else
-        redirect_to new_user_session_url, alert:  exception.message
+        redirect_to new_user_session_url, alert: exception.message
       end
-    else
-      render action: '401', status: 401
     end
   end
 
@@ -28,26 +28,28 @@ class ApplicationController < ActionController::Base
 
   def context
     if selection_count == 1
-      if selection.has_key?(:ids) && selection[:ids].size > 0
+      if selection.key?(:ids) && !selection[:ids].empty?
         @item = Item.find(selection[:ids].first)
-      elsif selection.has_key?(:fids) && selection[:fids].size > 0
+      elsif selection.key?(:fids) && !selection[:fids].empty?
         @item = Folder.find(selection[:fids].first)
-      elsif selection.has_key?(:tids) && selection[:tids].size > 0
+      elsif selection.key?(:tids) && !selection[:tids].empty?
         @item = Transfer.find(selection[:tids].first)
       end
     else
-      @items = Item.where( id: selection[:ids] )
-      @folders = Folder.where( id: selection[:fids] )
-      @transfers = Transfer.where( id: selection[:tids] )
-      @can_destroy = @folders.accessible_by(current_ability, :destroy).any? ||
+      @items = Item.where(id: selection[:ids])
+      @folders = Folder.where(id: selection[:fids])
+      @transfers = Transfer.where(id: selection[:tids])
+      @can_destroy =
+        @folders.accessible_by(current_ability, :destroy).any? ||
         @items.accessible_by(current_ability, :destroy).any? ||
         @transfers.accessible_by(current_ability, :destroy).any?
 
-      @can_update = @folders.accessible_by(current_ability, :update).any? ||
+      @can_update =
+        @folders.accessible_by(current_ability, :update).any? ||
         @items.accessible_by(current_ability, :update).any?
     end
 
-    head :not_found and return unless request.xhr?
+    (head(:not_found) && return) unless request.xhr?
 
     respond_to do |format|
       format.html { render layout: false }
@@ -77,18 +79,18 @@ class ApplicationController < ActionController::Base
 
     @collaborators = []
 
-    @collaborators += User.
-      starts_with(params[:q]).
-      where('`id` != ?', current_user.id).
-      limit(5).
-      map do |u|
-      {
-        type: u.class.model_name.plural,
-        type_name: u.class.model_name.human,
-        name: u.to_s,
-        id: u.id
-      }
-    end
+    @collaborators +=
+      User.starts_with(params[:q])
+          .where('`id` != ?', current_user.id)
+          .limit(5)
+          .map do |u|
+            {
+              type: u.class.model_name.plural,
+              type_name: u.class.model_name.human,
+              name: u.to_s,
+              id: u.id
+            }
+          end
 
     @collaborators += Group.starts_with(params[:q]).limit(5).map do |g|
       {
@@ -105,37 +107,38 @@ class ApplicationController < ActionController::Base
   end
 
   def ping
-    unless current_user
-      head :forbidden
-    else
+    if current_user
       head :ok
+    else
+      head :forbidden
     end
   end
 
   protected
+
   include L::FilterHelper
 
   private
 
-  def stream_file file, options = {}
+  def stream_file(file, options = {})
     file = File.open(file) if file.is_a?(String)
 
     headers['Accept-Ranges'] = 'bytes'
-    headers["Content-Transfer-Encoding"] = "binary"
+    headers['Content-Transfer-Encoding'] = 'binary'
 
     if request.headers['Range']
       unit, range = request.headers['Range'].split '=', 2
       rstart, rend = range.split('-').map(&:to_i)
       rend ||= (file.size - 1)
-      length = rend - rstart + 1;
-      head(:not_modified) and return if length <= 0
+      length = rend - rstart + 1
+      (head(:not_modified) && return) if length <= 0
       headers['Content-Length'] = length.to_s
       headers['Content-Range'] = "bytes #{rstart}-#{rend}/#{file.size}"
       file.seek(rstart, IO::SEEK_SET)
     else
       length = file.size
       headers['Content-Length'] = length.to_s
-      headers['Content-Range'] = "bytes 0-#{length-1}/#{file.size}"
+      headers['Content-Range'] = "bytes 0-#{length - 1}/#{file.size}"
     end
 
     send_data file.read(length), options.merge(disposition: 'inline', status: 206)
@@ -146,16 +149,16 @@ class ApplicationController < ActionController::Base
   end
 
   def set_locale
-      lang = session[:locale] || params[:locale] || I18n.default_locale
-      I18n.locale = lang.to_sym
+    lang = extract_locale_from_browser || params[:locale] || I18n.default_locale
+    I18n.locale = lang.to_sym
   end
 
-  def default_url_options(options={})
-    { locale:  I18n.locale }
+  def default_url_options(options = {})
+    { locale: I18n.locale }
   end
 
   def after_sign_in_path_for(resource)
-    access_page, session[:access_page] = session[:access_page], nil
+    access_page = session.delete(:access_page)
     access_page || transfers_path
   end
 
@@ -168,9 +171,9 @@ class ApplicationController < ActionController::Base
   end
 
   def selection
-    selection ||= Hash.new
+    selection ||= {}
     params[:selection].each do |key, value|
-      selection[key.to_sym] ||= Array.new
+      selection[key.to_sym] ||= []
       value.each { |id| selection[key.to_sym].push(id) }
     end
     selection
@@ -178,8 +181,8 @@ class ApplicationController < ActionController::Base
 
   def selection_count
     count = 0
-    selection.each do |key, value|
-      count = count + value.size
+    selection.each do |_k, value|
+      count += value.size
     end
     count
   end
@@ -190,6 +193,8 @@ class ApplicationController < ActionController::Base
     @bg = Background.where(active: true).to_a.sample
   end
 
-  def set_language_from_header
+  def extract_locale_from_browser
+    l = request.env['HTTP_ACCEPT_LANGUAGE'].to_s.scan(/^[a-z]{2}/).first
+    l == 'pl' ? :pl : :en
   end
 end

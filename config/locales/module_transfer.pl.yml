@@ -1,15 +1,15 @@
 pl:
   transfers:
     submenu:
-      new: Dodaj Transfer
-      index: Lista transfers
+      new: Dodaj transfer
+      index: Lista transferów
     form: &TRANFERFORM
       or_drop: "lub upuść w dowolnym miejscu na ekranie"
       subject: "Nazwa dla przesyłanych plików"
       recipients: "Chcę wysłać maila (możesz wpisać kilka maili oddzielając je przecinkiem)"
       recipients_placeholder: 'Lista odbiorców'
       message_placeholder: 'Wiadomość do odbiorców'
-      infinity: 'Zawsze dostępnne'
+      infinity: 'Zawsze dostępne'
       fileupload: Dodaj pliki
       expires_in: "Pliki dostępne przez (dni)"
       processing: "Przetwarzanie..."
@@ -20,7 +20,7 @@ pl:
     edit_form:
       <<: *TRANFERFORM
     new:
-      title: Dodawanie Transfer
+      title: Dodawanie transferu
     index:
       fileupload: Dodaj pliki
       processing: "Przetwarzanie..."
@@ -28,11 +28,20 @@ pl:
       new_transfer: 'Prześlij pliki'
       infinite: 'zawsze'
     edit:
-      title: Edycja Transfer
+      title: Edycja transferu
       processing: "Przetwarzanie"
       infinity: "Przetwarzanie"
     download:
-      download: "Zapisz plik"
+      file_download: 'Pobieranie pliku:'
+      processing_file: Plik jest jeszcze przetwarzany
+      notify_me: 'Przenieś mnie na tę kartę, gdy przetwarzanie się skończy'
+      transfer_expired: Plik nie jest już dostępny
+      transfer_size: Rozmiar paczki
+      transfer_content: "Zawartość (ilość plików: %{count})"
+      file_info: Informacje o pliku
+      transfer_expiration_distance: "Plik jest jeszcze dostępny przez: %{distance}"
+      transfer_expired_at: "Plik wygasł: %{when}"
+      download: "Pobierz"
       save: "Zapisz w Sakve"
       and_more: "oraz %{count} więcej plików"
     save:
@@ -58,7 +67,7 @@ pl:
         client_ip: "Adres IP"
         browser: "Przeglądarka (UserAgent)"
   menu:
-    transfers: Transfers
+    transfers: Transfery
   activerecord:
     attributes:
       transfer:
