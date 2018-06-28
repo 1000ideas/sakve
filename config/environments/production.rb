@@ -1,6 +1,6 @@
 Sakve::Application.configure do
   config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.default_url_options = { :host => 'sakve.1000i.pl' }
+  config.action_mailer.default_url_options = { :host => ENV['SAKVE_PROD_APPLICATION_DOMAIN'] }
   config.action_mailer.delivery_method = :smtp
 
   config.action_mailer.smtp_settings = {
