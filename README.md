@@ -27,3 +27,28 @@ Aplikacja przetwarza pliki offline, aby nie blokować bazy i serwera http.
 `TransferArchiveWorker` - przetwarza wysłane pliki. Tworzy archiwum zip w razie potrzeby.
 
 `ItemProcessWorker` - przetwarza dodany plik. Tworzy miniaturki i konwertuje pliki na przystępne formaty.
+
+## Jak uruchomić w sposób tradycyjny
+
+```bash
+gem install bundler
+bundle install
+rake db:create
+rake db:migrate
+rake db:seed
+```
+
+## Jak zrestartować bazę:
+
+```bash
+rake db:setup
+```
+
+## Aby dane <polecenie> uruchomić w trybie production
+```
+RAILS_ENV=production <polecenie>
+```
+
+
+
+

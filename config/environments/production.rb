@@ -1,22 +1,19 @@
 Sakve::Application.configure do
   config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.default_url_options = { :host => 'sakve.1000i.pl' }
+  config.action_mailer.delivery_method = :smtp
 
-config.action_mailer.default_url_options = { :host => 'sakve.1000i.pl' }
+  config.action_mailer.smtp_settings = {
+      :address              => ENV['SAKVE_PROD_SMTP_ADDRESS'],
+      :port                 => ENV['SAKVE_PROD_SMTP_PORT'],
+      :domain               => ENV['SAKVE_PROD_SMTP_DOMAIN'],
+      :user_name            => ENV['SAKVE_PROD_SMTP_USER_NAME'],
+      :password             => ENV['SAKVE_PROD_SMTP_PASSWORD'],
+      :authentication       => ENV['SAKVE_PROD_SMTP_AUTHENTICATION'],
+      :enable_starttls_auto => ENV['SAKVE_PROD_SMTP_ENABLE_STARTTLS_AUTO'],
+  }
 
-config.action_mailer.delivery_method = :smtp
-
-config.action_mailer.smtp_settings = {
-  :address              => "smtp.zenbox.pl",
-  :port                 => 587,
-  :domain               => "1000i.pl",
-  :user_name            => "no-reply@1000i.pl",
-  :password             => "ZkXrqdf5",
-  :authentication       => "plain",
-  :enable_starttls_auto => false
-}
-
-config.action_mailer.perform_deliveries = true;
-
+  config.action_mailer.perform_deliveries = true;
 
   # Settings specified here will take precedence over those in config/application.rb
 

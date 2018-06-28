@@ -2,7 +2,16 @@ Sakve::Application.configure do
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.default_url_options = { :host => 'localhost:3000' }
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = { :address => "localhost", :port => 1025 }
+  
+  config.action_mailer.smtp_settings = {
+      :address              => ENV['SAKVE_DEV_SMTP_ADDRESS'],
+      :port                 => ENV['SAKVE_DEV_SMTP_PORT'],
+      :domain               => ENV['SAKVE_DEV_SMTP_DOMAIN'],
+      :user_name            => ENV['SAKVE_DEV_SMTP_USER_NAME'],
+      :password             => ENV['SAKVE_DEV_SMTP_PASSWORD'],
+      :authentication       => ENV['SAKVE_DEV_SMTP_AUTHENTICATION'],
+      :enable_starttls_auto => ENV['SAKVE_DEV_SMTP_ENABLE_STARTTLS_AUTO'],
+  }
 
   config.action_mailer.perform_deliveries = true;
 
@@ -23,7 +32,7 @@ Sakve::Application.configure do
   config.action_controller.perform_caching = false
 
   # Don't care if the mailer can't send
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
 
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log

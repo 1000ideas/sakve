@@ -1,6 +1,6 @@
 ---
-:verbose: true
-:daemon: true
+:verbose: <%= ENV['SAKVE_SIDEKIQ_VERBOSE'] %>
+:daemon: <%= ENV['SAKVE_SIDEKIQ_DEAMON'] %>
 :logfile: ./log/sidekiq.log
 :pidfile: ./tmp/pids/sidekiq.pid
 development:

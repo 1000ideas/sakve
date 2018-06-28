@@ -14,6 +14,7 @@
 /log/*.log
 /tmp
 .*~
+.idea
 
 ###Rails###
 
@@ -66,8 +67,5 @@ doc/
 upload_tmp/*
 dump.rdb
 
-
-config/database.yml
-config/environments/production.rb
-config/initializers/sakve.rb
-
+# secret / local environment variables
+config/local_environment.yml
