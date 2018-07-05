@@ -1,34 +1,47 @@
 # Sakve
 
-Aplikacja pozwalająca na przechowywanie i dzielenie się plikami miedzy zalogowanymi użytkownikami. Dodatkowo istnieje możliwość publicznych transferów plików
+Sakve aims to be a self-hosted alternative to WeTransfer, with cloud files storage for companies. Application is written in Ruby on Rails and allows You to store, share and send files. Perfect tool for sharing files inside any company.
+
+Current features:
+1.   Cloud file storage, with directories tree.
+2.   Files shared inside the company
+3.   Easy drag & drop file upload
+4.   Customizable transfer download page
+5.   Auto expiring transfers
+6.   Each user can have different storage limit
+...and many more smaller things.
+
+## Current state
+
+Sakve is fully functional, production-tested application, though got out of date with dependencies. It needs both Ruby and Rails updates, along with all dependencies in order to thrive.
 
 ## Docker
 
-Aplikacja jest połączona z Dockerem. Pozwala on nam uruchomić aplikację w środowisku produkcyjnym lub developerskim.
+Application is composed with Docker and consists of two environments: production and dvelopment.
 
-`docker-compose -f docker-compose-prod.yml up --build` - buduje i uruchamia aplikację w środowisku produkcyjnym (tabele __nie__ zostaną wypełnione przykładowymi danymi; pliki .coffee i .scss zostaną skompilowane).
+`docker-compose -f docker-compose-prod.yml up --build` - build and run app in a production environment (tables __won't be__ populated with seed data; files .coffee and .scss __will be__ compiled).
 
-`docker-compose -f docker-compose-dev.yml up --build` - buduje i uruchamia aplikację w środowisku developerskim (tabele __zostaną__ wypełnione przykładowymi danymi; pliki .coffee i .scss __nie__ zostaną skompilowane).
+`docker-compose -f docker-compose-dev.yml up --build` - build and run app in a development environment (tables __will be__ populated with seed data; files .coffee and .scss __won't be__ compiled).
 
-## Jak to działa?
+## How to start?
 
-Przed uruchomieniem aplikacji należy zainstalować najnowsze wersje gemów, wykonując komendę `bundle update`. Aplikacja wykonuje pewne operacje offline wykorzystując do tego sidekiq (redis) dlatego w systemie musi działać demon redisa i musi zostać włączony sidekiq.
+Before running the application you should install all necessary gems, by running a command `bundle update`. Some of the jobs are running in the background using Sidekiq. Thats why you need to have Redis daemon and Sidekiq running before.
 
-Dodatkowo, aby zaoszczędzić miejce należy regularnie uruchamiać `rake sakve:transfer:clean`. Zadanie usuwa nieaktualne transfery plików.
+There is a garbage collector task, you need to run it often in order to remove old transfers and temporary files. You can run it with: `rake sakve:transfer:clean`.
 
-## Zadanie wykonywane w tle
+## Background jobs
 
-Aplikacja przetwarza pliki offline, aby nie blokować bazy i serwera http.
+Sakve processes files asynchronous with Sidekiq, so it won't clutch processors and RAM:
 
-`FolderArchiveWorker` - tworzy archiwum zip z wybranego folderu.
+`FolderArchiveWorker` - creates zip archive from selected folder.
 
-`SelectionArchiveWorker` - tworzy archiwum zip z zaznaczonych plików i folderów.
+`SelectionArchiveWorker` - creates zip archive from selected files and folder.
 
-`TransferArchiveWorker` - przetwarza wysłane pliki. Tworzy archiwum zip w razie potrzeby.
+`TransferArchiveWorker` - processes transfered files. Create zip arhive if needed.
 
-`ItemProcessWorker` - przetwarza dodany plik. Tworzy miniaturki i konwertuje pliki na przystępne formaty.
+`ItemProcessWorker` - processes added file. Creates thumbnails, converts files to friendly formats.
 
-## Jak uruchomić w sposób tradycyjny
+## How to start in more traditional way? (without Docker)
 
 ```bash
 gem install bundler
@@ -38,15 +51,15 @@ rake db:migrate
 rake db:seed
 ```
 
-## Jak zrestartować bazę:
+## How to restart database:
 
 ```bash
 rake db:setup
 ```
 
-## Aby dane <polecenie> uruchomić w trybie production
+## In order to  run specific <command> in production environment
 ```
-RAILS_ENV=production <polecenie>
+RAILS_ENV=production <command>
 ```
 
 
