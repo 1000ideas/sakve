@@ -1,4 +1,4 @@
-# Sakve
+![Sakve Logo](https://raw.githubusercontent.com/1000ideas/sakve/master/app/assets/images/logo.png "Sakve Logo")
 
 Sakve aims to be a self-hosted alternative to WeTransfer, with cloud files storage for companies. Application is written in Ruby on Rails and allows You to store, share and send files. Perfect tool for sharing files inside any company.
 
